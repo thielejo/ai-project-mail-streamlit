@@ -5,6 +5,7 @@ description = "Group project for the course BIS5522 AI & Machine Learning"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    # bisherigen Pakete
     "jupyterlab>=4.5.6",
     "matplotlib>=3.10.8",
     "numpy>=2.4.3",
@@ -13,7 +14,13 @@ dependencies = [
     "seaborn>=0.13.2",
     "torch>=2.2.0",
     "transformers>=4.38.0",
-    "huggingface-hub>=0.20.0"
+    "huggingface-hub>=0.20.0",
+    
+    # NEU: 
+    "xgboost>=2.0",
+    "streamlit>=1.30",
+    "fredapi>=0.5",
+    "kaggle>=1.6"
 ]
 
 [project.scripts]
