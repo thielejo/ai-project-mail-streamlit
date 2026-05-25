@@ -58,7 +58,7 @@ The entire engine is compiled into an interactive **Streamlit Web Application** 
 
 1. **User Input:** The user inputs standard vehicle criteria and selects the current US economic environment (interest rate regime).
 2. **Algorithmic Fusion:** The backend computes the ultimate price utilizing the core synthesis equation:
-   $$	ext{Live Price} = 	ext{Baseline Price (Stage 1)} 	imes 	ext{Market Multiplier (Stage 2)} 	imes 	ext{Seasonal Factor (Stage 3)}$$
+   $$\text{Live Price} = \text{Baseline Price (Stage 1)} \times \text{Market Multiplier (Stage 2)} \times \text{Seasonal Factor (Stage 3)}$$
 3. **LLM Orchestrator:** An integrated Large Language Model (via Ollama/Local API) processes these raw mathematical metrics into intuitive, natural language tactical advice (e.g., *"Based on the high Federal Funds Rate and the fact that your asset is a convertible, do not sell in November. Hold the vehicle for 5 months to leverage the Spring Bounce, maximizing your net return by an estimated \$1,800 despite the minor mileage depreciation"*).
 
 ---
