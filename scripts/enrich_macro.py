@@ -13,37 +13,72 @@ OUTPUT_PATH = Path("car_prices_macro.csv")
 FRED_BASE = "https://fred.stlouisfed.org/graph/fredgraph.csv?id="
 
 FRED_SERIES = {
-    "cpi_used_cars": "CUSR0000SETA01",  # CPI Used Cars & Trucks (MUVVI proxy)
+    # --- Price indices ---
+    "cpi_used_cars": "CUSR0000SETA01",   # CPI Used Cars & Trucks (MUVVI proxy)
+
+    # --- Monetary policy ---
     "fedfunds": "FEDFUNDS",              # US Federal Funds Rate
+
+    # --- Consumer demand ---
+    "consumer_sentiment": "UMCSENT",    # Univ. of Michigan Consumer Sentiment
+    "unemployment": "UNRATE",           # US Unemployment Rate
+
+    # --- Automotive market volume ---
+    "total_vehicle_sales": "TOTALSA",   # Total Vehicle Sales (millions, SAAR)
+
+    # --- Energy / external shocks ---
+    "oil_price_wti": "DCOILWTICO",      # WTI Crude Oil Price (USD/barrel)
+
+    # --- Crisis / stress indicators ---
+    "recession": "USREC",               # NBER Recession Indicator (0 = no, 1 = yes)
+    "credit_spread": "BAMLH0A0HYM2",   # High-Yield Credit Spread (market stress proxy)
 }
 
 # 2015 is our neutral economic baseline (as defined in the project proposal)
 CPI_BASE_YEAR = 2015
 
 
-def fetch_fred_series(column_name: str, series_id: str) -> pd.Series:
-    """Download a single FRED series and return it indexed by year-month period."""
+def fetch_fred_series(column_name: str, series_id: str, retries: int = 2) -> pd.Series | None:
+    """Download a single FRED series. Returns None and warns if all attempts fail."""
     url = FRED_BASE + series_id
-    df = pd.read_csv(url, parse_dates=["observation_date"])
-    df["year_month"] = df["observation_date"].dt.to_period("M")
-    return df.set_index("year_month")[series_id].rename(column_name)
+    for attempt in range(1, retries + 1):
+        try:
+            df = pd.read_csv(url, parse_dates=["observation_date"])
+            df["year_month"] = df["observation_date"].dt.to_period("M")
+            # Aggregate duplicates (e.g. data revisions) by taking the last value per month
+            series = df.groupby("year_month")[series_id].last().rename(column_name)
+            return series
+        except Exception as e:
+            if attempt < retries:
+                print(f"   -> Versuch {attempt} fehlgeschlagen für '{column_name}', wiederhole...")
+            else:
+                print(f"   -> Warnung: '{column_name}' ({series_id}) nicht verfügbar: {e}")
+                return None
 
 
 def build_macro_index() -> pd.DataFrame:
     """
     Fetch all FRED series and compute the CPI multiplier relative to the 2015 baseline.
 
-    The cpi_multiplier is the core of Stage 2:
+    Core formula for Stage 2:
         Live Price = Stage1_Baseline × cpi_multiplier × seasonal_factor
+
+    Additional series provide context for the LLM orchestrator and future model iterations.
     """
-    series = [fetch_fred_series(name, sid) for name, sid in FRED_SERIES.items()]
+    series = []
+    for name, sid in FRED_SERIES.items():
+        result = fetch_fred_series(name, sid)
+        if result is not None:
+            series.append(result)
+            print(f"   -> '{name}' geladen ({sid})")
+
     macro = pd.concat(series, axis=1).dropna(how="all")
 
     baseline_cpi = macro.loc["2015", "cpi_used_cars"].mean()
     macro["cpi_multiplier"] = macro["cpi_used_cars"] / baseline_cpi
 
     macro.index = macro.index.astype(str)
-    return macro.reset_index().rename(columns={"year_month": "year_month"})
+    return macro.reset_index().rename(columns={"index": "year_month"})
 
 
 def enrich_car_prices(
@@ -62,6 +97,7 @@ def enrich_car_prices(
     macro.to_csv(macro_path, index=False)
     print(f"   -> Makro-Index gespeichert: {macro_path}")
     print(f"   -> Zeitraum: {macro['year_month'].min()} bis {macro['year_month'].max()}")
+    print(f"   -> Spalten: {list(macro.columns)}")
     print(f"   -> CPI-Basiswert 2015: {macro.loc[macro['year_month'].str.startswith('2015'), 'cpi_used_cars'].mean():.2f}")
 
     print("3. Verknüpfe Fahrzeug- und Makrodaten über year_month...")
