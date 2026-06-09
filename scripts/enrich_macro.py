@@ -12,6 +12,12 @@ OUTPUT_PATH = Path("car_prices_macro.csv")
 # FRED series downloaded directly — no API key required
 FRED_BASE = "https://fred.stlouisfed.org/graph/fredgraph.csv?id="
 
+# fredgraph.csv ignores query params like observation_start, so we trim post-download.
+# 1996-01 is chosen because: USREC otherwise drags the index back to 1854, and
+# credit_spread (BAMLH0A0HYM2) starts in late 1996 — keeping earlier rows
+# would leave nearly every macro column NaN before that date.
+MACRO_START = pd.Period("1996-01", "M")
+
 FRED_SERIES = {
     # --- Price indices ---
     "cpi_used_cars": "CUSR0000SETA01",   # CPI Used Cars & Trucks (MUVVI proxy)
@@ -43,7 +49,7 @@ def fetch_fred_series(column_name: str, series_id: str, retries: int = 2) -> pd.
     url = FRED_BASE + series_id
     for attempt in range(1, retries + 1):
         try:
-            df = pd.read_csv(url, parse_dates=["observation_date"])
+            df = pd.read_csv(url, parse_dates=["observation_date"], na_values=["."])
             df["year_month"] = df["observation_date"].dt.to_period("M")
             # Aggregate duplicates (e.g. data revisions) by taking the last value per month
             series = df.groupby("year_month")[series_id].last().rename(column_name)
@@ -72,7 +78,15 @@ def build_macro_index() -> pd.DataFrame:
             series.append(result)
             print(f"   -> '{name}' geladen ({sid})")
 
-    macro = pd.concat(series, axis=1).dropna(how="all")
+    macro = pd.concat(series, axis=1).sort_index().dropna(how="all")
+
+    # Trim to MACRO_START: fredgraph.csv ignores observation_start params, so USREC
+    # would otherwise drag the index back to 1854.
+    macro = macro[macro.index >= MACRO_START]
+
+    # Forward-fill within-series gaps (quarterly surveys with monthly index,
+    # occasional missing months in continuous series).
+    macro = macro.ffill()
 
     baseline_cpi = macro.loc["2015", "cpi_used_cars"].mean()
     macro["cpi_multiplier"] = macro["cpi_used_cars"] / baseline_cpi
