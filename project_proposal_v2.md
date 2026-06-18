@@ -8,7 +8,7 @@
 | :--- | :--- | :--- |
 | Johanna Thiele | [@Thielejo](https://github.com/Thielejo) | thielejo@hs-pforzheim.de |
 | Moritz Binder | [@Moritzb1](https://github.com/Moritzb1) | bindermo@hs-pforzheim.de |
-| Pasca Muller | [@Paelus](https://github.com/Paelus) | muelle6p@hs-pforzheim.de |
+| Pascal Müller | [@Paelus](https://github.com/Paelus) | muelle6p@hs-pforzheim.de |
 | Tara Golle | [@trsphgll](https://github.com/trsphgll) | golletar@hs-pforzheim.de |
 
 ## Selected Track

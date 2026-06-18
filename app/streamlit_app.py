@@ -229,3 +229,24 @@ with st.expander("Wichtigste Einflussfaktoren aus dem Modelltest"):
         st.dataframe(pd.DataFrame(top_features), use_container_width=True, hide_index=True)
     else:
         st.write("Noch keine Feature-Importance gespeichert.")
+
+with st.expander("Modellgenauigkeit nach Preissegment"):
+    segment_metrics = metrics.get("segment_metrics", [])
+    if segment_metrics:
+        df_seg = pd.DataFrame(segment_metrics).rename(
+            columns={
+                "segment": "Segment",
+                "price_range": "Preisbereich",
+                "n": "Testdaten",
+                "mae": "MAE ($)",
+                "rmse": "RMSE ($)",
+                "mape_percent": "MAPE (%)",
+            }
+        )
+        st.dataframe(df_seg, use_container_width=True, hide_index=True)
+        st.caption(
+            "Das Modell ist am genauesten im Mittelklasse-Segment ($10k–$20k). "
+            "Budget-Fahrzeuge (MAPE ~35%) und Luxusfahrzeuge (MAPE ~21%) sind schwerer vorherzusagen."
+        )
+    else:
+        st.write("Segmentauswertung noch nicht verfügbar.")

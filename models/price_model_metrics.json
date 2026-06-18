@@ -63,5 +63,47 @@
       "feature": "sale_month",
       "importance": 15.7077
     }
+  ],
+  "segment_metrics": [
+    {
+      "segment": "Budget",
+      "price_range": "$500\u2013$5,000",
+      "n": 17698,
+      "mae": 770.24,
+      "rmse": 1115.52,
+      "mape_percent": 34.96
+    },
+    {
+      "segment": "Economy",
+      "price_range": "$5,000\u2013$10,000",
+      "n": 21617,
+      "mae": 1179.72,
+      "rmse": 1597.73,
+      "mape_percent": 15.83
+    },
+    {
+      "segment": "Mid-Range",
+      "price_range": "$10,000\u2013$20,000",
+      "n": 46152,
+      "mae": 1537.78,
+      "rmse": 2118.41,
+      "mape_percent": 10.75
+    },
+    {
+      "segment": "Premium",
+      "price_range": "$20,000\u2013$40,000",
+      "n": 20518,
+      "mae": 3118.88,
+      "rmse": 4208.52,
+      "mape_percent": 11.79
+    },
+    {
+      "segment": "Luxury",
+      "price_range": "$40,000\u2013$150,000",
+      "n": 1814,
+      "mae": 11632.97,
+      "rmse": 16431.56,
+      "mape_percent": 20.87
+    }
   ]
 }

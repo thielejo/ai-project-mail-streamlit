@@ -48,6 +48,16 @@ The script automatically used a sklearn gradient boosting model so the baseline 
 | R2 | 0.8816 | -0.0248 |
 | MAPE | 16.42% | 121.05% |
 
+## Error by Price Segment
+
+| Segment | Price Range | Test Rows | MAE | RMSE | MAPE |
+|---|---|---:|---:|---:|---:|
+| Budget | $500–$5,000 | 17,698 | $770 | $1,116 | 35.0% |
+| Economy | $5,000–$10,000 | 21,617 | $1,180 | $1,598 | 15.8% |
+| Mid-Range | $10,000–$20,000 | 46,152 | $1,538 | $2,118 | 10.8% |
+| Premium | $20,000–$40,000 | 20,518 | $3,119 | $4,209 | 11.8% |
+| Luxury | $40,000–$150,000 | 1,814 | $11,633 | $16,432 | 20.9% |
+
 ## Most Important Features
 
 | Feature | Importance |
