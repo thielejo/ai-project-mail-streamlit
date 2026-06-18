@@ -74,4 +74,24 @@ MISTRAL_API_KEY="your-key-here"
 3. Push to GitHub and create a Pull Request to merge your work into the `main` branch.
 4. Keep your environment in sync! Run `uv sync` whenever another team member adds a new dependency.
 
+## 🚗 Universal Pricing Agent Workflow
+
+Build the model features:
+
+```bash
+uv run python scripts/build_features.py
+```
+
+Train the Stage 1 price model:
+
+```bash
+uv run python scripts/train_price_model.py
+```
+
+Start the Streamlit demo:
+
+```bash
+uv run streamlit run app/streamlit_app.py
+```
+
 Good luck and have fun building! 🚀
