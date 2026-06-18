@@ -1,0 +1,67 @@
+{
+  "created_at": "2026-06-18T10:03:15.477197+00:00",
+  "input_path": "car_prices_features.csv",
+  "model_path": "models/price_model.joblib",
+  "model_name": "HistGradientBoostingRegressor",
+  "fallback_reason": "XGBoost could not be loaded because the macOS OpenMP runtime `libomp.dylib` is missing. Install it with `brew install libomp` to enable XGBoost locally.",
+  "rows_used": 200000,
+  "train_rows": 160000,
+  "test_rows": 40000,
+  "features": [
+    "vehicle_age",
+    "sale_month",
+    "odometer",
+    "condition",
+    "year_month",
+    "make",
+    "model",
+    "body"
+  ],
+  "target": "sellingprice",
+  "metrics": {
+    "mae": 1849.96,
+    "rmse": 3298.97,
+    "r2": 0.8816,
+    "mape_percent": 16.42
+  },
+  "median_baseline_metrics": {
+    "mae": 6932.41,
+    "rmse": 9704.69,
+    "r2": -0.0248,
+    "mape_percent": 121.05
+  },
+  "top_features": [
+    {
+      "feature": "make",
+      "importance": 2470.4691
+    },
+    {
+      "feature": "vehicle_age",
+      "importance": 2415.7414
+    },
+    {
+      "feature": "body",
+      "importance": 2042.4342
+    },
+    {
+      "feature": "odometer",
+      "importance": 1913.0556
+    },
+    {
+      "feature": "model",
+      "importance": 1517.4431
+    },
+    {
+      "feature": "condition",
+      "importance": 610.6118
+    },
+    {
+      "feature": "year_month",
+      "importance": 32.523
+    },
+    {
+      "feature": "sale_month",
+      "importance": 15.7077
+    }
+  ]
+}
