@@ -1,0 +1,316 @@
+[
+  {
+    "name": "HistGradientBoosting",
+    "description": "Sequentielles Boosting (sklearn). Schnell, keine XGBoost-Abh\u00e4ngigkeit. Aktuell in der Streamlit-App.",
+    "metrics": {
+      "mae": 1766.35,
+      "rmse": 3057.07,
+      "r2": 0.8983,
+      "mape_percent": 16.02,
+      "mae_relative_percent": 12.61,
+      "mean_price": 14009.66
+    },
+    "segment_metrics": [
+      {
+        "segment": "Budget",
+        "price_range": "$500\u2013$5,000",
+        "n": 6645,
+        "mae": 774.36,
+        "mape_percent": 35.45
+      },
+      {
+        "segment": "Economy",
+        "price_range": "$5,000\u2013$10,000",
+        "n": 8064,
+        "mae": 1165.91,
+        "mape_percent": 15.68
+      },
+      {
+        "segment": "Mid-Range",
+        "price_range": "$10,000\u2013$20,000",
+        "n": 17410,
+        "mae": 1536.23,
+        "mape_percent": 10.72
+      },
+      {
+        "segment": "Premium",
+        "price_range": "$20,000\u2013$40,000",
+        "n": 7862,
+        "mae": 2949.28,
+        "mape_percent": 11.28
+      },
+      {
+        "segment": "Luxury",
+        "price_range": "$40,000\u2013$150,000",
+        "n": 699,
+        "mae": 10323.3,
+        "mape_percent": 18.88
+      }
+    ],
+    "train_seconds": 33.25
+  },
+  {
+    "name": "XGBoost",
+    "description": "Sequentielles Boosting mit nativer XGBoost-Bibliothek (300 B\u00e4ume, lr=0.06, depth=6). Empfohlenes Modell.",
+    "metrics": {
+      "mae": 2055.4,
+      "rmse": 3521.19,
+      "r2": 0.8651,
+      "mape_percent": 18.21,
+      "mae_relative_percent": 14.67,
+      "mean_price": 14009.66
+    },
+    "segment_metrics": [
+      {
+        "segment": "Budget",
+        "price_range": "$500\u2013$5,000",
+        "n": 6645,
+        "mae": 844.43,
+        "mape_percent": 39.69
+      },
+      {
+        "segment": "Economy",
+        "price_range": "$5,000\u2013$10,000",
+        "n": 8064,
+        "mae": 1324.3,
+        "mape_percent": 17.61
+      },
+      {
+        "segment": "Mid-Range",
+        "price_range": "$10,000\u2013$20,000",
+        "n": 17410,
+        "mae": 1732.63,
+        "mape_percent": 12.2
+      },
+      {
+        "segment": "Premium",
+        "price_range": "$20,000\u2013$40,000",
+        "n": 7862,
+        "mae": 3493.09,
+        "mape_percent": 13.17
+      },
+      {
+        "segment": "Luxury",
+        "price_range": "$40,000\u2013$150,000",
+        "n": 699,
+        "mae": 13498.96,
+        "mape_percent": 24.91
+      }
+    ],
+    "train_seconds": 1.45
+  },
+  {
+    "name": "Linear Regression",
+    "description": "Einfachstes lineares Modell ohne Regularisierung. Dient als untere Vergleichsschwelle.",
+    "metrics": {
+      "mae": 2192.6,
+      "rmse": 3690.55,
+      "r2": 0.8518,
+      "mape_percent": 20.14,
+      "mae_relative_percent": 15.65,
+      "mean_price": 14009.66
+    },
+    "segment_metrics": [
+      {
+        "segment": "Budget",
+        "price_range": "$500\u2013$5,000",
+        "n": 6645,
+        "mae": 886.16,
+        "mape_percent": 46.65
+      },
+      {
+        "segment": "Economy",
+        "price_range": "$5,000\u2013$10,000",
+        "n": 8064,
+        "mae": 1249.39,
+        "mape_percent": 16.63
+      },
+      {
+        "segment": "Mid-Range",
+        "price_range": "$10,000\u2013$20,000",
+        "n": 17410,
+        "mae": 1968.76,
+        "mape_percent": 13.68
+      },
+      {
+        "segment": "Premium",
+        "price_range": "$20,000\u2013$40,000",
+        "n": 7862,
+        "mae": 4043.12,
+        "mape_percent": 15.42
+      },
+      {
+        "segment": "Luxury",
+        "price_range": "$40,000\u2013$150,000",
+        "n": 699,
+        "mae": 9757.84,
+        "mape_percent": 17.9
+      }
+    ],
+    "train_seconds": 0.84
+  },
+  {
+    "name": "Ridge Regression",
+    "description": "Linear mit L2-Regularisierung (alpha=10). Robuster bei korrelierten Features.",
+    "metrics": {
+      "mae": 2201.99,
+      "rmse": 3710.66,
+      "r2": 0.8502,
+      "mape_percent": 20.17,
+      "mae_relative_percent": 15.72,
+      "mean_price": 14009.66
+    },
+    "segment_metrics": [
+      {
+        "segment": "Budget",
+        "price_range": "$500\u2013$5,000",
+        "n": 6645,
+        "mae": 880.57,
+        "mape_percent": 46.51
+      },
+      {
+        "segment": "Economy",
+        "price_range": "$5,000\u2013$10,000",
+        "n": 8064,
+        "mae": 1250.9,
+        "mape_percent": 16.63
+      },
+      {
+        "segment": "Mid-Range",
+        "price_range": "$10,000\u2013$20,000",
+        "n": 17410,
+        "mae": 1980.6,
+        "mape_percent": 13.76
+      },
+      {
+        "segment": "Premium",
+        "price_range": "$20,000\u2013$40,000",
+        "n": 7862,
+        "mae": 4049.99,
+        "mape_percent": 15.47
+      },
+      {
+        "segment": "Luxury",
+        "price_range": "$40,000\u2013$150,000",
+        "n": 699,
+        "mae": 9972.0,
+        "mape_percent": 18.12
+      }
+    ],
+    "train_seconds": 0.49
+  },
+  {
+    "name": "Random Forest",
+    "description": "Ensemble aus 200 unabh\u00e4ngigen Entscheidungsb\u00e4umen (max_depth=20). Parallelisiert, robust gegen Overfitting.",
+    "metrics": {
+      "mae": 2332.63,
+      "rmse": 3838.67,
+      "r2": 0.8397,
+      "mape_percent": 21.25,
+      "mae_relative_percent": 16.65,
+      "mean_price": 14009.66
+    },
+    "segment_metrics": [
+      {
+        "segment": "Budget",
+        "price_range": "$500\u2013$5,000",
+        "n": 6645,
+        "mae": 998.59,
+        "mape_percent": 45.92
+      },
+      {
+        "segment": "Economy",
+        "price_range": "$5,000\u2013$10,000",
+        "n": 8064,
+        "mae": 1621.8,
+        "mape_percent": 21.5
+      },
+      {
+        "segment": "Mid-Range",
+        "price_range": "$10,000\u2013$20,000",
+        "n": 17410,
+        "mae": 2038.57,
+        "mape_percent": 14.45
+      },
+      {
+        "segment": "Premium",
+        "price_range": "$20,000\u2013$40,000",
+        "n": 7862,
+        "mae": 3976.45,
+        "mape_percent": 14.9
+      },
+      {
+        "segment": "Luxury",
+        "price_range": "$40,000\u2013$150,000",
+        "n": 699,
+        "mae": 11621.97,
+        "mape_percent": 22.0
+      }
+    ],
+    "train_seconds": 80.47
+  },
+  {
+    "name": "Median Baseline",
+    "description": "Predicts the median training price for every vehicle. Lower bound for model quality.",
+    "metrics": {
+      "mae": 6932.41,
+      "rmse": 9704.69,
+      "r2": -0.0248,
+      "mape_percent": 121.05,
+      "mae_relative_percent": 49.48,
+      "mean_price": 14009.66
+    },
+    "segment_metrics": [],
+    "train_seconds": 0.0
+  },
+  {
+    "name": "Lasso Regression",
+    "description": "Linear mit L1-Regularisierung (alpha=1). Setzt irrelevante Features auf 0.",
+    "metrics": {
+      "mae": 7131.65,
+      "rmse": 10167.56,
+      "r2": -0.1249,
+      "mape_percent": 104.54,
+      "mae_relative_percent": 50.91,
+      "mean_price": 14009.66
+    },
+    "segment_metrics": [
+      {
+        "segment": "Budget",
+        "price_range": "$500\u2013$5,000",
+        "n": 6645,
+        "mae": 7853.56,
+        "mape_percent": 444.13
+      },
+      {
+        "segment": "Economy",
+        "price_range": "$5,000\u2013$10,000",
+        "n": 8064,
+        "mae": 2899.46,
+        "mape_percent": 43.39
+      },
+      {
+        "segment": "Mid-Range",
+        "price_range": "$10,000\u2013$20,000",
+        "n": 17410,
+        "mae": 3703.99,
+        "mape_percent": 23.21
+      },
+      {
+        "segment": "Premium",
+        "price_range": "$20,000\u2013$40,000",
+        "n": 7862,
+        "mae": 15286.17,
+        "mape_percent": 57.72
+      },
+      {
+        "segment": "Luxury",
+        "price_range": "$40,000\u2013$150,000",
+        "n": 699,
+        "mae": 40673.2,
+        "mape_percent": 78.32
+      }
+    ],
+    "train_seconds": 0.43
+  }
+]
