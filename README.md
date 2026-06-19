@@ -25,22 +25,26 @@ Stage 3 (Seasonal)  Rule-based by body type & month     → Best-time-to-sell ad
 ## Repository Structure
 
 ```
-app/                        Streamlit demo app
+app/                        Streamlit demo app (Stage 1 + Stage 2)
 docs/                       Project proposal, session notes, data documentation
 model_comparison/           Model benchmarking results (6 models compared)
-models/                     Trained model files
+models/                     Trained model files and evaluation results
 notebooks/                  Exploratory notebooks
 scripts/
   build_features.py         Feature engineering from cleaned CSV
   train_price_model.py      Train Stage 1 model (XGBoost with HistGB fallback)
+  stage2_macro.py           Stage 2 module: CPI lookup and price adjustment
+  evaluate_stage2.py        Stage 2 backtest and forward projection
   evaluate_segments.py      Segment error analysis on existing model
   compare_models.py         Full model comparison benchmark
   enrich_macro.py           Download FRED macro indicators → macro_index.csv
-  train_stage1.py           Alternative XGBoost pipeline (Moritz branch)
+  train_stage1.py           Alternative XGBoost pipeline (older)
+Aktueller_Stand.md          Full project context for AI assistants (start here)
 car_prices_clean.csv        Cleaned Manheim auction data (558,743 rows, 2014–2015)
 car_prices_features.csv     Engineered features ready for model training (534,318 rows)
 macro_index.csv             FRED macro indicators 1996–2026-06 (CPI, rates, sentiment)
-model_results.md            Latest Stage 1 evaluation results incl. segment breakdown
+model_results.md            Stage 1 evaluation results incl. segment breakdown
+model_results_stage2.md     Stage 2 evaluation: backtest and forward projections
 ```
 
 > `car_prices_macro.csv` (98 MB) is gitignored. Regenerate with:
@@ -60,25 +64,40 @@ uv run python scripts/build_features.py
 # 2. Train Stage 1 model
 uv run python scripts/train_price_model.py
 
-# 3. Run Streamlit demo
+# 3. Evaluate Stage 2
+uv run python scripts/evaluate_stage2.py
+
+# 4. Run Streamlit demo
 uv run streamlit run app/streamlit_app.py
 ```
 
 ---
 
-## Model Performance (Stage 1)
+## Model Performance
 
-Current best model: **HistGradientBoostingRegressor** (200,000 training rows)
+### Stage 1 — HistGradientBoostingRegressor (200,000 training rows)
 
 | Metric | Model | Median baseline |
 |---|---:|---:|
-| MAE | $1,766 | $6,932 |
-| RMSE | $3,259 | $9,705 |
-| R² | 0.898 | −0.025 |
-| MAPE | 12.6% | 49.5% |
+| MAE | $1,850 | $6,932 |
+| RMSE | $3,299 | $9,705 |
+| R² | 0.882 | −0.025 |
+| MAPE | 16.4% | 121.1% |
 
 Error by price segment: see [`model_results.md`](model_results.md)
 Full model comparison (6 models): see [`model_comparison/model_comparison.md`](model_comparison/model_comparison.md)
+
+### Stage 2 — CPI Macro Adjustment
+
+| Date | CPI Multiplier | Effect |
+|---|---:|---|
+| 2015-01 (baseline) | 1.0000 | Reference |
+| 2021-12 (COVID surge) | 1.1396 | +14% vs. baseline |
+| 2023-09 (all-time high) | 1.2200 | +22% vs. baseline |
+| 2026-06 (current) | 1.2177 | +21.8% vs. baseline |
+
+Backtest on historical test set: Δ MAE = −$0.15 (0.01%) — does not hurt accuracy on 2014–2015 data.
+See [`model_results_stage2.md`](model_results_stage2.md)
 
 ---
 
