@@ -8,3 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Generated large datasets (regenerate via scripts/enrich_macro.py)
+car_prices_macro.csv

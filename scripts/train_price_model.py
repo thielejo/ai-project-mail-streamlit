@@ -193,6 +193,15 @@ def build_pipeline() -> tuple[TransformedTargetRegressor, str, str | None]:
         )
 
 
+PRICE_SEGMENTS = [
+    ("Budget", 500, 5_000),
+    ("Economy", 5_000, 10_000),
+    ("Mid-Range", 10_000, 20_000),
+    ("Premium", 20_000, 40_000),
+    ("Luxury", 40_000, 150_000),
+]
+
+
 def evaluate_model(y_true: pd.Series, predictions: np.ndarray) -> dict[str, float]:
     mae = mean_absolute_error(y_true, predictions)
     rmse = np.sqrt(mean_squared_error(y_true, predictions))
@@ -205,6 +214,32 @@ def evaluate_model(y_true: pd.Series, predictions: np.ndarray) -> dict[str, floa
         "r2": round(float(r2), 4),
         "mape_percent": round(float(mape), 2),
     }
+
+
+def evaluate_by_segment(
+    y_true: pd.Series, predictions: np.ndarray
+) -> list[dict]:
+    pred_series = pd.Series(predictions, index=y_true.index)
+    results = []
+    for label, low, high in PRICE_SEGMENTS:
+        mask = y_true.between(low, high)
+        n = int(mask.sum())
+        if n < 10:
+            continue
+        seg_true = y_true[mask]
+        seg_pred = pred_series[mask]
+        mae = mean_absolute_error(seg_true, seg_pred)
+        rmse = np.sqrt(mean_squared_error(seg_true, seg_pred))
+        mape = np.mean(np.abs((seg_true - seg_pred) / seg_true)) * 100
+        results.append({
+            "segment": label,
+            "price_range": f"${low:,}–${high:,}",
+            "n": n,
+            "mae": round(float(mae), 2),
+            "rmse": round(float(rmse), 2),
+            "mape_percent": round(float(mape), 2),
+        })
+    return results
 
 
 def get_top_feature_importance(
@@ -254,6 +289,7 @@ def write_results_markdown(
     metrics: dict[str, float],
     baseline_metrics: dict[str, float],
     top_features: list[dict[str, float | str]],
+    segment_metrics: list[dict],
     rows_used: int,
     test_rows: int,
     model_path: Path,
@@ -266,6 +302,14 @@ def write_results_markdown(
         )
     else:
         feature_table = "| Not available for this model type | n/a |"
+
+    if segment_metrics:
+        segment_table = "\n".join(
+            f"| {s['segment']} | {s['price_range']} | {s['n']:,} | ${s['mae']:,.0f} | ${s['rmse']:,.0f} | {s['mape_percent']:.1f}% |"
+            for s in segment_metrics
+        )
+    else:
+        segment_table = "| n/a | n/a | n/a | n/a | n/a | n/a |"
 
     fallback_note = ""
     if fallback_reason:
@@ -321,6 +365,12 @@ Target variable:
 | R2 | {metrics["r2"]:.4f} | {baseline_metrics["r2"]:.4f} |
 | MAPE | {metrics["mape_percent"]:.2f}% | {baseline_metrics["mape_percent"]:.2f}% |
 
+## Error by Price Segment
+
+| Segment | Price Range | Test Rows | MAE | RMSE | MAPE |
+|---|---|---:|---:|---:|---:|
+{segment_table}
+
 ## Most Important Features
 
 | Feature | Importance |
@@ -363,6 +413,7 @@ def main() -> None:
 
     predictions = model.predict(X_test)
     metrics = evaluate_model(y_test, predictions)
+    segment_metrics = evaluate_by_segment(y_test, predictions)
 
     median_prediction = np.full(shape=len(y_test), fill_value=y_train.median())
     baseline_metrics = evaluate_model(y_test, median_prediction)
@@ -385,6 +436,7 @@ def main() -> None:
         "target": TARGET_COLUMN,
         "metrics": metrics,
         "median_baseline_metrics": baseline_metrics,
+        "segment_metrics": segment_metrics,
         "top_features": top_features,
     }
     args.metrics_output.write_text(
@@ -397,6 +449,7 @@ def main() -> None:
         metrics=metrics,
         baseline_metrics=baseline_metrics,
         top_features=top_features,
+        segment_metrics=segment_metrics,
         rows_used=len(df),
         test_rows=len(X_test),
         model_path=args.model_output,
