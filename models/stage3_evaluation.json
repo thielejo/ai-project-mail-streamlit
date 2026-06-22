@@ -1,0 +1,144 @@
+{
+  "created_at": "2026-06-22T15:25:36.715192+00:00",
+  "method": "cpi_normalized_model_residual_by_body_month",
+  "reference_year_month": "2015-02",
+  "factor_min": 0.85,
+  "factor_max": 1.15,
+  "shrinkage_observations": 1000,
+  "minimum_recommendation_observations": 100,
+  "observed_months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    12
+  ],
+  "unobserved_months": [
+    8,
+    9,
+    10,
+    11
+  ],
+  "holdout_evaluation": {
+    "training_rows": 423984,
+    "test_rows": 105806,
+    "baseline_mae": 1895.03,
+    "stage3_mae": 1870.2,
+    "mae_change": -24.82,
+    "mae_change_percent": -1.31
+  },
+  "seasonality_csv": "models\\seasonality_factors.csv",
+  "body_summary": [
+    {
+      "body": "sedan",
+      "total_observations": 234034,
+      "observed_months": 8,
+      "best_month": "Mar",
+      "best_factor": 1.0381,
+      "worst_month": "Dec",
+      "worst_factor": 0.9286
+    },
+    {
+      "body": "suv",
+      "total_observations": 139924,
+      "observed_months": 8,
+      "best_month": "Mar",
+      "best_factor": 1.029,
+      "worst_month": "Dec",
+      "worst_factor": 0.9158
+    },
+    {
+      "body": "hatchback",
+      "total_observations": 25651,
+      "observed_months": 8,
+      "best_month": "Jan",
+      "best_factor": 1.0292,
+      "worst_month": "Jun",
+      "worst_factor": 0.9506
+    },
+    {
+      "body": "minivan",
+      "total_observations": 24626,
+      "observed_months": 8,
+      "best_month": "Mar",
+      "best_factor": 1.0149,
+      "worst_month": "Dec",
+      "worst_factor": 0.9357
+    },
+    {
+      "body": "coupe",
+      "total_observations": 16955,
+      "observed_months": 8,
+      "best_month": "Mar",
+      "best_factor": 1.022,
+      "worst_month": "Dec",
+      "worst_factor": 0.9514
+    },
+    {
+      "body": "crew cab",
+      "total_observations": 16005,
+      "observed_months": 8,
+      "best_month": "Jun",
+      "best_factor": 1.012,
+      "worst_month": "Dec",
+      "worst_factor": 0.9587
+    },
+    {
+      "body": "wagon",
+      "total_observations": 15521,
+      "observed_months": 8,
+      "best_month": "Mar",
+      "best_factor": 1.0212,
+      "worst_month": "Dec",
+      "worst_factor": 0.9489
+    },
+    {
+      "body": "convertible",
+      "total_observations": 10148,
+      "observed_months": 8,
+      "best_month": "Mar",
+      "best_factor": 1.0197,
+      "worst_month": "Dec",
+      "worst_factor": 0.9487
+    },
+    {
+      "body": "supercrew",
+      "total_observations": 8882,
+      "observed_months": 8,
+      "best_month": "Jun",
+      "best_factor": 1.0289,
+      "worst_month": "Dec",
+      "worst_factor": 0.9712
+    },
+    {
+      "body": "g sedan",
+      "total_observations": 7417,
+      "observed_months": 8,
+      "best_month": "Jan",
+      "best_factor": 1.0197,
+      "worst_month": "Jun",
+      "worst_factor": 0.9757
+    },
+    {
+      "body": "supercab",
+      "total_observations": 5152,
+      "observed_months": 8,
+      "best_month": "Jun",
+      "best_factor": 1.0106,
+      "worst_month": "Dec",
+      "worst_factor": 0.9759
+    },
+    {
+      "body": "regular cab",
+      "total_observations": 4668,
+      "observed_months": 8,
+      "best_month": "Mar",
+      "best_factor": 1.0096,
+      "worst_month": "Dec",
+      "worst_factor": 0.9656
+    }
+  ]
+}

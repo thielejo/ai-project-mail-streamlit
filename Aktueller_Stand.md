@@ -11,7 +11,7 @@
 **Team MAIL:** Johanna Thiele · Moritz Binder · Pascal Müller · Tara Golle
 **Deadline:** 31.07.2026 (LNCS-Paper, 12 Seiten + Präsentation)
 
-Wir bauen einen **hybriden KI-Agenten für dynamische Gebrauchtwagenpreisgestaltung**. Das System kombiniert ein ML-Modell (Stage 1), eine makroökonomische CPI-Anpassung (Stage 2) und saisonale Regeln (Stage 3, noch nicht implementiert) zu einem marktaktuellen Preisvorschlag.
+Wir bauen einen **hybriden KI-Agenten für dynamische Gebrauchtwagenpreisgestaltung**. Das System kombiniert ein ML-Modell (Stage 1), eine makroökonomische CPI-Anpassung (Stage 2) und saisonale Regeln (Stage 3) zu einem marktaktuellen Preisvorschlag.
 
 **Trainingsdaten:** 558.743 US-Auktionsverkäufe 2014–2015 (Manheim via Kaggle).
 **Endprodukt:** Streamlit-Demo + LLM-Orchestrierung.
@@ -44,8 +44,8 @@ Eingabe: Fahrzeugbeschreibung (Marke, Modell, Karosserie, Baujahr, Km, Zustand)
                         │  × seasonal_factor(Karosserietyp, Monat)
                         ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│  Stage 3 — Saisonal (OFFEN ❌)                                         │
-│  Regelbasiert: Durchschnittspreise nach Karosserietyp × Verkaufsmonat │
+│  Stage 3 — Saisonal (FERTIG ✅)                                        │
+│  Regelbasiert: bereinigte Modellabweichung nach Karosserie × Monat   │
 │  → „Bester Monat zum Verkaufen" + saisonaler Anpassungsfaktor         │
 └───────────────────────┬────────────────────────────────────────────────┘
                         │
@@ -67,8 +67,10 @@ Aktueller_Stand.md          ← Diese Datei. KI-Kontext, zuerst lesen.
 README.md                   ← Menschenlesbare Übersicht (auf Englisch).
 
 app/
-  streamlit_app.py          ← Demo-App. Importiert stage2_macro aus scripts/.
-                              Zeigt Stage-1-Basis + Stage-2-CPI-Preis.
+  streamlit_app.py          ← Demo-App. Importiert stage2_macro und
+                              stage3_seasonality aus scripts/.
+                              Zeigt Stage-1-Basis + Stage-2-CPI-Preis
+                              + Stage-3-Saisonpreis.
                               Bewertungsdatum-Selector 1996–2026.
 
 scripts/
@@ -78,8 +80,15 @@ scripts/
   stage2_macro.py           ← Stage-2-Modul. Von App und Scripts importieren.
                               Funktionen: load_macro_index(), apply_stage2(),
                               get_cpi_multiplier(), get_macro_context()
+  stage3_seasonality.py     ← Stage-3-Modul. Funktionen:
+                              prepare_seasonality_data(),
+                              build_seasonality_factors(), apply_stage3()
   evaluate_stage2.py        ← Backtest + Vorwärtsprojektion für Stage 2.
                               Schreibt models/stage2_evaluation.json
+  evaluate_stage3.py        ← Saisonalitätsfaktoren + Summary.
+                              Schreibt models/seasonality_factors.csv,
+                              models/stage3_evaluation.json und
+                              model_results_stage3.md
   evaluate_segments.py      ← Segmentanalyse auf gespeichertem Modell.
   compare_models.py         ← 6-Modell-Benchmark (Ergebnisse in model_comparison/)
   enrich_macro.py           ← FRED-Download → macro_index.csv (Internet nötig)
@@ -98,6 +107,8 @@ model_comparison/
 
 model_results.md            ← Stage-1-Ergebnisse (auto-generiert beim Training)
 model_results_stage2.md     ← Stage-2-Evaluierung (auto-generiert)
+model_results_stage3.md     ← Stage-3-Saisonalität (auto-generiert)
+                              inkl. Datenabdeckung und 80/20-Prüfung
 
 docs/
   project_proposal_v2.md   ← Offizieller Projektvorschlag
@@ -131,7 +142,10 @@ uv run python scripts/train_price_model.py
 # 3. Stage-2-Evaluation
 uv run python scripts/evaluate_stage2.py
 
-# 4. Demo-App starten
+# 4. Stage-3-Evaluation
+uv run python scripts/evaluate_stage3.py
+
+# 5. Demo-App starten
 uv run streamlit run app/streamlit_app.py
 
 # Optional: Makrodaten von FRED aktualisieren
@@ -187,11 +201,10 @@ Das alte UI trennte `sale_year` und `model_year` nicht klar. Ein einziges „Bew
 
 | Priorität | Aufgabe | Hinweise |
 |---|---|---|
-| 1 | **Stage 3: Saisonalität** | Durchschnittspreise nach Karosserietyp × Monat aus Trainingsdaten; seasonal_factor ≈ ±15%; „Bester Monat"-Chart in App |
-| 2 | **Preisrange in App** | ±MAE des jeweiligen Segments statt einer einzigen Zahl anzeigen |
-| 3 | **Volles Training** | `--max-rows 0` für 534k Zeilen; erwartete MAE-Verbesserung ~5–10% |
-| 4 | **LLM-Orchestrierung** | Stage 1–3-Output + `get_macro_context()` → natürlichsprachliche Erklärung |
-| 5 | **Paper schreiben** | LNCS 12 Seiten; Architekturdiagramm; Stage-1+2-Ergebnisse sind fertig |
+| 1 | **Preisrange in App** | ±MAE des jeweiligen Segments statt einer einzigen Zahl anzeigen |
+| 2 | **Volles Training** | `--max-rows 0` für 534k Zeilen; erwartete MAE-Verbesserung ~5–10% |
+| 3 | **LLM-Orchestrierung** | Stage 1–3-Output + `get_macro_context()` → natürlichsprachliche Erklärung |
+| 4 | **Paper schreiben** | LNCS 12 Seiten; Architekturdiagramm; Stage-1+2+3-Ergebnisse sind fertig |
 
 ---
 
