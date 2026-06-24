@@ -1,0 +1,541 @@
+body,sale_month,month_name,seasonal_factor,seasonal_delta_pct,raw_factor,observations,confidence,is_observed,body_observations,recommendation_eligible_months,has_recommendation,best_month,best_month_name,best_factor,worst_month,worst_month_name,worst_factor
+access cab,1,Jan,0.9991,-0.1,0.9839,56,low,True,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,2,Feb,1.0014,0.1,1.0187,83,low,True,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,3,Mar,0.9992,-0.1,0.9686,26,low,True,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,4,Apr,1.0003,0.0,1.2505,1,low,True,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,5,May,1.0011,0.1,1.0321,36,low,True,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,6,Jun,0.9984,-0.2,0.9703,56,low,True,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,7,Jul,1.0001,0.0,1.0807,1,low,True,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,8,Aug,1.0,0.0,1.0,0,no_data,False,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,9,Sep,1.0,0.0,1.0,0,no_data,False,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,10,Oct,1.0,0.0,1.0,0,no_data,False,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,11,Nov,1.0,0.0,1.0,0,no_data,False,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+access cab,12,Dec,0.9993,-0.1,0.9745,30,low,True,289,0,False,2,Feb,1.0014,6,Jun,0.9984
+beetle convertible,1,Jan,0.9994,-0.1,0.9733,22,low,True,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,2,Feb,1.0003,0.0,1.0207,14,low,True,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,3,Mar,1.0,0.0,1.0026,3,low,True,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,4,Apr,1.0,0.0,1.0,0,no_data,False,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,5,May,1.0002,0.0,1.0233,10,low,True,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,6,Jun,0.9998,-0.0,0.9766,8,low,True,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,7,Jul,1.0,0.0,1.0,0,no_data,False,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,8,Aug,1.0,0.0,1.0,0,no_data,False,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,9,Sep,1.0,0.0,1.0,0,no_data,False,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,10,Oct,1.0,0.0,1.0,0,no_data,False,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,11,Nov,1.0,0.0,1.0,0,no_data,False,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+beetle convertible,12,Dec,1.0,-0.0,0.9948,1,low,True,58,0,False,2,Feb,1.0003,1,Jan,0.9994
+cab plus,1,Jan,1.0,0.0,1.0,0,no_data,False,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,2,Feb,0.9999,-0.0,0.8827,1,low,True,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,3,Mar,1.0,0.0,1.0,1,low,True,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,4,Apr,1.0,0.0,1.0,0,no_data,False,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,5,May,1.0,0.0,1.0,0,no_data,False,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,6,Jun,1.0,0.0,1.0,0,no_data,False,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,7,Jul,1.0,0.0,1.0,0,no_data,False,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,8,Aug,1.0,0.0,1.0,0,no_data,False,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,9,Sep,1.0,0.0,1.0,0,no_data,False,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,10,Oct,1.0,0.0,1.0,0,no_data,False,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,11,Nov,1.0,0.0,1.0,0,no_data,False,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus,12,Dec,1.0006,0.1,1.5691,1,low,True,3,0,False,12,Dec,1.0006,2,Feb,0.9999
+cab plus 4,1,Jan,1.0,0.0,1.0,0,no_data,False,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,2,Feb,1.0006,0.1,1.284,2,low,True,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,3,Mar,1.0,0.0,1.0,0,no_data,False,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,4,Apr,1.0,0.0,1.0,0,no_data,False,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,5,May,1.0,0.0,1.0,0,no_data,False,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,6,Jun,1.0001,0.0,1.0178,3,low,True,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,7,Jul,1.0,0.0,1.0,0,no_data,False,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,8,Aug,1.0,0.0,1.0,0,no_data,False,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,9,Sep,1.0,0.0,1.0,0,no_data,False,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,10,Oct,1.0,0.0,1.0,0,no_data,False,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,11,Nov,1.0,0.0,1.0,0,no_data,False,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+cab plus 4,12,Dec,0.9998,-0.0,0.7973,1,low,True,6,0,False,2,Feb,1.0006,12,Dec,0.9998
+club cab,1,Jan,0.9964,-0.4,0.9044,39,low,True,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,2,Feb,1.0016,0.2,1.0286,58,low,True,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,3,Mar,0.9994,-0.1,0.9455,12,low,True,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,4,Apr,0.999,-0.1,0.5053,2,low,True,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,5,May,1.0018,0.2,1.1204,15,low,True,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,6,Jun,1.0014,0.1,1.0699,20,low,True,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,7,Jul,1.0,0.0,1.0,0,no_data,False,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,8,Aug,1.0,0.0,1.0,0,no_data,False,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,9,Sep,1.0,0.0,1.0,0,no_data,False,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,10,Oct,1.0,0.0,1.0,0,no_data,False,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,11,Nov,1.0,0.0,1.0,0,no_data,False,163,0,False,5,May,1.0018,1,Jan,0.9964
+club cab,12,Dec,0.9993,-0.1,0.959,17,low,True,163,0,False,5,May,1.0018,1,Jan,0.9964
+convertible,1,Jan,0.9847,-1.5,0.9784,2439,high,True,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,2,Feb,1.0045,0.4,1.006,2925,high,True,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,3,Mar,1.0126,1.3,1.0268,884,medium,True,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,4,Apr,1.0005,0.0,1.0149,32,low,True,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,5,May,1.0092,0.9,1.0177,1082,high,True,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,6,Jun,1.0052,0.5,1.008,1875,high,True,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,7,Jul,1.0003,0.0,1.008,37,low,True,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,8,Aug,1.0,0.0,1.0,0,no_data,False,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,9,Sep,1.0,0.0,1.0,0,no_data,False,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,10,Oct,1.0,0.0,1.0,0,no_data,False,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,11,Nov,1.0,0.0,1.0,0,no_data,False,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+convertible,12,Dec,0.9835,-1.7,0.9635,828,medium,True,10102,6,True,3,Mar,1.0126,12,Dec,0.9835
+coupe,1,Jan,0.9872,-1.3,0.9842,4230,high,True,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,2,Feb,1.0093,0.9,1.0111,5029,high,True,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,3,Mar,1.0177,1.8,1.0303,1401,high,True,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,4,Apr,1.0002,0.0,1.0066,37,low,True,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,5,May,0.9984,-0.2,0.9973,1618,high,True,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,6,Jun,0.9997,-0.0,0.9996,3085,high,True,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,7,Jul,1.0018,0.2,1.0274,69,low,True,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,8,Aug,1.0,0.0,1.0,0,no_data,False,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,9,Sep,1.0,0.0,1.0,0,no_data,False,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,10,Oct,1.0,0.0,1.0,0,no_data,False,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,11,Nov,1.0,0.0,1.0,0,no_data,False,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+coupe,12,Dec,0.9839,-1.6,0.9728,1447,high,True,16916,6,True,3,Mar,1.0177,12,Dec,0.9839
+crew cab,1,Jan,1.0015,0.1,1.0019,3968,high,True,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,2,Feb,1.0016,0.2,1.002,4759,high,True,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,3,Mar,1.0045,0.4,1.0077,1366,high,True,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,4,Apr,0.9925,-0.7,0.7795,35,low,True,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,5,May,0.9948,-0.5,0.9918,1742,high,True,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,6,Jun,1.0022,0.2,1.0029,2987,high,True,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,7,Jul,0.9989,-0.1,0.9792,55,low,True,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,8,Aug,1.0,0.0,1.0,0,no_data,False,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,9,Sep,1.0,0.0,1.0,0,no_data,False,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,10,Oct,1.0,0.0,1.0,0,no_data,False,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,11,Nov,1.0,0.0,1.0,0,no_data,False,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crew cab,12,Dec,0.9903,-1.0,0.9814,1084,high,True,15996,6,True,3,Mar,1.0045,12,Dec,0.9903
+crewmax cab,1,Jan,0.9983,-0.2,0.9864,140,medium,True,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,2,Feb,0.9997,-0.0,0.9978,158,medium,True,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,3,Mar,1.0002,0.0,1.0046,35,low,True,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,4,Apr,1.0,-0.0,0.9961,1,low,True,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,5,May,1.0008,0.1,1.0141,61,low,True,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,6,Jun,1.0026,0.3,1.0256,112,medium,True,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,7,Jul,1.0,0.0,1.0096,2,low,True,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,8,Aug,1.0,0.0,1.0,0,no_data,False,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,9,Sep,1.0,0.0,1.0,0,no_data,False,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,10,Oct,1.0,0.0,1.0,0,no_data,False,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,11,Nov,1.0,0.0,1.0,0,no_data,False,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+crewmax cab,12,Dec,0.9984,-0.2,0.9597,41,low,True,550,3,True,6,Jun,1.0026,1,Jan,0.9983
+cts coupe,1,Jan,0.9985,-0.2,0.9619,41,low,True,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,2,Feb,0.9999,-0.0,0.9966,42,low,True,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,3,Mar,1.0002,0.0,1.0151,12,low,True,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,4,Apr,1.0,0.0,1.0,0,no_data,False,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,5,May,1.0,0.0,1.0006,26,low,True,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,6,Jun,1.0005,0.1,1.0231,24,low,True,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,7,Jul,1.0,0.0,1.0114,1,low,True,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,8,Aug,1.0,0.0,1.0,0,no_data,False,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,9,Sep,1.0,0.0,1.0,0,no_data,False,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,10,Oct,1.0,0.0,1.0,0,no_data,False,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,11,Nov,1.0,0.0,1.0,0,no_data,False,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts coupe,12,Dec,0.9999,-0.0,0.9941,12,low,True,158,0,False,6,Jun,1.0005,1,Jan,0.9985
+cts wagon,1,Jan,1.0003,0.0,1.0896,3,low,True,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,2,Feb,0.9998,-0.0,0.9404,3,low,True,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,3,Mar,1.0,0.0,1.0,0,no_data,False,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,4,Apr,1.0,0.0,1.0,0,no_data,False,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,5,May,1.0004,0.0,1.1205,3,low,True,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,6,Jun,1.0,0.0,1.0,1,low,True,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,7,Jul,1.0,0.0,1.0,0,no_data,False,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,8,Aug,1.0,0.0,1.0,0,no_data,False,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,9,Sep,1.0,0.0,1.0,0,no_data,False,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,10,Oct,1.0,0.0,1.0,0,no_data,False,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,11,Nov,1.0,0.0,1.0,0,no_data,False,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts wagon,12,Dec,0.9999,-0.0,0.9777,3,low,True,13,0,False,5,May,1.0004,2,Feb,0.9998
+cts-v coupe,1,Jan,0.9999,-0.0,0.9918,9,low,True,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,2,Feb,1.0,0.0,1.0002,11,low,True,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,3,Mar,1.0,0.0,1.0182,1,low,True,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,4,Apr,1.0,0.0,1.0,0,no_data,False,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,5,May,1.0,-0.0,0.9981,4,low,True,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,6,Jun,1.0,0.0,1.0018,5,low,True,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,7,Jul,1.0,0.0,1.0,0,no_data,False,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,8,Aug,1.0,0.0,1.0,0,no_data,False,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,9,Sep,1.0,0.0,1.0,0,no_data,False,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,10,Oct,1.0,0.0,1.0,0,no_data,False,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,11,Nov,1.0,0.0,1.0,0,no_data,False,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v coupe,12,Dec,1.0001,0.0,1.0184,4,low,True,34,0,False,12,Dec,1.0001,1,Jan,0.9999
+cts-v wagon,1,Jan,1.0,0.0,1.0,1,low,True,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,2,Feb,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,3,Mar,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,4,Apr,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,5,May,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,6,Jun,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,7,Jul,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,8,Aug,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,9,Sep,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,10,Oct,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,11,Nov,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+cts-v wagon,12,Dec,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+double cab,1,Jan,0.9976,-0.2,0.9907,355,medium,True,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,2,Feb,1.0004,0.0,1.0014,455,medium,True,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,3,Mar,1.0022,0.2,1.0181,136,medium,True,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,4,Apr,0.9993,-0.1,0.76,3,low,True,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,5,May,1.0007,0.1,1.005,177,medium,True,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,6,Jun,1.0006,0.1,1.0022,343,medium,True,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,7,Jul,1.0003,0.0,1.0261,13,low,True,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,8,Aug,1.0,0.0,1.0,0,no_data,False,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,9,Sep,1.0,0.0,1.0,0,no_data,False,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,10,Oct,1.0,0.0,1.0,0,no_data,False,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,11,Nov,1.0,0.0,1.0,0,no_data,False,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+double cab,12,Dec,0.9981,-0.2,0.9781,95,low,True,1577,5,True,3,Mar,1.0022,1,Jan,0.9976
+e-series van,1,Jan,1.0046,0.5,1.016,406,medium,True,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,2,Feb,1.0114,1.1,1.0356,473,medium,True,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,3,Mar,1.0009,0.1,1.0066,154,medium,True,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,4,Apr,0.9992,-0.1,0.8897,7,low,True,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,5,May,0.9983,-0.2,0.9902,215,medium,True,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,6,Jun,0.9903,-1.0,0.9684,443,medium,True,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,7,Jul,0.9999,-0.0,0.9729,5,low,True,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,8,Aug,1.0,0.0,1.0,0,no_data,False,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,9,Sep,1.0,0.0,1.0,0,no_data,False,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,10,Oct,1.0,0.0,1.0,0,no_data,False,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,11,Nov,1.0,0.0,1.0,0,no_data,False,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+e-series van,12,Dec,0.9944,-0.6,0.9465,116,medium,True,1819,6,True,2,Feb,1.0114,6,Jun,0.9903
+elantra coupe,1,Jan,1.0001,0.0,1.0036,18,low,True,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,2,Feb,1.0002,0.0,1.0079,26,low,True,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,3,Mar,1.0,0.0,1.0063,6,low,True,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,4,Apr,1.0,0.0,1.0,0,no_data,False,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,5,May,0.9995,-0.1,0.97,18,low,True,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,6,Jun,0.9993,-0.1,0.9736,29,low,True,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,7,Jul,1.0,0.0,1.0,0,no_data,False,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,8,Aug,1.0,0.0,1.0,0,no_data,False,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,9,Sep,1.0,0.0,1.0,0,no_data,False,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,10,Oct,1.0,0.0,1.0,0,no_data,False,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,11,Nov,1.0,0.0,1.0,0,no_data,False,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+elantra coupe,12,Dec,1.0007,0.1,1.1339,5,low,True,102,0,False,12,Dec,1.0007,6,Jun,0.9993
+extended cab,1,Jan,0.984,-1.6,0.9697,1118,high,True,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,2,Feb,1.0041,0.4,1.0071,1335,high,True,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,3,Mar,1.0071,0.7,1.0245,406,medium,True,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,4,Apr,0.9959,-0.4,0.683,13,low,True,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,5,May,1.001,0.1,1.0034,384,medium,True,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,6,Jun,1.0091,0.9,1.023,652,medium,True,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,7,Jul,1.0005,0.0,1.0693,7,low,True,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,8,Aug,1.0,0.0,1.0,0,no_data,False,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,9,Sep,1.0,0.0,1.0,0,no_data,False,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,10,Oct,1.0,0.0,1.0,0,no_data,False,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,11,Nov,1.0,0.0,1.0,0,no_data,False,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+extended cab,12,Dec,0.9932,-0.7,0.9748,372,medium,True,4287,6,True,6,Jun,1.0091,1,Jan,0.984
+g convertible,1,Jan,0.9997,-0.0,0.995,67,low,True,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,2,Feb,0.9998,-0.0,0.9973,103,medium,True,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,3,Mar,0.9997,-0.0,0.9873,22,low,True,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,4,Apr,0.9998,-0.0,0.8134,1,low,True,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,5,May,1.0007,0.1,1.031,23,low,True,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,6,Jun,1.0011,0.1,1.0149,83,low,True,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,7,Jul,1.0,-0.0,0.9982,2,low,True,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,8,Aug,1.0,0.0,1.0,0,no_data,False,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,9,Sep,1.0,0.0,1.0,0,no_data,False,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,10,Oct,1.0,0.0,1.0,0,no_data,False,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,11,Nov,1.0,0.0,1.0,0,no_data,False,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g convertible,12,Dec,0.9996,-0.0,0.981,22,low,True,323,1,False,2,Feb,0.9998,2,Feb,0.9998
+g coupe,1,Jan,1.0051,0.5,1.0188,372,medium,True,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,2,Feb,0.9998,-0.0,0.9994,464,medium,True,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,3,Mar,0.9984,-0.2,0.9852,123,medium,True,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,4,Apr,1.0,-0.0,0.9714,1,low,True,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,5,May,0.9993,-0.1,0.994,129,medium,True,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,6,Jun,0.9947,-0.5,0.9804,371,medium,True,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,7,Jul,0.9996,-0.0,0.9373,6,low,True,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,8,Aug,1.0,0.0,1.0,0,no_data,False,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,9,Sep,1.0,0.0,1.0,0,no_data,False,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,10,Oct,1.0,0.0,1.0,0,no_data,False,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,11,Nov,1.0,0.0,1.0,0,no_data,False,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g coupe,12,Dec,1.0025,0.3,1.0223,126,medium,True,1592,6,True,1,Jan,1.0051,6,Jun,0.9947
+g sedan,1,Jan,1.0174,1.7,1.0265,1910,high,True,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,2,Feb,1.0074,0.7,1.0108,2169,high,True,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,3,Mar,0.9994,-0.1,0.9985,617,medium,True,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,4,Apr,0.9998,-0.0,0.9781,9,low,True,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,5,May,0.9889,-1.1,0.9701,594,medium,True,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,6,Jun,0.9777,-2.2,0.9632,1544,high,True,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,7,Jul,1.0004,0.0,1.0287,15,low,True,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,8,Aug,1.0,0.0,1.0,0,no_data,False,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,9,Sep,1.0,0.0,1.0,0,no_data,False,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,10,Oct,1.0,0.0,1.0,0,no_data,False,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,11,Nov,1.0,0.0,1.0,0,no_data,False,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g sedan,12,Dec,1.0095,0.9,1.0265,554,medium,True,7412,6,True,1,Jan,1.0174,6,Jun,0.9777
+g37 convertible,1,Jan,1.0,-0.0,0.9816,2,low,True,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,2,Feb,1.0004,0.0,1.1305,3,low,True,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,3,Mar,0.9999,-0.0,0.9473,2,low,True,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,4,Apr,1.0,0.0,1.0,0,no_data,False,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,5,May,1.0,-0.0,0.9844,1,low,True,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,6,Jun,1.0003,0.0,1.0666,4,low,True,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,7,Jul,1.0,0.0,1.0,0,no_data,False,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,8,Aug,1.0,0.0,1.0,0,no_data,False,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,9,Sep,1.0,0.0,1.0,0,no_data,False,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,10,Oct,1.0,0.0,1.0,0,no_data,False,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,11,Nov,1.0,0.0,1.0,0,no_data,False,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 convertible,12,Dec,0.9993,-0.1,0.913,8,low,True,20,0,False,2,Feb,1.0004,12,Dec,0.9993
+g37 coupe,1,Jan,0.9999,-0.0,0.9661,4,low,True,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,2,Feb,0.9999,-0.0,0.9569,3,low,True,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,3,Mar,1.0,0.0,1.0482,1,low,True,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,4,Apr,1.0,0.0,1.0,0,no_data,False,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,5,May,1.0001,0.0,1.0959,1,low,True,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,6,Jun,1.0001,0.0,1.0567,1,low,True,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,7,Jul,1.0,0.0,1.0,0,no_data,False,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,8,Aug,1.0,0.0,1.0,0,no_data,False,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,9,Sep,1.0,0.0,1.0,0,no_data,False,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,10,Oct,1.0,0.0,1.0,0,no_data,False,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,11,Nov,1.0,0.0,1.0,0,no_data,False,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+g37 coupe,12,Dec,1.0001,0.0,1.0562,2,low,True,12,0,False,12,Dec,1.0001,1,Jan,0.9999
+genesis coupe,1,Jan,0.9975,-0.3,0.9626,72,low,True,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,2,Feb,1.002,0.2,1.0257,86,low,True,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,3,Mar,1.0006,0.1,1.0324,20,low,True,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,4,Apr,1.0,0.0,1.0,0,no_data,False,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,5,May,1.0002,0.0,1.0107,18,low,True,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,6,Jun,1.0021,0.2,1.0336,67,low,True,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,7,Jul,1.0,0.0,1.0,0,no_data,False,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,8,Aug,1.0,0.0,1.0,0,no_data,False,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,9,Sep,1.0,0.0,1.0,0,no_data,False,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,10,Oct,1.0,0.0,1.0,0,no_data,False,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,11,Nov,1.0,0.0,1.0,0,no_data,False,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+genesis coupe,12,Dec,0.9978,-0.2,0.9239,30,low,True,293,0,False,6,Jun,1.0021,1,Jan,0.9975
+granturismo convertible,1,Jan,0.9999,-0.0,0.9355,2,low,True,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,2,Feb,1.0001,0.0,1.0461,3,low,True,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,3,Mar,1.0,0.0,1.0,0,no_data,False,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,4,Apr,1.0,0.0,1.0,0,no_data,False,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,5,May,1.0001,0.0,1.0241,4,low,True,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,6,Jun,0.9998,-0.0,0.9401,4,low,True,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,7,Jul,1.0,0.0,1.0,0,no_data,False,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,8,Aug,1.0,0.0,1.0,0,no_data,False,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,9,Sep,1.0,0.0,1.0,0,no_data,False,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,10,Oct,1.0,0.0,1.0,0,no_data,False,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,11,Nov,1.0,0.0,1.0,0,no_data,False,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+granturismo convertible,12,Dec,1.0,0.0,1.0,0,no_data,False,13,0,False,2,Feb,1.0001,6,Jun,0.9998
+hatchback,1,Jan,1.0213,2.1,1.0247,6319,high,True,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,2,Feb,1.0169,1.7,1.0191,7392,high,True,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,3,Mar,1.0127,1.3,1.0185,2181,high,True,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,4,Apr,0.9954,-0.5,0.9251,65,low,True,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,5,May,0.9616,-3.8,0.9465,2552,high,True,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,6,Jun,0.9552,-4.5,0.9466,5152,high,True,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,7,Jul,0.9997,-0.0,0.9948,57,low,True,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,8,Aug,1.0,0.0,1.0,0,no_data,False,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,9,Sep,1.0,0.0,1.0,0,no_data,False,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,10,Oct,1.0,0.0,1.0,0,no_data,False,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,11,Nov,1.0,0.0,1.0,0,no_data,False,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+hatchback,12,Dec,1.0049,0.5,1.0075,1902,high,True,25620,6,True,1,Jan,1.0213,6,Jun,0.9552
+king cab,1,Jan,0.9972,-0.3,0.9764,136,medium,True,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,2,Feb,1.0041,0.4,1.0305,156,medium,True,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,3,Mar,0.9987,-0.1,0.9608,34,low,True,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,4,Apr,1.0,0.0,1.0,0,no_data,False,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,5,May,0.9994,-0.1,0.9826,36,low,True,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,6,Jun,0.9953,-0.5,0.9478,100,medium,True,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,7,Jul,0.9999,-0.0,0.9351,1,low,True,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,8,Aug,1.0,0.0,1.0,0,no_data,False,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,9,Sep,1.0,0.0,1.0,0,no_data,False,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,10,Oct,1.0,0.0,1.0,0,no_data,False,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,11,Nov,1.0,0.0,1.0,0,no_data,False,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+king cab,12,Dec,1.0002,0.0,1.0043,50,low,True,513,3,True,2,Feb,1.0041,6,Jun,0.9953
+koup,1,Jan,1.0001,0.0,1.0016,42,low,True,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,2,Feb,1.0018,0.2,1.0342,54,low,True,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,3,Mar,0.9999,-0.0,0.9937,17,low,True,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,4,Apr,1.0,0.0,1.0,0,no_data,False,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,5,May,1.0001,0.0,1.0033,19,low,True,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,6,Jun,0.9995,-0.1,0.9834,33,low,True,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,7,Jul,1.0,0.0,1.0,0,no_data,False,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,8,Aug,1.0,0.0,1.0,0,no_data,False,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,9,Sep,1.0,0.0,1.0,0,no_data,False,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,10,Oct,1.0,0.0,1.0,0,no_data,False,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,11,Nov,1.0,0.0,1.0,0,no_data,False,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+koup,12,Dec,1.0003,0.0,1.0234,14,low,True,179,0,False,2,Feb,1.0018,6,Jun,0.9995
+mega cab,1,Jan,1.0004,0.0,1.0355,11,low,True,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,2,Feb,0.9987,-0.1,0.9145,15,low,True,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,3,Mar,1.0,-0.0,0.9877,3,low,True,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,4,Apr,1.0,0.0,1.0,0,no_data,False,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,5,May,1.0004,0.0,1.0147,28,low,True,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,6,Jun,1.0002,0.0,1.0032,50,low,True,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,7,Jul,1.0003,0.0,1.1413,2,low,True,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,8,Aug,1.0,0.0,1.0,0,no_data,False,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,9,Sep,1.0,0.0,1.0,0,no_data,False,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,10,Oct,1.0,0.0,1.0,0,no_data,False,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,11,Nov,1.0,0.0,1.0,0,no_data,False,111,0,False,5,May,1.0004,2,Feb,0.9987
+mega cab,12,Dec,1.0002,0.0,1.0885,2,low,True,111,0,False,5,May,1.0004,2,Feb,0.9987
+minivan,1,Jan,0.993,-0.7,0.9919,6452,high,True,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,2,Feb,1.0062,0.6,1.007,7882,high,True,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,3,Mar,1.0144,1.4,1.0208,2251,high,True,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,4,Apr,0.9974,-0.3,0.9591,68,low,True,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,5,May,0.9943,-0.6,0.9915,2071,high,True,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,6,Jun,0.9981,-0.2,0.9977,4171,high,True,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,7,Jul,0.9978,-0.2,0.9556,51,low,True,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,8,Aug,1.0,0.0,1.0,0,no_data,False,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,9,Sep,1.0,0.0,1.0,0,no_data,False,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,10,Oct,1.0,0.0,1.0,0,no_data,False,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,11,Nov,1.0,0.0,1.0,0,no_data,False,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+minivan,12,Dec,0.9799,-2.0,0.9679,1673,high,True,24619,6,True,3,Mar,1.0144,12,Dec,0.9799
+promaster cargo van,1,Jan,0.9995,-0.1,0.9465,10,low,True,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,2,Feb,1.001,0.1,1.0403,26,low,True,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,3,Mar,1.0003,0.0,1.0654,4,low,True,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,4,Apr,1.0,0.0,1.0,0,no_data,False,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,5,May,1.0002,0.0,1.0522,3,low,True,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,6,Jun,0.999,-0.1,0.9296,15,low,True,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,7,Jul,1.0,0.0,1.0,0,no_data,False,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,8,Aug,1.0,0.0,1.0,0,no_data,False,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,9,Sep,1.0,0.0,1.0,0,no_data,False,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,10,Oct,1.0,0.0,1.0,0,no_data,False,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,11,Nov,1.0,0.0,1.0,0,no_data,False,59,0,False,2,Feb,1.001,6,Jun,0.999
+promaster cargo van,12,Dec,0.9998,-0.0,0.7651,1,low,True,59,0,False,2,Feb,1.001,6,Jun,0.999
+q60 convertible,1,Jan,1.0002,0.0,1.0084,19,low,True,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,2,Feb,1.0,0.0,1.0024,10,low,True,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,3,Mar,1.0,0.0,1.0301,1,low,True,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,4,Apr,1.0,0.0,1.0,0,no_data,False,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,5,May,1.0,0.0,1.0,0,no_data,False,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,6,Jun,1.0,0.0,1.0082,6,low,True,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,7,Jul,1.0,0.0,1.0,0,no_data,False,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,8,Aug,1.0,0.0,1.0,0,no_data,False,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,9,Sep,1.0,0.0,1.0,0,no_data,False,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,10,Oct,1.0,0.0,1.0,0,no_data,False,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,11,Nov,1.0,0.0,1.0,0,no_data,False,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 convertible,12,Dec,0.9999,-0.0,0.9729,5,low,True,41,0,False,1,Jan,1.0002,12,Dec,0.9999
+q60 coupe,1,Jan,1.0001,0.0,1.0109,10,low,True,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,2,Feb,1.0,0.0,1.0,10,low,True,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,3,Mar,1.0,0.0,1.0,0,no_data,False,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,4,Apr,1.0,0.0,1.0,0,no_data,False,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,5,May,0.9998,-0.0,0.9255,3,low,True,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,6,Jun,0.9999,-0.0,0.9895,7,low,True,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,7,Jul,1.0,0.0,1.0,0,no_data,False,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,8,Aug,1.0,0.0,1.0,0,no_data,False,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,9,Sep,1.0,0.0,1.0,0,no_data,False,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,10,Oct,1.0,0.0,1.0,0,no_data,False,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,11,Nov,1.0,0.0,1.0,0,no_data,False,36,0,False,1,Jan,1.0001,5,May,0.9998
+q60 coupe,12,Dec,1.0,0.0,1.0022,6,low,True,36,0,False,1,Jan,1.0001,5,May,0.9998
+quad cab,1,Jan,0.9896,-1.0,0.9794,1019,high,True,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,2,Feb,1.0027,0.3,1.0049,1239,high,True,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,3,Mar,0.9987,-0.1,0.9954,389,medium,True,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,4,Apr,0.9983,-0.2,0.7625,7,low,True,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,5,May,1.0061,0.6,1.0228,367,medium,True,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,6,Jun,1.0102,1.0,1.0265,629,medium,True,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,7,Jul,1.0001,0.0,1.0149,6,low,True,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,8,Aug,1.0,0.0,1.0,0,no_data,False,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,9,Sep,1.0,0.0,1.0,0,no_data,False,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,10,Oct,1.0,0.0,1.0,0,no_data,False,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,11,Nov,1.0,0.0,1.0,0,no_data,False,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+quad cab,12,Dec,0.9853,-1.5,0.9395,322,medium,True,3978,6,True,6,Jun,1.0102,12,Dec,0.9853
+ram van,1,Jan,1.0,0.0,1.0,1,low,True,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,2,Feb,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,3,Mar,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,4,Apr,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,5,May,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,6,Jun,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,7,Jul,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,8,Aug,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,9,Sep,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,10,Oct,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,11,Nov,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+ram van,12,Dec,1.0,0.0,1.0,0,no_data,False,1,0,False,1,Jan,1.0,1,Jan,1.0
+regular cab,1,Jan,1.002,0.2,1.0037,1162,high,True,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,2,Feb,1.0035,0.4,1.0059,1493,high,True,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,3,Mar,1.0062,0.6,1.0203,440,medium,True,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,4,Apr,0.998,-0.2,0.8451,13,low,True,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,5,May,0.9987,-0.1,0.9957,409,medium,True,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,6,Jun,0.9958,-0.4,0.9907,827,medium,True,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,7,Jul,0.9996,-0.0,0.9567,10,low,True,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,8,Aug,1.0,0.0,1.0,0,no_data,False,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,9,Sep,1.0,0.0,1.0,0,no_data,False,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,10,Oct,1.0,0.0,1.0,0,no_data,False,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,11,Nov,1.0,0.0,1.0,0,no_data,False,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular cab,12,Dec,0.9813,-1.9,0.9197,304,medium,True,4658,6,True,3,Mar,1.0062,12,Dec,0.9813
+regular-cab,1,Jan,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,2,Feb,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,3,Mar,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,4,Apr,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,5,May,0.9998,-0.0,0.9811,12,low,True,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,6,Jun,1.0001,0.0,1.0233,3,low,True,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,7,Jul,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,8,Aug,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,9,Sep,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,10,Oct,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,11,Nov,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+regular-cab,12,Dec,1.0,0.0,1.0,0,no_data,False,15,0,False,6,Jun,1.0001,5,May,0.9998
+sedan,1,Jan,1.0041,0.4,1.0041,60160,high,True,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,2,Feb,1.0146,1.5,1.0148,69657,high,True,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,3,Mar,1.0317,3.2,1.0334,19567,high,True,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,4,Apr,0.9749,-2.5,0.9316,579,medium,True,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,5,May,0.9769,-2.3,0.9759,22208,high,True,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,6,Jun,0.9735,-2.6,0.9729,42955,high,True,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,7,Jul,0.9968,-0.3,0.9899,464,medium,True,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,8,Aug,1.0,0.0,1.0,0,no_data,False,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,9,Sep,1.0,0.0,1.0,0,no_data,False,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,10,Oct,1.0,0.0,1.0,0,no_data,False,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,11,Nov,1.0,0.0,1.0,0,no_data,False,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+sedan,12,Dec,0.991,-0.9,0.9905,18135,high,True,233725,8,True,3,Mar,1.0317,6,Jun,0.9735
+supercab,1,Jan,0.9956,-0.4,0.9925,1439,high,True,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,2,Feb,0.9967,-0.3,0.9945,1573,high,True,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,3,Mar,1.0014,0.1,1.0046,446,medium,True,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,4,Apr,0.9998,-0.0,0.9838,14,low,True,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,5,May,1.0041,0.4,1.0131,462,medium,True,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,6,Jun,1.01,1.0,1.0219,836,medium,True,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,7,Jul,1.0004,0.0,1.0599,7,low,True,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,8,Aug,1.0,0.0,1.0,0,no_data,False,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,9,Sep,1.0,0.0,1.0,0,no_data,False,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,10,Oct,1.0,0.0,1.0,0,no_data,False,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,11,Nov,1.0,0.0,1.0,0,no_data,False,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercab,12,Dec,0.9935,-0.7,0.9757,367,medium,True,5144,6,True,6,Jun,1.01,12,Dec,0.9935
+supercrew,1,Jan,0.9954,-0.5,0.9933,2205,high,True,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,2,Feb,0.9951,-0.5,0.9933,2740,high,True,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,3,Mar,1.0072,0.7,1.0165,766,medium,True,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,4,Apr,0.9968,-0.3,0.8073,17,low,True,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,5,May,1.0022,0.2,1.0045,988,medium,True,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,6,Jun,1.0088,0.9,1.0144,1566,high,True,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,7,Jul,1.0008,0.1,1.021,42,low,True,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,8,Aug,1.0,0.0,1.0,0,no_data,False,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,9,Sep,1.0,0.0,1.0,0,no_data,False,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,10,Oct,1.0,0.0,1.0,0,no_data,False,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,11,Nov,1.0,0.0,1.0,0,no_data,False,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+supercrew,12,Dec,0.9925,-0.8,0.9787,547,medium,True,8871,6,True,6,Jun,1.0088,12,Dec,0.9925
+suv,1,Jan,0.9998,-0.0,0.9998,36371,high,True,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,2,Feb,1.0105,1.1,1.0108,41275,high,True,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,3,Mar,1.0204,2.0,1.0221,11729,high,True,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,4,Apr,0.9552,-4.5,0.8345,371,medium,True,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,5,May,0.9879,-1.2,0.987,13634,high,True,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,6,Jun,0.9874,-1.3,0.9869,25765,high,True,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,7,Jul,0.9995,-0.0,0.9983,380,medium,True,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,8,Aug,1.0,0.0,1.0,0,no_data,False,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,9,Sep,1.0,0.0,1.0,0,no_data,False,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,10,Oct,1.0,0.0,1.0,0,no_data,False,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,11,Nov,1.0,0.0,1.0,0,no_data,False,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+suv,12,Dec,0.9795,-2.0,0.9775,10276,high,True,139801,8,True,3,Mar,1.0204,4,Apr,0.9552
+transit van,1,Jan,1.0,0.0,1.0,0,no_data,False,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,2,Feb,1.0,0.0,1.0,0,no_data,False,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,3,Mar,1.0,0.0,1.0004,1,low,True,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,4,Apr,1.0,0.0,1.0,0,no_data,False,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,5,May,1.0006,0.1,1.096,6,low,True,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,6,Jun,0.9999,-0.0,0.9877,10,low,True,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,7,Jul,0.9997,-0.0,0.86,2,low,True,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,8,Aug,1.0,0.0,1.0,0,no_data,False,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,9,Sep,1.0,0.0,1.0,0,no_data,False,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,10,Oct,1.0,0.0,1.0,0,no_data,False,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,11,Nov,1.0,0.0,1.0,0,no_data,False,19,0,False,5,May,1.0006,7,Jul,0.9997
+transit van,12,Dec,1.0,0.0,1.0,0,no_data,False,19,0,False,5,May,1.0006,7,Jul,0.9997
+tsx sport wagon,1,Jan,0.9999,-0.0,0.9922,17,low,True,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,2,Feb,1.0004,0.0,1.0556,7,low,True,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,3,Mar,1.0,0.0,1.0,0,no_data,False,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,4,Apr,1.0,0.0,1.0,0,no_data,False,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,5,May,1.0,0.0,1.0486,1,low,True,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,6,Jun,0.9995,-0.1,0.9428,9,low,True,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,7,Jul,1.0,0.0,1.0,0,no_data,False,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,8,Aug,1.0,0.0,1.0,0,no_data,False,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,9,Sep,1.0,0.0,1.0,0,no_data,False,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,10,Oct,1.0,0.0,1.0,0,no_data,False,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,11,Nov,1.0,0.0,1.0,0,no_data,False,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+tsx sport wagon,12,Dec,0.9999,-0.0,0.9683,2,low,True,36,0,False,2,Feb,1.0004,6,Jun,0.9995
+van,1,Jan,0.9999,-0.0,0.9999,1166,high,True,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,2,Feb,1.007,0.7,1.0121,1364,high,True,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,3,Mar,1.0062,0.6,1.0207,426,medium,True,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,4,Apr,0.9987,-0.1,0.893,12,low,True,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,5,May,1.0021,0.2,1.0077,381,medium,True,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,6,Jun,0.9871,-1.3,0.9691,716,medium,True,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,7,Jul,1.0005,0.1,1.0733,7,low,True,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,8,Aug,1.0,0.0,1.0,0,no_data,False,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,9,Sep,1.0,0.0,1.0,0,no_data,False,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,10,Oct,1.0,0.0,1.0,0,no_data,False,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,11,Nov,1.0,0.0,1.0,0,no_data,False,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+van,12,Dec,0.9913,-0.9,0.9686,383,medium,True,4455,6,True,2,Feb,1.007,6,Jun,0.9871
+wagon,1,Jan,1.0011,0.1,1.0014,4090,high,True,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,2,Feb,1.0108,1.1,1.0131,4692,high,True,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,3,Mar,1.0169,1.7,1.0294,1349,high,True,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,4,Apr,0.999,-0.1,0.9652,29,low,True,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,5,May,0.9882,-1.2,0.9797,1384,high,True,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,6,Jun,0.984,-1.6,0.978,2653,high,True,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,7,Jul,1.0012,0.1,1.037,33,low,True,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,8,Aug,1.0,0.0,1.0,0,no_data,False,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,9,Sep,1.0,0.0,1.0,0,no_data,False,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,10,Oct,1.0,0.0,1.0,0,no_data,False,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,11,Nov,1.0,0.0,1.0,0,no_data,False,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+wagon,12,Dec,0.9858,-1.4,0.9746,1277,high,True,15507,6,True,3,Mar,1.0169,6,Jun,0.984
+xtracab,1,Jan,0.9991,-0.1,0.949,18,low,True,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,2,Feb,1.0002,0.0,1.0241,10,low,True,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,3,Mar,1.0003,0.0,1.093,3,low,True,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,4,Apr,1.0,0.0,1.0,0,no_data,False,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,5,May,1.0,-0.0,0.9863,3,low,True,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,6,Jun,0.9993,-0.1,0.7803,3,low,True,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,7,Jul,1.0,0.0,1.0,0,no_data,False,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,8,Aug,1.0,0.0,1.0,0,no_data,False,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,9,Sep,1.0,0.0,1.0,0,no_data,False,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,10,Oct,1.0,0.0,1.0,0,no_data,False,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,11,Nov,1.0,0.0,1.0,0,no_data,False,42,0,False,12,Dec,1.0007,1,Jan,0.9991
+xtracab,12,Dec,1.0007,0.1,1.1461,5,low,True,42,0,False,12,Dec,1.0007,1,Jan,0.9991

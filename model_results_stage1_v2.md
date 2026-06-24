@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Stage 1 V2 is a separate vehicle-value model that runs before Stage 2 and Stage 3. The existing production model remains unchanged as a backup.
+Stage 1 V2 is the production vehicle-value model that runs before Stage 2 and Stage 3. The existing V1 model remains unchanged as an automatic fallback.
 
 Unlike the existing model, V2 deliberately excludes sale month and `year_month`. Stage 2 remains responsible for market movement and Stage 3 for seasonality.
 

@@ -21,7 +21,7 @@ from stage3_seasonality import (
 
 OUTPUT_JSON = Path("models/stage3_evaluation.json")
 OUTPUT_MD = Path("model_results_stage3.md")
-SEASONALITY_CSV = Path("models/seasonality_factors.csv")
+SEASONALITY_CSV = Path("models/seasonality_factors_v2.csv")
 RANDOM_STATE = 42
 
 
@@ -121,7 +121,7 @@ final_price = stage2_price x seasonal_factor(body, month)
 ```
 
 Die Berechnung vergleicht CPI-normalisierte Verkaufspreise mit Vorhersagen des
-Stage-1-Modells für die feste Referenz `{REFERENCE_YEAR_MONTH}`. Dadurch werden
+zeitneutralen Stage-1-V2-Modells. V2 enthält bewusst keinen Verkaufsmonat. Dadurch werden
 Unterschiede im Fahrzeugmix (Modell, Alter, Laufleistung und Zustand) weitgehend
 herausgerechnet. Der Zielmonat fließt nicht doppelt in Stage 1 und Stage 3 ein.
 
@@ -197,7 +197,8 @@ def main() -> None:
     output = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "method": "cpi_normalized_model_residual_by_body_month",
-        "reference_year_month": REFERENCE_YEAR_MONTH,
+        "stage1_model": "price_model_v2.joblib",
+        "reference_year_month": "time-neutral V2 (no sale month feature)",
         "factor_min": FACTOR_MIN,
         "factor_max": FACTOR_MAX,
         "shrinkage_observations": SHRINKAGE_OBSERVATIONS,

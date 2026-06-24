@@ -20,7 +20,7 @@ Wir bauen einen **hybriden KI-Agenten für dynamische Gebrauchtwagenpreisgestalt
 
 ## Update vom 24.06.2026 — Stage 2 und Stage 3 vollständig geprüft
 
-- **Stage 2:** Die Evaluation verwendet eine feste Stage-1-Referenz (`2015-02`) und trennt damit Basispreis und CPI-Anpassung sauber. Der Rückwärtstest verbessert den MAE von **1.890,21 $ auf 1.889,19 $**.
+- **Stage 2:** V2 ist zeitneutral und enthält weder Verkaufsmonat noch Makrovariable. Im basisnahen Rückwärtstest verändert die CPI-Korrektur den MAE von **1.370,16 $ auf 1.376,22 $** (+0,44 %).
 - **Stage 3:** Alle **529.790** auswertbaren Verkäufe, **45** Karosserieformen und **540** Kombinationen aus Karosserieform und Monat wurden erneut validiert.
 - Der Stage-3-Test-MAE verbessert sich von **1.895,03 $ auf 1.870,20 $** (**−24,82 $ / −1,31 %**).
 - Saisonfaktoren bleiben auf **0,85 bis 1,15** begrenzt. Für August bis November fehlen historische Verkäufe; diese Monate bleiben deshalb neutral bei **1,0** und werden als `no_data` gekennzeichnet.
@@ -36,7 +36,9 @@ Wir bauen einen **hybriden KI-Agenten für dynamische Gebrauchtwagenpreisgestalt
 - `MMR`, VIN und Verkäufer wurden bewusst ausgeschlossen. Insbesondere `MMR` wäre bereits eine externe Preisvorhersage und könnte die Modellleistung künstlich beziehungsweise zielähnlich verbessern.
 - Auf denselben 105.834 zurückgehaltenen Testfahrzeugen sinkt der MAE vom bisherigen Modell mit **1.831,39 $** auf **1.370,15 $**. Das entspricht **461,24 $ beziehungsweise 25,19 % weniger MAE**.
 - Weitere V2-Testwerte: **RMSE 2.400,34 $**, **R² 0,9366**, **MAPE 15,13 %**. Das Ensemble ist gezielt auf den MAE in Dollar optimiert; andere Fehlermaße können gegenüber einer einzelnen V2-Komponente einen Trade-off zeigen.
-- Das neue Modell liegt unter `models/price_model_v2.joblib`. Es ist aktuell noch **nicht in die Streamlit-App oder in Stage 2/3 integriert**, damit das bisherige produktive System unverändert und reproduzierbar bleibt.
+- Das neue Modell liegt unter `models/price_model_v2.joblib` und ist jetzt das **Produktionsmodell der Streamlit-App**. Die App bietet die zusätzlichen V2-Eingaben an; das bisherige Modell bleibt als automatischer Fallback erhalten.
+- Stage 2 wurde auf dem vollständigen V2-Testset neu geprüft: **MAE 1.370,16 $ vor CPI und 1.376,22 $ nach CPI** im basisnahen Zeitraum 2014–2015 (+0,44 %).
+- Stage 3 wurde mit V2 neu berechnet. Auf dem getrennten Regel-Holdout sinkt der MAE von **1.353,15 $ auf 1.339,84 $** (−0,98 %).
 
 ---
 
@@ -48,11 +50,10 @@ Eingabe: Fahrzeugbeschreibung (Marke, Modell, Karosserie, Baujahr, Km, Zustand)
          ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │  Stage 1 — Micro (FERTIG ✅)                                           │
-│  HistGradientBoostingRegressor auf Fahrzeugattribute                   │
+│  V2 XGBoost-Raw/Log-Ensemble auf Fahrzeugattribute                    │
 │  → Basispreis in USD (2015er Preisniveau)                              │
-│  Modell: models/price_model.joblib                                     │
-│  MAE: $1.850 | RMSE: $3.299 | R²: 0.882 | MAPE: 16,4%               │
-│  V2-Kandidat separat: price_model_v2.joblib | MAE: $1.370             │
+│  Modell: models/price_model_v2.joblib | V1 bleibt als Fallback         │
+│  MAE: $1.370 | RMSE: $2.400 | R²: 0.9366 | MAPE: 15,13%             │
 └───────────────────────┬────────────────────────────────────────────────┘
                         │  × cpi_multiplier(Zieldatum)
                         ▼
@@ -60,7 +61,7 @@ Eingabe: Fahrzeugbeschreibung (Marke, Modell, Karosserie, Baujahr, Km, Zustand)
 │  Stage 2 — Macro (FERTIG ✅)                                           │
 │  CPI Gebrauchtwagen (FRED: CUSR0000SETA01), Basis 2015 = 1,000        │
 │  Aktueller Multiplikator (2026-06): 1,2177 → +21,8% vs. 2015         │
-│  Rückwärtstest: MAE 1.890,21 → 1.889,19 $ (feste Referenz 2015-02)   │
+│  V2-Rückwärtstest: MAE 1.370,16 → 1.376,22 $ (+0,44%)                │
 │  Modul: scripts/stage2_macro.py                                        │
 │  Evaluation: scripts/evaluate_stage2.py                                │
 └───────────────────────┬────────────────────────────────────────────────┘
@@ -195,7 +196,7 @@ uv run python scripts/enrich_macro.py
 | Stage-1-V2-R² | 0,9366 | altes Modell auf demselben Test: 0,8800 |
 | Stage-1-V2-MAPE | 15,13% | ohne MMR, VIN oder Verkäufer |
 | Stage-2-CPI-Mult. (2026-06) | 1,2177 | +21,8% vs. 2015-Basis |
-| Stage-2-Backtest | $1.890,21 → $1.889,19 | feste Stage-1-Referenz 2015-02; angezeigtes Δ −$1,02 |
+| Stage-2-Backtest mit V2 | $1.370,16 → $1.376,22 | CPI-Korrektur im basisnahen Zeitraum 2014–2015; +0,44 % |
 | Trainingszeilen | 200.000 | Teilmenge; voller Datensatz: 534.318 |
 
 **Fehler nach Preissegment (Stage 1):**
@@ -215,7 +216,7 @@ uv run python scripts/enrich_macro.py
 **Stage 1: Warum HistGradientBoosting statt XGBoost?**
 XGBoost braucht `libomp` auf macOS (häufig fehlend). HistGB ist der automatische Fallback und schneidet im Benchmark besser ab (MAE $1.850 vs. $2.055). Das Trainings-Skript wählt automatisch.
 
-Diese Entscheidung beschreibt weiterhin das bisherige Produktionsmodell. Die neue, separat gespeicherte V2 nutzt ein stärker abgestimmtes XGBoost-Ensemble und zusätzliche Fahrzeugmerkmale. Sie ersetzt das alte Modell erst nach einer bewussten App- und Stage-2/3-Integration.
+Diese Entscheidung beschreibt das weiterhin vorhandene V1-Fallback. Das Produktionsmodell V2 nutzt ein abgestimmtes XGBoost-Ensemble und zusätzliche Fahrzeugmerkmale.
 
 **Stage 2: Warum nur CPI-Multiplikator, kein Composite-Index?**
 `year_month` ist das unwichtigste Feature in Stage 1 (Permutation Importance 32 vs. 2.470 für `make`). Andere Makrosignale (Leitzins, Arbeitslosigkeit, Stimmung) beeinflussen die Nachfrage, bräuchten aber ein eigenes Gewichtungsmodell. CPI Gebrauchtwagen misst direkt die Inflation auf dem relevanten Markt. Die anderen Signale sind über `get_macro_context()` für die LLM-Schicht verfügbar.
@@ -236,9 +237,8 @@ Das alte UI trennte `sale_year` und `model_year` nicht klar. Ein einziges „Bew
 | Priorität | Aufgabe | Hinweise |
 |---|---|---|
 | 1 | **Preisrange in App** | ±MAE des jeweiligen Segments statt einer einzigen Zahl anzeigen |
-| 2 | **Stage 1 V2 integrieren** | zusätzliche Eingaben in der App ergänzen; Stage 2/3 mit V2 erneut evaluieren; altes Modell als Fallback behalten |
-| 3 | **LLM-Orchestrierung** | Stage 1–3-Output + `get_macro_context()` → natürlichsprachliche Erklärung |
-| 4 | **Paper schreiben** | LNCS 12 Seiten; Architekturdiagramm; Stage-1+2+3-Ergebnisse sind fertig |
+| 2 | **LLM-Orchestrierung** | Stage 1–3-Output + `get_macro_context()` → natürlichsprachliche Erklärung |
+| 3 | **Paper schreiben** | LNCS 12 Seiten; Architekturdiagramm; Stage-1+2+3-Ergebnisse sind fertig |
 
 ---
 
@@ -247,7 +247,7 @@ Das alte UI trennte `sale_year` und `model_year` nicht klar. Ein einziges „Bew
 - `car_prices_macro.csv` ist **gitignored** (98 MB). Bei Bedarf: `uv run python scripts/enrich_macro.py`
 - `macro_index.csv` enthält 1996-01 bis 2026-06. Die letzten 3 Monate sind forward-gefüllt (FRED-Verzögerung).
 - `models/price_model.joblib` nutzt `OrdinalEncoder(unknown_value=-1)` für Kategorien. `year_month`-Werte außerhalb 2014–2015 werden als -1 kodiert — vertretbar, da `year_month` sehr geringe Feature-Importance hat.
-- `models/price_model_v2.joblib` ist ein separater, noch nicht produktiv eingebundener Kandidat. Es erwartet zusätzlich `trim`, `transmission`, `state`, `color`, `interior` und `make_model`. Das alte Modell darf bei einer späteren Integration nicht überschrieben werden.
+- `models/price_model_v2.joblib` ist das produktiv eingebundene Stage-1-Modell. Es erwartet zusätzlich `trim`, `transmission`, `state`, `color`, `interior` und `make_model`. Fehlt die Datei, lädt die App automatisch das alte V1-Modell.
 - `stage2_macro.py` nutzt absolute Pfade (`PROJECT_ROOT = Path(__file__).resolve().parent.parent`). Importierbar aus `scripts/` und `app/` (die App macht `sys.path.insert(0, str(PROJECT_ROOT / "scripts"))`).
 - **PR #1 (GitHub Classroom) nicht anfassen** — wird automatisch vom Professor-System gepflegt.
 - **PR #2** (`Mail_project_moritz` → `main`) ist der aktive Entwicklungs-PR.

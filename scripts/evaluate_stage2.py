@@ -33,19 +33,17 @@ from stage2_macro import (
     load_macro_index,
     MACRO_SIGNAL_LABELS,
 )
+from train_stage1_v2 import FEATURES as V2_FEATURES, load_data as load_v2_data
 
 # Must exactly match train_price_model.py to reproduce the same test split
 RANDOM_STATE = 42
 TARGET_COLUMN = "sellingprice"
-NUMERIC_FEATURES = ["vehicle_age", "sale_month", "odometer", "condition"]
-CATEGORICAL_FEATURES = ["year_month", "make", "model", "body"]
-FEATURE_COLUMNS = NUMERIC_FEATURES + CATEGORICAL_FEATURES
-MAX_ROWS = 200_000
-REFERENCE_YEAR_MONTH = "2015-02"
-REFERENCE_MONTH = 2
+FEATURE_COLUMNS = V2_FEATURES
+MAX_ROWS = 0
+REFERENCE_YEAR_MONTH = "time-neutral-v2"
 
-FEATURES_PATH = Path("car_prices_features.csv")
-MODEL_PATH = Path("models/price_model.joblib")
+FEATURES_PATH = Path("car_prices_clean.csv")
+MODEL_PATH = Path("models/price_model_v2.joblib")
 MACRO_PATH = Path("macro_index.csv")
 OUTPUT_JSON = Path("models/stage2_evaluation.json")
 OUTPUT_MD = Path("model_results_stage2.md")
@@ -62,22 +60,11 @@ FORWARD_PROJECTION_MONTHS = [
 ]
 
 
-def _load_test_set() -> tuple[pd.DataFrame, pd.Series]:
+def _load_test_set() -> tuple[pd.DataFrame, pd.Series, pd.Series]:
     """Reproduce the exact Stage 1 test split (same rows, same seed)."""
-    df = pd.read_csv(FEATURES_PATH)
-    required = FEATURE_COLUMNS + [TARGET_COLUMN]
-    df = df.dropna(subset=required)
-    df = df[
-        df[TARGET_COLUMN].between(500, 150_000)
-        & df["odometer"].between(1, 500_000)
-        & df["vehicle_age"].between(0, 30)
-    ].copy()
-    if len(df) > MAX_ROWS:
-        df = df.sample(n=MAX_ROWS, random_state=RANDOM_STATE)
-    X = df[FEATURE_COLUMNS]
-    y = df[TARGET_COLUMN]
-    _, X_test, _, y_test = train_test_split(X, y, test_size=0.2, random_state=RANDOM_STATE)
-    return X_test, y_test
+    df = load_v2_data(FEATURES_PATH, MAX_ROWS)
+    _, test = train_test_split(df, test_size=0.2, random_state=RANDOM_STATE)
+    return test[FEATURE_COLUMNS], test[TARGET_COLUMN], test["year_month"]
 
 
 def _metrics(y_true: pd.Series, y_pred: np.ndarray) -> dict[str, float]:
@@ -111,14 +98,6 @@ def _forward_projection(
             }
         )
     return rows
-
-
-def _to_reference_input(X: pd.DataFrame) -> pd.DataFrame:
-    """Return Stage-1 inputs at the same fixed market reference as the app."""
-    reference = X.copy()
-    reference["sale_month"] = REFERENCE_MONTH
-    reference["year_month"] = REFERENCE_YEAR_MONTH
-    return reference
 
 
 def _write_markdown(
@@ -159,10 +138,10 @@ Quelle: CPI Used Cars & Trucks (CUSR0000SETA01, FRED).
 
 ## Architekturgetreuer Backtest (2014–2015 Testset)
 
-Für beide Zeilen wird Stage 1 mit der festen Marktreferenz `{REFERENCE_YEAR_MONTH}`
-ausgeführt. Stage 2 wendet danach den CPI des tatsächlichen historischen
-Verkaufsmonats an. So entspricht der Test der aktuellen App-Architektur und
-zählt den Monat nicht bereits in Stage 1 mit.
+Stage 1 V2 enthält bewusst weder Verkaufsmonat noch Makrovariable und liefert
+damit einen zeitneutralen Fahrzeug-Basiswert. Stage 2 wendet anschließend den
+CPI des tatsächlichen historischen Verkaufsmonats an. Der Zielmonat wird so
+nicht doppelt gezählt.
 
 | Metrik | Referenz-Baseline | Mit Stage 2 | Δ |
 |---|---:|---:|---:|
@@ -174,8 +153,8 @@ zählt den Monat nicht bereits in Stage 1 mit.
 **CPI-Multiplikator im Testset (2014–2015):**
 - Min: {multiplier_stats['min']:.4f} / Max: {multiplier_stats['max']:.4f} / Ø {multiplier_stats['mean']:.4f}
 
-> Der kleine Unterschied ({mae_delta:+.2f} USD MAE) bestätigt, dass Stage 2
-> die feste 2015-02-Referenz im historischen Zeitraum leicht verbessert. Die
+> Der kleine Unterschied ({mae_delta:+.2f} USD MAE) zeigt, wie Stage 2
+> den zeitneutralen V2-Basiswert im historischen Zeitraum verändert. Die
 > Faktoren liegen nahe bei 1,0, weil 2014–2015 den Referenzzeitraum bilden.
 
 ## Vorwärtsprojektion (Median Stage-1-Preis: ${stage1_median:,.0f})
@@ -202,9 +181,8 @@ zählt den Monat nicht bereits in Stage 1 mit.
 - Im gespeicherten Makrostand sind die CPI-Werte für 2026-05 und 2026-06 aus
   2026-04 fortgeschrieben. 2026-06 ist daher ein Bewertungsdatum, kein neuer
   unabhängiger CPI-Messpunkt.
-- Das Stage-1-Modell kennt `year_month`-Werte außerhalb von 2014–2015 nicht;
-  der OrdinalEncoder kodiert diese als -1. Da `year_month` der unwichtigste Feature
-  (Importance 32 vs. 2470 für `make`) ist, ist der Effekt minimal.
+- Stage 1 V2 enthält bewusst weder `sale_month` noch `year_month`. Dadurch
+  bleiben Marktbewegung und Saison vollständig in Stage 2 und Stage 3.
 """
     OUTPUT_MD.write_text(content, encoding="utf-8")
 
@@ -216,20 +194,19 @@ def main() -> None:
     print("\n1. Lade Makrodaten...")
     macro = load_macro_index(MACRO_PATH)
 
-    print("2. Reproduziere Stage-1-Testset (200k Zeilen, random_state=42)...")
-    X_test, y_test = _load_test_set()
-    print(f"   -> Testset: {len(X_test):,} Zeilen, {len(X_test['year_month'].unique())} year_month-Werte")
+    print("2. Reproduziere das vollständige Stage-1-V2-Testset (random_state=42)...")
+    X_test, y_test, test_months = _load_test_set()
+    print(f"   -> Testset: {len(X_test):,} Zeilen, {len(test_months.unique())} year_month-Werte")
 
-    print("3. Lade Stage-1-Modell und berechne Vorhersagen bei fester Referenz 2015-02...")
+    print("3. Lade das zeitneutrale Stage-1-V2-Modell...")
     model = joblib.load(MODEL_PATH)
-    reference_test = _to_reference_input(X_test)
-    stage1_preds = model.predict(reference_test)
+    stage1_preds = model.predict(X_test)
     stage1_metrics = _metrics(y_test, stage1_preds)
     print(f"   Stage 1  MAE=${stage1_metrics['mae']:,.2f}  RMSE=${stage1_metrics['rmse']:,.2f}  R²={stage1_metrics['r2']:.4f}")
 
     print("\n4. Wende Stage-2-CPI-Anpassung auf Testset an...")
     multipliers = np.array(
-        [get_cpi_multiplier(ym, macro) for ym in X_test["year_month"].tolist()]
+        [get_cpi_multiplier(ym, macro) for ym in test_months.tolist()]
     )
     stage2_preds = stage1_preds * multipliers
     stage2_metrics = _metrics(y_test, stage2_preds)
@@ -250,7 +227,7 @@ def main() -> None:
     stage1_median = float(np.median(stage1_preds))
     projection = _forward_projection(stage1_median, macro, FORWARD_PROJECTION_MONTHS)
     print(f"   Stage-1-Median-Baseline: ${stage1_median:,.0f}")
-    print(f"\n   {'Monat':<12} {'Multip.':>8} {'Stage 1':>10} {'Stage 2':>10} {'Δ':>7}")
+    print(f"\n   {'Monat':<12} {'Multip.':>8} {'Stage 1':>10} {'Stage 2':>10} {'Delta':>7}")
     print(f"   {'-'*53}")
     for r in projection:
         print(
@@ -268,7 +245,8 @@ def main() -> None:
 
     output = {
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "evaluation_method": "fixed_stage1_reference_then_historical_cpi",
+        "evaluation_method": "time_neutral_stage1_v2_then_historical_cpi",
+        "stage1_model": str(MODEL_PATH),
         "reference_year_month": REFERENCE_YEAR_MONTH,
         "stage1_metrics_historical": stage1_metrics,
         "stage2_metrics_historical": stage2_metrics,

@@ -4,7 +4,6 @@ import json
 import sys
 from pathlib import Path
 
-import joblib
 import pandas as pd
 import streamlit as st
 
@@ -18,29 +17,23 @@ from stage2_macro import (  # noqa: E402
     load_macro_index,
 )
 from stage3_seasonality import (  # noqa: E402
-    REFERENCE_MONTH,
-    REFERENCE_YEAR_MONTH,
     apply_stage3,
     load_seasonality_factors,
 )
+from stage1_runtime import (  # noqa: E402
+    V1_METRICS_PATH,
+    V2_METRICS_PATH,
+    build_v1_input,
+    build_v2_input,
+    get_v2_category_options,
+    load_production_model,
+)
 
 FEATURES_PATH = PROJECT_ROOT / "car_prices_features.csv"
-MODEL_PATH = PROJECT_ROOT / "models" / "price_model.joblib"
-METRICS_PATH = PROJECT_ROOT / "models" / "price_model_metrics.json"
 STAGE2_EVAL_PATH = PROJECT_ROOT / "models" / "stage2_evaluation.json"
 MACRO_PATH = PROJECT_ROOT / "macro_index.csv"
-SEASONALITY_PATH = PROJECT_ROOT / "models" / "seasonality_factors.csv"
-
-FEATURE_COLUMNS = [
-    "vehicle_age",
-    "sale_month",
-    "odometer",
-    "condition",
-    "year_month",
-    "make",
-    "model",
-    "body",
-]
+SEASONALITY_V1_PATH = PROJECT_ROOT / "models" / "seasonality_factors.csv"
+SEASONALITY_V2_PATH = PROJECT_ROOT / "models" / "seasonality_factors_v2.csv"
 
 MACRO_AVAILABLE_YEARS = list(range(1996, 2027))
 MACRO_AVAILABLE_MONTHS = list(range(1, 13))
@@ -55,7 +48,7 @@ st.set_page_config(page_title="Universal Pricing Agent", layout="wide")
 
 @st.cache_resource
 def load_model():
-    return joblib.load(MODEL_PATH)
+    return load_production_model()
 
 
 @st.cache_data
@@ -66,10 +59,11 @@ def load_feature_data() -> pd.DataFrame:
 
 
 @st.cache_data
-def load_metrics() -> dict:
-    if not METRICS_PATH.exists():
+def load_metrics(model_version: str) -> dict:
+    path = V2_METRICS_PATH if model_version == "v2" else V1_METRICS_PATH
+    if not path.exists():
         return {}
-    return json.loads(METRICS_PATH.read_text(encoding="utf-8"))
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 @st.cache_data
@@ -85,8 +79,9 @@ def load_macro() -> pd.DataFrame:
 
 
 @st.cache_data
-def load_seasonality() -> pd.DataFrame:
-    return load_seasonality_factors(SEASONALITY_PATH)
+def load_seasonality(model_version: str) -> pd.DataFrame:
+    path = SEASONALITY_V2_PATH if model_version == "v2" else SEASONALITY_V1_PATH
+    return load_seasonality_factors(path)
 
 
 def format_currency(value: float) -> str:
@@ -99,37 +94,13 @@ def get_default_index(options: list, preferred) -> int:
     return 0
 
 
-def build_prediction_input(
-    vehicle_age: int,
-    odometer: int,
-    condition: float,
-    make: str,
-    model: str,
-    body: str,
-) -> pd.DataFrame:
-    return pd.DataFrame(
-        [
-            {
-                "vehicle_age": vehicle_age,
-                "sale_month": REFERENCE_MONTH,
-                "odometer": odometer,
-                "condition": condition,
-                "year_month": REFERENCE_YEAR_MONTH,
-                "make": make,
-                "model": model,
-                "body": body,
-            }
-        ],
-        columns=FEATURE_COLUMNS,
-    )
-
-
 data = load_feature_data()
-metrics = load_metrics()
+model, model_version = load_model()
+metrics = load_metrics(model_version)
 stage2_eval = load_stage2_eval()
-model = load_model()
 macro = load_macro()
-seasonality = load_seasonality()
+seasonality = load_seasonality(model_version)
+v2_options = get_v2_category_options(model) if model_version == "v2" else {}
 
 st.title("Universal Pricing Agent")
 st.caption(
@@ -161,6 +132,34 @@ with left_column:
         body_options,
         index=get_default_index(body_options, "sedan"),
     )
+
+    if model_version == "v2":
+        st.caption("Stage 1 V2 nutzt zusätzliche Fahrzeugdetails für eine genauere Schätzung.")
+        trim = st.selectbox(
+            "Ausstattung (Trim)", v2_options["trim"],
+            index=get_default_index(v2_options["trim"], "base"),
+        )
+        detail_left, detail_right = st.columns(2)
+        with detail_left:
+            transmission = st.selectbox(
+                "Getriebe", v2_options["transmission"],
+                index=get_default_index(v2_options["transmission"], "automatic"),
+            )
+            state = st.selectbox(
+                "US-Bundesstaat", v2_options["state"],
+                index=get_default_index(v2_options["state"], "ca"),
+            )
+        with detail_right:
+            color = st.selectbox(
+                "Außenfarbe", v2_options["color"],
+                index=get_default_index(v2_options["color"], "black"),
+            )
+            interior = st.selectbox(
+                "Innenfarbe", v2_options["interior"],
+                index=get_default_index(v2_options["interior"], "black"),
+            )
+    else:
+        trim = transmission = state = color = interior = ""
 
     input_left, input_right = st.columns(2)
     with input_left:
@@ -199,14 +198,30 @@ with left_column:
 with right_column:
     st.subheader("Preisprognose")
 
-    prediction_input = build_prediction_input(
-        vehicle_age=vehicle_age,
-        odometer=int(odometer),
-        condition=float(condition),
-        make=selected_make,
-        model=selected_model,
-        body=selected_body,
-    )
+    if model_version == "v2":
+        prediction_input = build_v2_input(
+            model_year=int(model_year),
+            vehicle_age=vehicle_age,
+            odometer=int(odometer),
+            condition=float(condition),
+            make=selected_make,
+            model=selected_model,
+            trim=trim,
+            body=selected_body,
+            transmission=transmission,
+            state=state,
+            color=color,
+            interior=interior,
+        )
+    else:
+        prediction_input = build_v1_input(
+            vehicle_age=vehicle_age,
+            odometer=int(odometer),
+            condition=float(condition),
+            make=selected_make,
+            model=selected_model,
+            body=selected_body,
+        )
 
     stage1_price = float(model.predict(prediction_input)[0])
     stage2_price, cpi_multiplier = apply_stage2(stage1_price, target_ym, macro)
@@ -232,7 +247,11 @@ with right_column:
     col1.metric(
         "Stage 1: Fahrzeugwert-Baseline",
         format_currency(stage1_price),
-        help=f"Vorhersage aus Fahrzeugmerkmalen mit der festen Marktreferenz {REFERENCE_YEAR_MONTH}.",
+        help=(
+            "Zeitneutrale V2-Vorhersage nur aus Fahrzeugmerkmalen."
+            if model_version == "v2"
+            else "V1-Vorhersage mit der festen Marktreferenz 2015-02."
+        ),
     )
     col2.metric(
         "Stage 2: Marktpreis",
@@ -314,11 +333,23 @@ with right_column:
             f"({seasonal_delta_pct:+.1f}%)."
         )
 
-    mae = metrics.get("metrics", {}).get("mae")
-    r2 = metrics.get("metrics", {}).get("r2")
+    metric_values = metrics.get("v2_metrics", metrics.get("metrics", {}))
+    mae = metric_values.get("mae")
+    r2 = metric_values.get("r2")
     if mae is not None and r2 is not None:
         mq_left, mq_right = st.columns(2)
-        mq_left.metric("Ø Fehler Stage 1 (MAE)", format_currency(float(mae)))
+        previous_mae = metrics.get("current_model_metrics_same_test", {}).get("mae")
+        if model_version == "v2" and previous_mae is not None:
+            improvement_pct = (float(previous_mae) - float(mae)) / float(previous_mae) * 100
+            mq_left.metric(
+                "Durchschnittlicher Fehler Stage 1 V2 (MAE)",
+                format_currency(float(mae)),
+                delta=f"-{improvement_pct:.2f}% vs. V1 ({format_currency(float(previous_mae))})",
+                delta_color="inverse",
+                help="V1 und V2 wurden auf denselben 105.834 Testfahrzeugen verglichen.",
+            )
+        else:
+            mq_left.metric("Durchschnittlicher Fehler Stage 1 (MAE)", format_currency(float(mae)))
         mq_right.metric("R² Score", f"{float(r2):.3f}")
 
     st.dataframe(
@@ -341,9 +372,9 @@ with right_column:
 st.divider()
 
 summary_cols = st.columns(3)
-summary_cols[0].metric("Trainingsdaten", f"{metrics.get('rows_used', 0):,}".replace(",", "."))
+summary_cols[0].metric("Trainingsdaten", f"{metrics.get('train_rows', metrics.get('rows_used', 0)):,}".replace(",", "."))
 summary_cols[1].metric("Testdaten", f"{metrics.get('test_rows', 0):,}".replace(",", "."))
-summary_cols[2].metric("Modell", metrics.get("model_name", "Preis-Modell"))
+summary_cols[2].metric("Modell", "Stage 1 V2" if model_version == "v2" else metrics.get("model_name", "Stage 1 V1"))
 
 with st.expander("Was passiert hier – Schritt für Schritt?"):
     st.markdown(
@@ -351,8 +382,9 @@ with st.expander("Was passiert hier – Schritt für Schritt?"):
 **Stage 1 – Fahrzeugwert-Baseline**
 
 1. Die App nimmt deine Fahrzeugdaten (Marke, Modell, Alter, Mileage, Zustand).
-2. Das trainierte HistGradientBoostingRegressor-Modell (`models/price_model.joblib`)
-   berechnet daraus einen Basispreis mit der festen Marktreferenz {REFERENCE_YEAR_MONTH}.
+2. Das Produktionsmodell ({'V2 XGBoost-Ensemble' if model_version == 'v2' else 'V1 HistGradientBoosting'})
+   berechnet daraus einen Basispreis. V2 enthält bewusst keinen Verkaufsmonat;
+   Markt und Saison werden erst in Stage 2 und 3 ergänzt.
 
 **Stage 2 – CPI-Marktpreisanpassung**
 
