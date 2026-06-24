@@ -42,11 +42,63 @@ MONTH_NAMES = {
     7: "Jul", 8: "Aug", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez",
 }
 CONDITION_OPTIONS = {
-    "Stark beschädigt": (1.0, "Erhebliche Schäden und umfassender Reparaturbedarf."),
-    "Reparaturbedürftig": (2.0, "Deutliche optische oder technische Mängel."),
-    "Durchschnittlich": (3.0, "Normale altersbedingte Abnutzung und Gebrauchsspuren."),
-    "Gut": (4.0, "Gepflegter Zustand mit kleineren Gebrauchsspuren."),
     "Sehr gut": (5.0, "Kaum sichtbare Gebrauchsspuren und keine bekannten größeren Mängel."),
+    "Gut": (4.0, "Gepflegter Zustand mit kleineren Gebrauchsspuren."),
+    "Durchschnittlich": (3.0, "Normale altersbedingte Abnutzung und Gebrauchsspuren."),
+    "Reparaturbedürftig": (2.0, "Deutliche optische oder technische Mängel."),
+    "Stark reparaturbedürftig": (1.0, "Erhebliche Schäden und umfassender Reparaturbedarf."),
+}
+MILES_PER_KILOMETER = 0.621371
+
+COLOR_LABELS = {
+    "beige": "Beige", "black": "Schwarz", "blue": "Blau", "brown": "Braun",
+    "burgundy": "Bordeauxrot", "charcoal": "Anthrazit", "gold": "Gold",
+    "gray": "Grau", "green": "Grün", "lime": "Hellgrün", "off-white": "Cremeweiß",
+    "orange": "Orange", "pink": "Rosa", "purple": "Violett", "red": "Rot",
+    "silver": "Silber", "tan": "Hellbraun", "turquoise": "Türkis", "white": "Weiß",
+    "yellow": "Gelb", "—": "Nicht angegeben",
+}
+TRANSMISSION_LABELS = {
+    "automatic": "Automatik", "manual": "Schaltgetriebe", "unknown": "Nicht angegeben",
+}
+STATE_LABELS = {
+    "ab": "Alberta (Kanada)", "al": "Alabama", "az": "Arizona", "ca": "Kalifornien",
+    "co": "Colorado", "fl": "Florida", "ga": "Georgia", "hi": "Hawaii",
+    "il": "Illinois", "in": "Indiana", "la": "Louisiana", "ma": "Massachusetts",
+    "md": "Maryland", "mi": "Michigan", "mn": "Minnesota", "mo": "Missouri",
+    "ms": "Mississippi", "nc": "North Carolina", "ne": "Nebraska",
+    "nj": "New Jersey", "nm": "New Mexico", "ns": "Nova Scotia (Kanada)",
+    "nv": "Nevada", "ny": "New York", "oh": "Ohio", "ok": "Oklahoma",
+    "on": "Ontario (Kanada)", "or": "Oregon", "pa": "Pennsylvania",
+    "pr": "Puerto Rico", "qc": "Québec (Kanada)", "sc": "South Carolina",
+    "tn": "Tennessee", "tx": "Texas", "ut": "Utah", "va": "Virginia",
+    "wa": "Washington", "wi": "Wisconsin",
+}
+BODY_LABELS = {
+    "access cab": "Verlängerte Kabine", "beetle convertible": "Beetle Cabriolet",
+    "cab plus": "Verlängerte Kabine (Cab Plus)", "cab plus 4": "Verlängerte Kabine (Cab Plus 4)",
+    "club cab": "Verlängerte Kabine (Club Cab)", "convertible": "Cabriolet",
+    "coupe": "Coupé", "crew cab": "Doppelkabine", "crewmax cab": "Große Doppelkabine",
+    "cts coupe": "CTS Coupé", "cts wagon": "CTS Kombi", "cts-v coupe": "CTS-V Coupé",
+    "double cab": "Doppelkabine", "e-series van": "E-Series Transporter",
+    "elantra coupe": "Elantra Coupé", "extended cab": "Verlängerte Kabine",
+    "g convertible": "G Cabriolet", "g coupe": "G Coupé", "g sedan": "G Limousine",
+    "g37 convertible": "G37 Cabriolet", "g37 coupe": "G37 Coupé",
+    "genesis coupe": "Genesis Coupé", "granturismo convertible": "GranTurismo Cabriolet",
+    "hatchback": "Schrägheck", "king cab": "Verlängerte Kabine (King Cab)",
+    "koup": "Koup Coupé", "mega cab": "Große Doppelkabine", "minivan": "Kleinbus",
+    "promaster cargo van": "ProMaster Kastenwagen", "q60 convertible": "Q60 Cabriolet",
+    "q60 coupe": "Q60 Coupé", "quad cab": "Doppelkabine (Quad Cab)",
+    "regular cab": "Einzelkabine", "regular-cab": "Einzelkabine", "sedan": "Limousine",
+    "supercab": "Verlängerte Kabine (SuperCab)", "supercrew": "Große Doppelkabine (SuperCrew)",
+    "suv": "Geländewagen / SUV", "transit van": "Transit Transporter",
+    "tsx sport wagon": "TSX Sportkombi", "van": "Transporter", "wagon": "Kombi",
+    "xtracab": "Verlängerte Kabine (XtraCab)",
+}
+MAKE_LABELS = {
+    "bmw": "BMW", "gmc": "GMC", "ram": "RAM", "mini": "MINI",
+    "mercedes-benz": "Mercedes-Benz", "rolls-royce": "Rolls-Royce",
+    "volkswagen": "Volkswagen",
 }
 
 
@@ -101,6 +153,37 @@ def get_default_index(options: list, preferred) -> int:
     return 0
 
 
+def title_case(value: str) -> str:
+    return str(value).replace("_", " ").strip().title()
+
+
+def format_make(value: str) -> str:
+    return MAKE_LABELS.get(str(value), title_case(value))
+
+
+def format_model(value: str) -> str:
+    return title_case(value)
+
+
+def format_body(value: str) -> str:
+    return BODY_LABELS.get(str(value), title_case(value))
+
+
+def format_trim(value: str) -> str:
+    if str(value) in {"—", "unknown"}:
+        return "Nicht angegeben"
+    return title_case(value)
+
+
+def format_state(value: str) -> str:
+    code = str(value).lower()
+    return f"{STATE_LABELS.get(code, code.upper())} ({code.upper()})"
+
+
+def format_color(value: str) -> str:
+    return COLOR_LABELS.get(str(value), title_case(value))
+
+
 data = load_feature_data()
 model, model_version = load_model()
 metrics = load_metrics(model_version)
@@ -120,50 +203,59 @@ left_column, right_column = st.columns([0.95, 1.05], gap="large")
 with left_column:
     st.subheader("Fahrzeugdaten")
 
-    make_options = sorted(data["make"].dropna().unique())
+    make_options = sorted(data["make"].dropna().unique(), key=format_make)
     selected_make = st.selectbox(
         "Marke",
         make_options,
         index=get_default_index(make_options, "bmw"),
+        format_func=format_make,
     )
 
     make_data = data[data["make"] == selected_make]
-    model_options = sorted(make_data["model"].dropna().unique())
+    model_options = sorted(make_data["model"].dropna().unique(), key=format_model)
     if not model_options:
-        model_options = sorted(data["model"].dropna().unique())
-    selected_model = st.selectbox("Modell", model_options)
+        model_options = sorted(data["model"].dropna().unique(), key=format_model)
+    selected_model = st.selectbox("Modell", model_options, format_func=format_model)
 
-    body_options = sorted(data["body"].dropna().unique())
+    body_options = sorted(data["body"].dropna().unique(), key=format_body)
     selected_body = st.selectbox(
         "Karosserieform",
         body_options,
         index=get_default_index(body_options, "sedan"),
+        format_func=format_body,
     )
 
     if model_version == "v2":
         st.caption("Stage 1 V2 nutzt zusätzliche Fahrzeugdetails für eine genauere Schätzung.")
+        trim_options = sorted(v2_options["trim"], key=format_trim)
+        state_options = sorted(v2_options["state"], key=format_state)
         trim = st.selectbox(
-            "Ausstattung (Trim)", v2_options["trim"],
-            index=get_default_index(v2_options["trim"], "base"),
+            "Ausstattungsvariante", trim_options,
+            index=get_default_index(trim_options, "base"),
+            format_func=format_trim,
         )
         detail_left, detail_right = st.columns(2)
         with detail_left:
             transmission = st.selectbox(
                 "Getriebe", v2_options["transmission"],
                 index=get_default_index(v2_options["transmission"], "automatic"),
+                format_func=lambda value: TRANSMISSION_LABELS.get(value, title_case(value)),
             )
             state = st.selectbox(
-                "US-Bundesstaat", v2_options["state"],
-                index=get_default_index(v2_options["state"], "ca"),
+                "Bundesstaat / Region", state_options,
+                index=get_default_index(state_options, "ca"),
+                format_func=format_state,
             )
         with detail_right:
             color = st.selectbox(
                 "Außenfarbe", v2_options["color"],
                 index=get_default_index(v2_options["color"], "black"),
+                format_func=format_color,
             )
             interior = st.selectbox(
                 "Innenfarbe", v2_options["interior"],
                 index=get_default_index(v2_options["interior"], "black"),
+                format_func=format_color,
             )
     else:
         trim = transmission = state = color = interior = ""
@@ -171,13 +263,15 @@ with left_column:
     input_left, input_right = st.columns(2)
     with input_left:
         model_year = st.number_input("Baujahr", min_value=1990, max_value=2022, value=2012, step=1)
-        odometer = st.number_input(
-            "Kilometerstand (Meilen)",
+        odometer_km = st.number_input(
+            "Kilometerstand (km)",
             min_value=1,
-            max_value=500_000,
-            value=50_000,
-            step=1_000,
+            max_value=800_000,
+            value=80_000,
+            step=5_000,
         )
+        odometer_miles = float(odometer_km) * MILES_PER_KILOMETER
+        st.caption("Für das US-Preismodell wird der Wert im Hintergrund automatisch in Meilen umgerechnet.")
 
     with input_right:
         condition_label = st.select_slider(
@@ -215,7 +309,7 @@ with right_column:
         prediction_input = build_v2_input(
             model_year=int(model_year),
             vehicle_age=vehicle_age,
-            odometer=int(odometer),
+            odometer=int(round(odometer_miles)),
             condition=float(condition),
             make=selected_make,
             model=selected_model,
@@ -229,7 +323,7 @@ with right_column:
     else:
         prediction_input = build_v1_input(
             vehicle_age=vehicle_age,
-            odometer=int(odometer),
+            odometer=int(round(odometer_miles)),
             condition=float(condition),
             make=selected_make,
             model=selected_model,
@@ -253,12 +347,12 @@ with right_column:
         label="Finaler Preis: Markt + Saison",
         value=format_currency(final_price),
         delta=f"{seasonal_delta:+,.0f} saisonaler Effekt",
-        help="Stage-2-Marktpreis x saisonaler Faktor fuer Karosserieform und Monat.",
+        help="Stage-2-Marktpreis × saisonaler Faktor für Karosserieform und Monat.",
     )
 
     col1, col2, col3 = st.columns(3)
     col1.metric(
-        "Stage 1: Fahrzeugwert-Baseline",
+        "Stage 1: Fahrzeugwert-Basiswert",
         format_currency(stage1_price),
         help=(
             "Zeitneutrale V2-Vorhersage nur aus Fahrzeugmerkmalen."
@@ -270,7 +364,7 @@ with right_column:
         "Stage 2: Marktpreis",
         format_currency(stage2_price),
         delta=f"{price_delta:+,.0f}",
-        help="Stage-1-Basispreis x CPI-Multiplikator fuer das gewaehlte Bewertungsdatum.",
+        help="Stage-1-Basispreis × CPI-Multiplikator für das gewählte Bewertungsdatum.",
     )
     col3.metric(
         f"Saisonfaktor ({MONTH_NAMES[target_month]})",
@@ -283,12 +377,13 @@ with right_column:
     col4.metric(
         f"CPI-Multiplikator ({target_ym})",
         f"{cpi_multiplier:.4f}",
-        delta=f"{delta_pct:+.1f}% vs. 2015",
-        help="Verhaeltnis des CPI Gebrauchtwagen zum 2015-Jahresdurchschnitt (FRED: CUSR0000SETA01).",
+        delta=f"{delta_pct:+.1f}% gegenüber 2015",
+        help="Verhältnis des Gebrauchtwagen-CPI zum Jahresdurchschnitt 2015 (FRED: CUSR0000SETA01).",
     )
     has_recommendation = bool(seasonal_row.get("has_recommendation", False))
+    best_month_number = int(seasonal_row.get("best_month", target_month))
     best_month_value = (
-        str(seasonal_row.get("best_month_name", MONTH_NAMES[target_month]))
+        MONTH_NAMES.get(best_month_number, str(best_month_number))
         if has_recommendation
         else "Keine belastbare Empfehlung"
     )
@@ -327,22 +422,22 @@ with right_column:
         )
     elif seasonal_delta_pct > 2:
         st.success(
-            f"Saisonal ist {MONTH_NAMES[target_month]} fuer **{selected_body}** eher stark "
+            f"Saisonal ist {MONTH_NAMES[target_month]} für **{format_body(selected_body)}** eher stark "
             f"({seasonal_delta_pct:+.1f}%)."
         )
     elif seasonal_delta_pct < -2:
         better_month_hint = (
-            f" Historisch besser: **{seasonal_row.get('best_month_name')}**."
+            f" Historisch besser: **{best_month_value}**."
             if has_recommendation
             else " Für einen Monatsvergleich ist die Datenbasis zu klein."
         )
         st.warning(
-            f"Saisonal ist {MONTH_NAMES[target_month]} fuer **{selected_body}** eher schwach "
+            f"Saisonal ist {MONTH_NAMES[target_month]} für **{format_body(selected_body)}** eher schwach "
             f"({seasonal_delta_pct:+.1f}%).{better_month_hint}"
         )
     else:
         st.info(
-            f"Saisonal liegt {MONTH_NAMES[target_month]} fuer **{selected_body}** nahe am Durchschnitt "
+            f"Saisonal liegt {MONTH_NAMES[target_month]} für **{format_body(selected_body)}** nahe am Durchschnitt "
             f"({seasonal_delta_pct:+.1f}%)."
         )
 
@@ -357,30 +452,32 @@ with right_column:
             mq_left.metric(
                 "Durchschnittlicher Fehler Stage 1 V2 (MAE)",
                 format_currency(float(mae)),
-                delta=f"-{improvement_pct:.2f}% vs. V1 ({format_currency(float(previous_mae))})",
+                delta=f"-{improvement_pct:.2f}% gegenüber V1 ({format_currency(float(previous_mae))})",
                 delta_color="inverse",
                 help="V1 und V2 wurden auf denselben 105.834 Testfahrzeugen verglichen.",
             )
         else:
             mq_left.metric("Durchschnittlicher Fehler Stage 1 (MAE)", format_currency(float(mae)))
-        mq_right.metric("R² Score", f"{float(r2):.3f}")
+        mq_right.metric("Bestimmtheitsmaß R²", f"{float(r2):.3f}")
 
-    st.dataframe(
-        prediction_input.rename(
-            columns={
-                "vehicle_age": "Alter",
-                "sale_month": "Monat",
-                "odometer": "Mileage",
-                "condition": "Zustand",
-                "year_month": "Jahr-Monat",
-                "make": "Marke",
-                "model": "Modell",
-                "body": "Karosserie",
-            }
-        ),
-        width="stretch",
-        hide_index=True,
-    )
+    display_input = {
+        "Marke": format_make(selected_make),
+        "Modell": format_model(selected_model),
+        "Karosserieform": format_body(selected_body),
+        "Baujahr": int(model_year),
+        "Fahrzeugalter": vehicle_age,
+        "Kilometerstand": f"{int(odometer_km):,} km".replace(",", "."),
+        "Zustand": condition_label,
+    }
+    if model_version == "v2":
+        display_input.update({
+            "Ausstattungsvariante": format_trim(trim),
+            "Getriebe": TRANSMISSION_LABELS.get(transmission, title_case(transmission)),
+            "Bundesstaat / Region": format_state(state),
+            "Außenfarbe": format_color(color),
+            "Innenfarbe": format_color(interior),
+        })
+    st.dataframe(pd.DataFrame([display_input]), width="stretch", hide_index=True)
 
 st.divider()
 
@@ -395,7 +492,7 @@ if model_version == "v2":
     if v1_mae is not None and v2_mae is not None:
         improvement_dollars = float(v1_mae) - float(v2_mae)
         improvement_percent = improvement_dollars / float(v1_mae) * 100
-        st.subheader("Direkter Modellvergleich: V1 vs. V2")
+        st.subheader("Direkter Modellvergleich: V1 und V2")
         st.caption("Identische Auswertung auf denselben 105.834 zurückgehaltenen Testfahrzeugen.")
         comparison_cols = st.columns(3)
         comparison_cols[0].metric(
@@ -420,9 +517,9 @@ if model_version == "v2":
 with st.expander("Was passiert hier – Schritt für Schritt?"):
     st.markdown(
         f"""
-**Stage 1 – Fahrzeugwert-Baseline**
+**Stage 1 – Fahrzeugwert-Basiswert**
 
-1. Die App nimmt deine Fahrzeugdaten (Marke, Modell, Alter, Mileage, Zustand).
+1. Die App nimmt deine Fahrzeugdaten (Marke, Modell, Alter, Kilometerstand, Zustand).
 2. Das Produktionsmodell ({'V2 XGBoost-Ensemble' if model_version == 'v2' else 'V1 HistGradientBoosting'})
    berechnet daraus einen Basispreis. V2 enthält bewusst keinen Verkaufsmonat;
    Markt und Saison werden erst in Stage 2 und 3 ergänzt.
@@ -467,7 +564,7 @@ with st.expander(f"Makroökonomischer Kontext – {target_ym}"):
         f"zuletzt verfügbare Wert genutzt (Forward-Fill). Dargestellt: {ctx['year_month']}."
     )
 
-with st.expander(f"Saisonale Datenbasis – {selected_body}"):
+with st.expander(f"Saisonale Datenbasis – {format_body(selected_body)}"):
     body_seasonality = seasonality[seasonality["body"] == selected_body].copy()
     if not body_seasonality.empty:
         confidence_labels = {
@@ -479,6 +576,7 @@ with st.expander(f"Saisonale Datenbasis – {selected_body}"):
         body_seasonality["confidence"] = body_seasonality["confidence"].map(
             confidence_labels
         ).fillna(body_seasonality["confidence"])
+        body_seasonality["month_name"] = body_seasonality["sale_month"].map(MONTH_NAMES)
         st.dataframe(
             body_seasonality[
                 ["month_name", "seasonal_factor", "seasonal_delta_pct", "observations", "confidence"]
@@ -498,7 +596,7 @@ with st.expander(f"Saisonale Datenbasis – {selected_body}"):
             "August bis November sind im historischen Datensatz nicht enthalten und bleiben neutral."
         )
 
-with st.expander("Stage-2-Backtestergebnis (historisches Testset 2014–2015)"):
+with st.expander("Stage-2-Backtestergebnis (historische Testdaten 2014–2015)"):
     if stage2_eval:
         s1 = stage2_eval.get("stage1_metrics_historical", {})
         s2 = stage2_eval.get("stage2_metrics_historical", {})
@@ -520,7 +618,7 @@ with st.expander("Stage-2-Backtestergebnis (historisches Testset 2014–2015)"):
         }
         st.dataframe(pd.DataFrame(cmp_data), width="stretch", hide_index=True)
         st.caption(
-            f"CPI-Multiplikator im Testset (2014–2015): "
+            f"CPI-Multiplikator in den Testdaten (2014–2015): "
             f"min={mult_stats.get('min', 0):.4f} / max={mult_stats.get('max', 0):.4f} / "
             f"ø={mult_stats.get('mean', 0):.4f}. "
             f"Stage 2 verändert die historische Genauigkeit um <$1 MAE, weil die "
@@ -534,7 +632,7 @@ with st.expander("Wichtigste Einflussfaktoren (Stage 1)"):
     if top_features:
         st.dataframe(pd.DataFrame(top_features), width="stretch", hide_index=True)
     else:
-        st.write("Noch keine Feature-Importance gespeichert.")
+        st.write("Noch keine Merkmalsbedeutung gespeichert.")
 
 with st.expander("Modellgenauigkeit nach Preissegment (Stage 1)"):
     segment_metrics = metrics.get("segment_metrics", [])
@@ -549,6 +647,12 @@ with st.expander("Modellgenauigkeit nach Preissegment (Stage 1)"):
                 "mape_percent": "MAPE (%)",
             }
         )
+        segment_labels = {
+            "Budget": "Sehr günstig", "Economy": "Günstig", "Mid-Range": "Mittelklasse",
+            "Premium": "Premium", "Luxury": "Luxusklasse",
+        }
+        if "Segment" in df_seg.columns:
+            df_seg["Segment"] = df_seg["Segment"].map(segment_labels).fillna(df_seg["Segment"])
         st.dataframe(df_seg, width="stretch", hide_index=True)
         st.caption(
             "Das Modell ist am genauesten im Mittelklasse-Segment ($10k–$20k). "
