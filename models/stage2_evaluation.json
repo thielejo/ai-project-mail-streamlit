@@ -1,0 +1,169 @@
+{
+  "created_at": "2026-06-24T09:43:13.281369+00:00",
+  "evaluation_method": "fixed_stage1_reference_then_historical_cpi",
+  "reference_year_month": "2015-02",
+  "stage1_metrics_historical": {
+    "mae": 1890.21,
+    "rmse": 3325.06,
+    "r2": 0.8797,
+    "mape_percent": 17.31
+  },
+  "stage2_metrics_historical": {
+    "mae": 1889.19,
+    "rmse": 3331.03,
+    "r2": 0.8793,
+    "mape_percent": 17.24
+  },
+  "test_multiplier_stats": {
+    "min": 0.9897,
+    "max": 1.0024,
+    "mean": 0.9967
+  },
+  "stage1_test_median_price": 12716.52,
+  "forward_projection": [
+    {
+      "year_month": "2015-01",
+      "cpi_multiplier": 0.993,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 12627.0,
+      "delta_pct": -0.7
+    },
+    {
+      "year_month": "2016-01",
+      "cpi_multiplier": 0.9971,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 12679.0,
+      "delta_pct": -0.3
+    },
+    {
+      "year_month": "2017-01",
+      "cpi_multiplier": 1.007,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 12806.0,
+      "delta_pct": 0.7
+    },
+    {
+      "year_month": "2018-01",
+      "cpi_multiplier": 1.0044,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 12773.0,
+      "delta_pct": 0.4
+    },
+    {
+      "year_month": "2019-01",
+      "cpi_multiplier": 1.0045,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 12773.0,
+      "delta_pct": 0.4
+    },
+    {
+      "year_month": "2020-01",
+      "cpi_multiplier": 1.005,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 12781.0,
+      "delta_pct": 0.5
+    },
+    {
+      "year_month": "2020-06",
+      "cpi_multiplier": 0.9953,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 12657.0,
+      "delta_pct": -0.5
+    },
+    {
+      "year_month": "2021-01",
+      "cpi_multiplier": 1.0191,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 12959.0,
+      "delta_pct": 1.9
+    },
+    {
+      "year_month": "2021-06",
+      "cpi_multiplier": 1.0482,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 13329.0,
+      "delta_pct": 4.8
+    },
+    {
+      "year_month": "2021-12",
+      "cpi_multiplier": 1.1396,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 14492.0,
+      "delta_pct": 14.0
+    },
+    {
+      "year_month": "2022-01",
+      "cpi_multiplier": 1.143,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 14535.0,
+      "delta_pct": 14.3
+    },
+    {
+      "year_month": "2022-06",
+      "cpi_multiplier": 1.1681,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 14854.0,
+      "delta_pct": 16.8
+    },
+    {
+      "year_month": "2022-12",
+      "cpi_multiplier": 1.2064,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 15341.0,
+      "delta_pct": 20.6
+    },
+    {
+      "year_month": "2023-01",
+      "cpi_multiplier": 1.2088,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 15372.0,
+      "delta_pct": 20.9
+    },
+    {
+      "year_month": "2023-09",
+      "cpi_multiplier": 1.22,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 15514.0,
+      "delta_pct": 22.0
+    },
+    {
+      "year_month": "2024-01",
+      "cpi_multiplier": 1.2176,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 15483.0,
+      "delta_pct": 21.8
+    },
+    {
+      "year_month": "2025-01",
+      "cpi_multiplier": 1.2134,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 15430.0,
+      "delta_pct": 21.3
+    },
+    {
+      "year_month": "2026-01",
+      "cpi_multiplier": 1.2179,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 15488.0,
+      "delta_pct": 21.8
+    },
+    {
+      "year_month": "2026-06",
+      "cpi_multiplier": 1.2177,
+      "stage1_baseline": 12717.0,
+      "stage2_price": 15485.0,
+      "delta_pct": 21.8
+    }
+  ],
+  "current_macro_context": {
+    "year_month": "2026-06",
+    "cpi_multiplier": 1.2177,
+    "cpi_used_cars": 179.174,
+    "fedfunds": 3.63,
+    "consumer_sentiment": 49.8,
+    "unemployment": 4.3,
+    "total_vehicle_sales": 16.485,
+    "recession": 0.0,
+    "credit_spread": 2.75
+  }
+}
