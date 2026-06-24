@@ -264,18 +264,6 @@ with right_column:
         ),
     )
 
-    if delta_pct > 10:
-        st.warning(
-            f"Gebrauchtwagenpreise liegen **{delta_pct:.1f}% über** dem 2015-Niveau — "
-            f"hauptsächlich durch den COVID-bedingten Angebotsengpass (2021–2022)."
-        )
-    elif delta_pct < -5:
-        st.info(
-            f"Gebrauchtwagenpreise liegen **{abs(delta_pct):.1f}% unter** dem 2015-Niveau."
-        )
-    else:
-        st.info(f"Gebrauchtwagenpreise nahe am 2015-Referenzniveau ({delta_pct:+.1f}%).")
-
     seasonal_observations = int(seasonal_row.get("observations", 0))
     if seasonal_observations == 0:
         st.info(
