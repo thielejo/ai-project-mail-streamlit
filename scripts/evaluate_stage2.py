@@ -1,8 +1,9 @@
 """Evaluate Stage 2 CPI adjustment on the historical test set.
 
 The evaluation has three angles:
-  1. Backtest on 2014-2015 test set: Stage 2 should barely change accuracy because
-     the CPI multiplier is ~0.99 for that period (training data IS the baseline).
+  1. Architecture-aligned backtest on the 2014-2015 test set. Stage 1 is first
+     evaluated at the fixed 2015-02 reference used by the app; Stage 2 then
+     applies the CPI multiplier of each row's actual sale month.
   2. CPI multiplier analysis over time: shows the pandemic surge and normalisation.
   3. Forward projection: what does a median-priced car cost across different target dates?
 
@@ -40,6 +41,8 @@ NUMERIC_FEATURES = ["vehicle_age", "sale_month", "odometer", "condition"]
 CATEGORICAL_FEATURES = ["year_month", "make", "model", "body"]
 FEATURE_COLUMNS = NUMERIC_FEATURES + CATEGORICAL_FEATURES
 MAX_ROWS = 200_000
+REFERENCE_YEAR_MONTH = "2015-02"
+REFERENCE_MONTH = 2
 
 FEATURES_PATH = Path("car_prices_features.csv")
 MODEL_PATH = Path("models/price_model.joblib")
@@ -110,6 +113,14 @@ def _forward_projection(
     return rows
 
 
+def _to_reference_input(X: pd.DataFrame) -> pd.DataFrame:
+    """Return Stage-1 inputs at the same fixed market reference as the app."""
+    reference = X.copy()
+    reference["sale_month"] = REFERENCE_MONTH
+    reference["year_month"] = REFERENCE_YEAR_MONTH
+    return reference
+
+
 def _write_markdown(
     stage1_metrics: dict,
     stage2_metrics: dict,
@@ -146,9 +157,14 @@ stage2_price = stage1_price × cpi_multiplier(target_month)
 Der `cpi_multiplier` ist auf den 2015-Jahresdurchschnitt (= 1.000) normiert.
 Quelle: CPI Used Cars & Trucks (CUSR0000SETA01, FRED).
 
-## Backtest: Historische Genauigkeit (2014–2015 Testset)
+## Architekturgetreuer Backtest (2014–2015 Testset)
 
-| Metrik | Stage 1 | Stage 2 | Δ |
+Für beide Zeilen wird Stage 1 mit der festen Marktreferenz `{REFERENCE_YEAR_MONTH}`
+ausgeführt. Stage 2 wendet danach den CPI des tatsächlichen historischen
+Verkaufsmonats an. So entspricht der Test der aktuellen App-Architektur und
+zählt den Monat nicht bereits in Stage 1 mit.
+
+| Metrik | Referenz-Baseline | Mit Stage 2 | Δ |
 |---|---:|---:|---:|
 | MAE | ${stage1_metrics['mae']:,.2f} | ${stage2_metrics['mae']:,.2f} | {mae_delta:+,.2f} |
 | RMSE | ${stage1_metrics['rmse']:,.2f} | ${stage2_metrics['rmse']:,.2f} | — |
@@ -158,9 +174,9 @@ Quelle: CPI Used Cars & Trucks (CUSR0000SETA01, FRED).
 **CPI-Multiplikator im Testset (2014–2015):**
 - Min: {multiplier_stats['min']:.4f} / Max: {multiplier_stats['max']:.4f} / Ø {multiplier_stats['mean']:.4f}
 
-> Der minimale Unterschied (±{abs(mae_delta):.0f} MAE) bestätigt, dass Stage 2
-> die historische Genauigkeit nicht verschlechtert. Die Trainingsperiode liegt
-> im CPI-Baseline-Bereich (~0.99), sodass der Anpassungsfaktor nahezu neutral ist.
+> Der kleine Unterschied ({mae_delta:+.2f} USD MAE) bestätigt, dass Stage 2
+> die feste 2015-02-Referenz im historischen Zeitraum leicht verbessert. Die
+> Faktoren liegen nahe bei 1,0, weil 2014–2015 den Referenzzeitraum bilden.
 
 ## Vorwärtsprojektion (Median Stage-1-Preis: ${stage1_median:,.0f})
 
@@ -183,6 +199,9 @@ Quelle: CPI Used Cars & Trucks (CUSR0000SETA01, FRED).
 - Stage 2 extrapoliert ausschließlich über CPI-Inflation; strukturelle Marktveränderungen
   (z. B. Elektrifizierung, Chip-Engpässe) sind nicht modelliert.
 - Für Monate ohne FRED-Daten wird der letzte verfügbare Monat genutzt (Forward-Fill).
+- Im gespeicherten Makrostand sind die CPI-Werte für 2026-05 und 2026-06 aus
+  2026-04 fortgeschrieben. 2026-06 ist daher ein Bewertungsdatum, kein neuer
+  unabhängiger CPI-Messpunkt.
 - Das Stage-1-Modell kennt `year_month`-Werte außerhalb von 2014–2015 nicht;
   der OrdinalEncoder kodiert diese als -1. Da `year_month` der unwichtigste Feature
   (Importance 32 vs. 2470 für `make`) ist, ist der Effekt minimal.
@@ -201,9 +220,10 @@ def main() -> None:
     X_test, y_test = _load_test_set()
     print(f"   -> Testset: {len(X_test):,} Zeilen, {len(X_test['year_month'].unique())} year_month-Werte")
 
-    print("3. Lade Stage-1-Modell und berechne Basisvorhersagen...")
+    print("3. Lade Stage-1-Modell und berechne Vorhersagen bei fester Referenz 2015-02...")
     model = joblib.load(MODEL_PATH)
-    stage1_preds = model.predict(X_test)
+    reference_test = _to_reference_input(X_test)
+    stage1_preds = model.predict(reference_test)
     stage1_metrics = _metrics(y_test, stage1_preds)
     print(f"   Stage 1  MAE=${stage1_metrics['mae']:,.2f}  RMSE=${stage1_metrics['rmse']:,.2f}  R²={stage1_metrics['r2']:.4f}")
 
@@ -223,7 +243,7 @@ def main() -> None:
     print(f"   Stage 2  MAE=${stage2_metrics['mae']:,.2f}  RMSE=${stage2_metrics['rmse']:,.2f}  R²={stage2_metrics['r2']:.4f}")
 
     mae_delta = stage2_metrics["mae"] - stage1_metrics["mae"]
-    print(f"   Δ MAE (Stage2−Stage1): ${mae_delta:+,.2f}  [{abs(mae_delta)/stage1_metrics['mae']*100:.2f}% Änderung]")
+    print(f"   Delta MAE (Stage2-Stage1): ${mae_delta:+,.2f}  [{abs(mae_delta)/stage1_metrics['mae']*100:.2f}% Änderung]")
     print(f"   -> Erwartetes Ergebnis: minimale Änderung, da Testperiode im CPI-Basisjahr-Bereich liegt.")
 
     print("\n5. Vorwärtsprojektion (Median Stage-1-Preis)...")
@@ -248,6 +268,8 @@ def main() -> None:
 
     output = {
         "created_at": datetime.now(timezone.utc).isoformat(),
+        "evaluation_method": "fixed_stage1_reference_then_historical_cpi",
+        "reference_year_month": REFERENCE_YEAR_MONTH,
         "stage1_metrics_historical": stage1_metrics,
         "stage2_metrics_historical": stage2_metrics,
         "test_multiplier_stats": mult_stats,
