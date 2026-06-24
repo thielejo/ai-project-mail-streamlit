@@ -39,7 +39,7 @@ requires-dist = [
     { name = "matplotlib", specifier = ">=3.10.8" },
     { name = "numpy", specifier = ">=2.4.3" },
     { name = "pandas", specifier = ">=3.0.1" },
-    { name = "scikit-learn", specifier = ">=1.8.0" },
+    { name = "scikit-learn", specifier = "==1.8.0" },
     { name = "seaborn", specifier = ">=0.13.2" },
     { name = "streamlit", specifier = ">=1.30" },
     { name = "torch", specifier = ">=2.2.0" },
