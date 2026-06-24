@@ -31,6 +31,7 @@ from stage1_runtime import (  # noqa: E402
 
 FEATURES_PATH = PROJECT_ROOT / "car_prices_features.csv"
 STAGE2_EVAL_PATH = PROJECT_ROOT / "models" / "stage2_evaluation.json"
+SHARED_SPLIT_BENCHMARK_PATH = PROJECT_ROOT / "models" / "stage1_v1_v2_shared_split.json"
 MACRO_PATH = PROJECT_ROOT / "macro_index.csv"
 SEASONALITY_V1_PATH = PROJECT_ROOT / "models" / "seasonality_factors.csv"
 SEASONALITY_V2_PATH = PROJECT_ROOT / "models" / "seasonality_factors_v2.csv"
@@ -122,7 +123,12 @@ def load_metrics(model_version: str) -> dict:
     path = V2_METRICS_PATH if model_version == "v2" else V1_METRICS_PATH
     if not path.exists():
         return {}
-    return json.loads(path.read_text(encoding="utf-8"))
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if model_version == "v2" and SHARED_SPLIT_BENCHMARK_PATH.exists():
+        payload["shared_split_benchmark"] = json.loads(
+            SHARED_SPLIT_BENCHMARK_PATH.read_text(encoding="utf-8")
+        )
+    return payload
 
 
 @st.cache_data
@@ -441,12 +447,18 @@ with right_column:
             f"({seasonal_delta_pct:+.1f}%)."
         )
 
-    metric_values = metrics.get("v2_metrics", metrics.get("metrics", {}))
+    metric_values = metrics.get("shared_split_benchmark", {}).get(
+        "v2_metrics", metrics.get("v2_metrics", metrics.get("metrics", {}))
+    )
     mae = metric_values.get("mae")
     r2 = metric_values.get("r2")
     if mae is not None and r2 is not None:
         mq_left, mq_right = st.columns(2)
-        previous_mae = metrics.get("current_model_metrics_same_test", {}).get("mae")
+        benchmark = metrics.get("shared_split_benchmark", {})
+        previous_mae = benchmark.get("v1_metrics", {}).get(
+            "mae", metrics.get("current_model_metrics_same_test", {}).get("mae")
+        )
+        mae = benchmark.get("v2_metrics", {}).get("mae", mae)
         if model_version == "v2" and previous_mae is not None:
             improvement_pct = (float(previous_mae) - float(mae)) / float(previous_mae) * 100
             mq_left.metric(
@@ -487,13 +499,21 @@ summary_cols[1].metric("Testdaten", f"{metrics.get('test_rows', 0):,}".replace("
 summary_cols[2].metric("Modell", "Stage 1 V2" if model_version == "v2" else metrics.get("model_name", "Stage 1 V1"))
 
 if model_version == "v2":
-    v2_mae = metrics.get("v2_metrics", {}).get("mae")
-    v1_mae = metrics.get("current_model_metrics_same_test", {}).get("mae")
+    benchmark = metrics.get("shared_split_benchmark", {})
+    v2_mae = benchmark.get("v2_metrics", {}).get(
+        "mae", metrics.get("v2_metrics", {}).get("mae")
+    )
+    v1_mae = benchmark.get("v1_metrics", {}).get(
+        "mae", metrics.get("current_model_metrics_same_test", {}).get("mae")
+    )
     if v1_mae is not None and v2_mae is not None:
         improvement_dollars = float(v1_mae) - float(v2_mae)
         improvement_percent = improvement_dollars / float(v1_mae) * 100
         st.subheader("Direkter Modellvergleich: V1 und V2")
-        st.caption("Identische Auswertung auf denselben 105.834 zurückgehaltenen Testfahrzeugen.")
+        st.caption(
+            "Beide Modelle wurden auf denselben 423.335 Zeilen neu trainiert und auf "
+            "denselben 105.834 zuvor unangetasteten Testfahrzeugen bewertet."
+        )
         comparison_cols = st.columns(3)
         comparison_cols[0].metric(
             "V1 – bisheriges Modell",

@@ -70,17 +70,17 @@ Gespeicherte Auswertung auf denselben 105.834 Fahrzeugzeilen:
 
 | Modell | MAE | RMSE | R² | MAPE |
 |---|---:|---:|---:|---:|
-| V1 | 1.831,39 $ | 3.302,43 $ | 0,8800 | 16,39 % |
+| V1 – auf gemeinsamem Split neu trainiert | 1.830,95 $ | 3.276,81 $ | 0,8818 | 16,45 % |
 | V2 | 1.370,15 $ | 2.400,34 $ | 0,9366 | 15,13 % |
 
 ```text
-Absolut: 1.831,39 $ − 1.370,15 $ = 461,24 $
-Relativ: 461,24 $ ÷ 1.831,39 $ × 100 = 25,19 %
+Absolut: 1.830,95 $ − 1.370,15 $ = 460,80 $
+Relativ: 460,80 $ ÷ 1.830,95 $ × 100 = 25,17 %
 ```
 
 Der MAE ist der durchschnittliche absolute Abstand zwischen Prognose und echtem Verkaufspreis. V2 liegt durchschnittlich rund 461 $ näher am echten Preis. Ein niedrigerer MAE ist besser.
 
-Die **25,19 % beziehen sich nur auf V1 gegen V2 in Stage 1**. Sie stammen nicht aus Stage 2 oder Stage 3.
+Die **25,17 % beziehen sich nur auf V1 gegen V2 in Stage 1**. Sie stammen nicht aus Stage 2 oder Stage 3.
 
 ## 4. Warum V2 genauer ist
 
@@ -181,18 +181,24 @@ uv run python scripts/train_stage1_v2.py --max-rows 0
 
 Der Lauf überschreibt das V2-Modell und seine Ergebnisdateien. Vorher Arbeitsstand sichern.
 
-## 7. Methodischer Hinweis zu den 25,19 %
+## 7. Wissenschaftlich strenger gemeinsamer Vergleich
 
-Die gespeicherte Auswertung führt V1 und V2 auf denselben V2-Testzeilen aus. Das ist aussagekräftiger als ein Vergleich verschiedener Ergebnisdateien.
+V1 und V2 wurden mit `scripts/compare_stage1_v1_v2_shared_split.py` von Grund auf
+neu trainiert. Beide erhielten exakt dieselben 423.335 Trainingszeilen und wurden
+auf denselben 105.834 zuvor unangetasteten Testzeilen geprüft. Gespeicherte Modelle
+wurden für diesen Vergleich weder geladen noch überschrieben.
 
-Für einen publikationsreifen Endnachweis sollten beide Modelle dennoch in einem gemeinsamen Skript neu trainiert werden:
+Der strenge Vergleich bestätigt eine MAE-Verbesserung von **460,80 $ beziehungsweise
+25,17 %**. Ein gepaartes Bootstrap-Verfahren mit 1.000 Wiederholungen ergibt ein
+95%-Intervall von **450,74 $ bis 470,83 $**. Damit ist der Vorteil auf diesem Split
+deutlich und nicht nur eine zufällige Schwankung.
 
-1. gleicher bereinigter Datensatz,
-2. exakt gleicher Trainingsanteil,
-3. exakt gleicher unangetasteter Testanteil,
-4. keine Testzeile darf vorher im Training eines Modells enthalten sein.
+Ergebnisdateien:
 
-Beim gespeicherten V1-Modell wurde die ursprüngliche Trainingsmitgliedschaft nicht vollständig rekonstruiert. Die 25,19 % sind deshalb ein starker interner Benchmark, aber noch kein vollständig unabhängiger wissenschaftlicher Endnachweis.
+- `models/stage1_v1_v2_shared_split.json`
+- `model_results_stage1_v1_v2_shared_split.md`
+
+Verbleibende Einschränkung: Der Split ist zufällig und kein zeitlicher Zukunftstest.
 
 ## 8. Integration in die App
 
@@ -254,7 +260,7 @@ Sehr gut → Gut → Durchschnittlich → Reparaturbedürftig → Stark reparatu
 
 ### Sichtbarer Modellvergleich
 
-Die App zeigt V1-MAE, V2-MAE, 461 $ weniger Fehler und 25,19 % Verbesserung.
+Die App zeigt V1-MAE, V2-MAE, 461 $ weniger Fehler und 25,17 % Verbesserung aus dem gemeinsamen Neutraining.
 
 ## 9. Stage 2 mit V2
 
@@ -267,7 +273,7 @@ Stage-2-Preis = V2-Basiswert × CPI-Multiplikator
 | V2 ohne CPI | 1.370,16 $ |
 | V2 mit historischem CPI | 1.376,22 $ |
 
-Änderung: +6,06 $ beziehungsweise +0,44 %. Stage 2 soll primär alte Preise auf ein späteres Marktpreisniveau übertragen. Im Testzeitraum 2014–2015 liegt der CPI fast bei 1,0. Das ist kein Widerspruch zur 25,19-%-Verbesserung von V2 gegenüber V1.
+Änderung: +6,06 $ beziehungsweise +0,44 %. Stage 2 soll primär alte Preise auf ein späteres Marktpreisniveau übertragen. Im Testzeitraum 2014–2015 liegt der CPI fast bei 1,0. Das ist kein Widerspruch zur 25,17-%-Verbesserung von V2 gegenüber V1.
 
 ## 10. Stage 3 mit V2
 
@@ -322,7 +328,7 @@ XGBoost ist auch beim Laden des gespeicherten Modells erforderlich.
 - vollständiger Pfad V2 → CPI → Saison
 - Streamlit-Test ohne App-Ausnahmen
 - Prüfung der V2-Eingabefelder
-- Prüfung von 1.831 $, 1.370 $ und 25,19 % in der Oberfläche
+- Prüfung von 1.831 $, 1.370 $ und 25,17 % in der Oberfläche
 - Prüfung der Kilometer-zu-Meilen-Umrechnung
 - Prüfung deutscher Zustände, Farben, Getriebe, Regionen und Karosserieformen
 - vollständige Stage-2- und Stage-3-Neuauswertung
@@ -336,7 +342,7 @@ XGBoost ist auch beim Laden des gespeicherten Modells erforderlich.
 5. CPI beschreibt den Gesamtmarkt, nicht jedes Modell einzeln.
 6. Region und Farbe können die Übertragbarkeit auf andere Märkte begrenzen.
 7. Eine Unsicherheitsspanne fehlt noch.
-8. V1 und V2 sollten für den Endnachweis auf einem garantiert gemeinsamen Split neu trainiert werden.
+8. Für eine zeitliche Generalisierungsprüfung wäre zusätzlich ein Zukunfts-Holdout sinnvoll.
 
 ## 15. Empfohlene nächste Schritte
 
@@ -363,4 +369,4 @@ XGBoost ist auch beim Laden des gespeicherten Modells erforderlich.
 
 ## 17. Kurzfassung
 
-> V2 nutzt mehr Daten, mehr Fahrzeugmerkmale und ein Ensemble aus zwei XGBoost-Modellen. Im gespeicherten internen Vergleich sinkt der MAE von 1.831 $ auf 1.370 $, also um 25,19 %. Die App verwendet V2 standardmäßig und V1 als Fallback. Stage 2 aktualisiert das Marktpreisniveau, Stage 3 ergänzt eine kleine Saisonkorrektur. Die Oberfläche ist deutsch, nimmt Kilometer entgegen und übersetzt Eingaben intern in die Kategorien des amerikanischen Trainingsdatensatzes.
+> V2 nutzt mehr Daten, mehr Fahrzeugmerkmale und ein Ensemble aus zwei XGBoost-Modellen. Im gemeinsamen Neutraining sinkt der MAE von 1.831 $ auf 1.370 $, also um 25,17 %. Die App verwendet V2 standardmäßig und V1 als Fallback. Stage 2 aktualisiert das Marktpreisniveau, Stage 3 ergänzt eine kleine Saisonkorrektur. Die Oberfläche ist deutsch, nimmt Kilometer entgegen und übersetzt Eingaben intern in die Kategorien des amerikanischen Trainingsdatensatzes.

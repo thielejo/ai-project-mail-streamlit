@@ -86,9 +86,13 @@ uv run streamlit run app/streamlit_app.py
 | Metric | V2 | Previous V1 on same test rows |
 |---|---:|---:|
 | MAE | $1,370 | $1,831 |
-| RMSE | $2,400 | $3,302 |
-| R² | 0.9366 | 0.8800 |
-| MAPE | 15.13% | 16.39% |
+| RMSE | $2,400 | $3,277 |
+| R² | 0.9366 | 0.8818 |
+| MAPE | 15.13% | 16.45% |
+
+Both models were retrained from scratch on the same 423,335 training rows and
+evaluated on the same 105,834 previously untouched test rows. V2 reduces MAE by
+**$460.80 (25.17%)**; the paired 95% bootstrap interval is $450.74–$470.83.
 
 Error by price segment: see [`model_results.md`](model_results.md)
 Full model comparison (6 models): see [`model_comparison/model_comparison.md`](model_comparison/model_comparison.md)

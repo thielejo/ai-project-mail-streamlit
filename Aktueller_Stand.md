@@ -34,7 +34,7 @@ Wir bauen einen **hybriden KI-Agenten für dynamische Gebrauchtwagenpreisgestalt
 - V2 ist ein **50/50-Ensemble aus zwei XGBoost-Modellen**: Eine Komponente prognostiziert den Preis direkt in Dollar, die andere den logarithmierten Preis. Architektur, Hyperparameter und Gewichtung wurden auf einem separaten Validierungsanteil gewählt.
 - V2 verwendet 529.169 bereinigte Verkäufe sowie zusätzliche Fahrzeugmerkmale wie Ausstattungsvariante, Getriebe, Bundesstaat, Außen- und Innenfarbe. Eine explizite Marke-Modell-Interaktion verbessert die Abbildung verschiedener Modellreihen.
 - `MMR`, VIN und Verkäufer wurden bewusst ausgeschlossen. Insbesondere `MMR` wäre bereits eine externe Preisvorhersage und könnte die Modellleistung künstlich beziehungsweise zielähnlich verbessern.
-- Auf denselben 105.834 zurückgehaltenen Testfahrzeugen sinkt der MAE vom bisherigen Modell mit **1.831,39 $** auf **1.370,15 $**. Das entspricht **461,24 $ beziehungsweise 25,19 % weniger MAE**.
+- Im strengen gemeinsamen Neutraining auf exakt demselben Split sinkt der MAE von V1 mit **1.830,95 $** auf **1.370,15 $** bei V2. Das entspricht **460,80 $ beziehungsweise 25,17 % weniger MAE**. Das gepaarte 95%-Bootstrap-Intervall liegt bei **450,74 $ bis 470,83 $**.
 - Weitere V2-Testwerte: **RMSE 2.400,34 $**, **R² 0,9366**, **MAPE 15,13 %**. Das Ensemble ist gezielt auf den MAE in Dollar optimiert; andere Fehlermaße können gegenüber einer einzelnen V2-Komponente einen Trade-off zeigen.
 - Das neue Modell liegt unter `models/price_model_v2.joblib` und ist jetzt das **Produktionsmodell der Streamlit-App**. Die App bietet die zusätzlichen V2-Eingaben an; das bisherige Modell bleibt als automatischer Fallback erhalten.
 - Stage 2 wurde auf dem vollständigen V2-Testset neu geprüft: **MAE 1.370,16 $ vor CPI und 1.376,22 $ nach CPI** im basisnahen Zeitraum 2014–2015 (+0,44 %).
@@ -191,7 +191,7 @@ uv run python scripts/enrich_macro.py
 | Stage-1-RMSE | $3.299 | |
 | Stage-1-R² | 0,882 | Median-Baseline R² = −0,025 |
 | Stage-1-MAPE | 16,4% | Bestes Segment: Mid-Range 10,7% |
-| Stage-1-V2-MAE | $1.370,15 | 105.834 Testzeilen; 25,19% besser als altes Modell auf denselben Zeilen |
+| Stage-1-V2-MAE | $1.370,15 | 105.834 Testzeilen; 25,17% besser als neu trainiertes V1 auf gemeinsamem Split |
 | Stage-1-V2-RMSE | $2.400,34 | V2-Ensemble, auf MAE optimiert |
 | Stage-1-V2-R² | 0,9366 | altes Modell auf demselben Test: 0,8800 |
 | Stage-1-V2-MAPE | 15,13% | ohne MMR, VIN oder Verkäufer |
