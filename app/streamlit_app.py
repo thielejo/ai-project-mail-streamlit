@@ -12,9 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 
 from stage2_macro import (  # noqa: E402
-    MACRO_SIGNAL_LABELS,
     apply_stage2,
-    get_macro_context,
     load_macro_index,
 )
 from stage3_seasonality import (  # noqa: E402
@@ -27,7 +25,6 @@ from stage3_seasonality import (  # noqa: E402
 FEATURES_PATH = PROJECT_ROOT / "car_prices_features.csv"
 MODEL_PATH = PROJECT_ROOT / "models" / "price_model.joblib"
 METRICS_PATH = PROJECT_ROOT / "models" / "price_model_metrics.json"
-STAGE2_EVAL_PATH = PROJECT_ROOT / "models" / "stage2_evaluation.json"
 MACRO_PATH = PROJECT_ROOT / "macro_index.csv"
 SEASONALITY_PATH = PROJECT_ROOT / "models" / "seasonality_factors.csv"
 
@@ -70,13 +67,6 @@ def load_metrics() -> dict:
     if not METRICS_PATH.exists():
         return {}
     return json.loads(METRICS_PATH.read_text(encoding="utf-8"))
-
-
-@st.cache_data
-def load_stage2_eval() -> dict:
-    if not STAGE2_EVAL_PATH.exists():
-        return {}
-    return json.loads(STAGE2_EVAL_PATH.read_text(encoding="utf-8"))
 
 
 @st.cache_data
@@ -126,7 +116,6 @@ def build_prediction_input(
 
 data = load_feature_data()
 metrics = load_metrics()
-stage2_eval = load_stage2_eval()
 model = load_model()
 macro = load_macro()
 seasonality = load_seasonality()
@@ -337,102 +326,3 @@ with right_column:
         width="stretch",
         hide_index=True,
     )
-
-with st.expander(f"Makroökonomischer Kontext – {target_ym}"):
-    ctx = get_macro_context(target_ym, macro)
-    ctx_rows = [
-        {"Indikator": "CPI-Multiplikator (2015 = 1.000)", "Wert": f"{ctx['cpi_multiplier']:.4f}"},
-    ]
-    for col, label in MACRO_SIGNAL_LABELS.items():
-        val = ctx.get(col)
-        if val is not None:
-            formatted = f"{int(val)}" if col == "recession" else f"{val:,.4g}"
-            ctx_rows.append({"Indikator": label, "Wert": formatted})
-    st.dataframe(pd.DataFrame(ctx_rows), width="stretch", hide_index=True)
-    st.caption(
-        f"Quelle: FRED (St. Louis Fed). Für Monate ohne aktuelle Daten wird der "
-        f"zuletzt verfügbare Wert genutzt (Forward-Fill). Dargestellt: {ctx['year_month']}."
-    )
-
-with st.expander(f"Saisonale Datenbasis – {selected_body}"):
-    body_seasonality = seasonality[seasonality["body"] == selected_body].copy()
-    if not body_seasonality.empty:
-        confidence_labels = {
-            "high": "hoch",
-            "medium": "mittel",
-            "low": "niedrig",
-            "no_data": "keine Daten",
-        }
-        body_seasonality["confidence"] = body_seasonality["confidence"].map(
-            confidence_labels
-        ).fillna(body_seasonality["confidence"])
-        st.dataframe(
-            body_seasonality[
-                ["month_name", "seasonal_factor", "seasonal_delta_pct", "observations", "confidence"]
-            ].rename(
-                columns={
-                    "month_name": "Monat",
-                    "seasonal_factor": "Faktor",
-                    "seasonal_delta_pct": "Effekt (%)",
-                    "observations": "Verkäufe",
-                    "confidence": "Datenbasis",
-                }
-            ),
-            width="stretch",
-            hide_index=True,
-        )
-        st.caption(
-            "August bis November sind im historischen Datensatz nicht enthalten und bleiben neutral."
-        )
-
-with st.expander("CPI-Backtestergebnis (historisches Testset 2014–2015)"):
-    if stage2_eval:
-        s1 = stage2_eval.get("stage1_metrics_historical", {})
-        s2 = stage2_eval.get("stage2_metrics_historical", {})
-        mult_stats = stage2_eval.get("test_multiplier_stats", {})
-        cmp_data = {
-            "Metrik": ["MAE ($)", "RMSE ($)", "R²", "MAPE (%)"],
-            "ML-Referenz": [
-                f"${s1.get('mae', 0):,.2f}",
-                f"${s1.get('rmse', 0):,.2f}",
-                f"{s1.get('r2', 0):.4f}",
-                f"{s1.get('mape_percent', 0):.2f}%",
-            ],
-            "Mit CPI": [
-                f"${s2.get('mae', 0):,.2f}",
-                f"${s2.get('rmse', 0):,.2f}",
-                f"{s2.get('r2', 0):.4f}",
-                f"{s2.get('mape_percent', 0):.2f}%",
-            ],
-        }
-        st.dataframe(pd.DataFrame(cmp_data), width="stretch", hide_index=True)
-        st.caption(
-            f"CPI-Multiplikator im Testset (2014–2015): "
-            f"min={mult_stats.get('min', 0):.4f} / max={mult_stats.get('max', 0):.4f} / "
-            f"ø={mult_stats.get('mean', 0):.4f}. "
-            f"Die CPI-Anpassung verändert die historische Genauigkeit um <$1 MAE, weil die "
-            f"Trainingsperiode im CPI-Basisjahr-Bereich liegt."
-        )
-    else:
-        st.write("Noch keine CPI-Evaluationsdaten. Bitte `uv run python scripts/evaluate_stage2.py` ausführen.")
-
-with st.expander("Modellgenauigkeit nach Preissegment"):
-    segment_metrics = metrics.get("segment_metrics", [])
-    if segment_metrics:
-        df_seg = pd.DataFrame(segment_metrics).rename(
-            columns={
-                "segment": "Segment",
-                "price_range": "Preisbereich",
-                "n": "Testdaten",
-                "mae": "MAE ($)",
-                "rmse": "RMSE ($)",
-                "mape_percent": "MAPE (%)",
-            }
-        )
-        st.dataframe(df_seg, width="stretch", hide_index=True)
-        st.caption(
-            "Das Modell ist am genauesten im Mittelklasse-Segment ($10k–$20k). "
-            "Budget-Fahrzeuge (MAPE ~35%) und Luxusfahrzeuge (MAPE ~21%) sind schwerer vorherzusagen."
-        )
-    else:
-        st.write("Segmentauswertung noch nicht verfügbar.")
