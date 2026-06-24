@@ -41,6 +41,13 @@ MONTH_NAMES = {
     1: "Jan", 2: "Feb", 3: "Mär", 4: "Apr", 5: "Mai", 6: "Jun",
     7: "Jul", 8: "Aug", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez",
 }
+CONDITION_OPTIONS = {
+    "Stark beschädigt": (1.0, "Erhebliche Schäden und umfassender Reparaturbedarf."),
+    "Reparaturbedürftig": (2.0, "Deutliche optische oder technische Mängel."),
+    "Durchschnittlich": (3.0, "Normale altersbedingte Abnutzung und Gebrauchsspuren."),
+    "Gut": (4.0, "Gepflegter Zustand mit kleineren Gebrauchsspuren."),
+    "Sehr gut": (5.0, "Kaum sichtbare Gebrauchsspuren und keine bekannten größeren Mängel."),
+}
 
 
 st.set_page_config(page_title="Universal Pricing Agent", layout="wide")
@@ -173,7 +180,13 @@ with left_column:
         )
 
     with input_right:
-        condition = st.slider("Zustand", min_value=1.0, max_value=5.0, value=3.5, step=0.1)
+        condition_label = st.select_slider(
+            "Fahrzeugzustand",
+            options=list(CONDITION_OPTIONS),
+            value="Gut",
+        )
+        condition, condition_description = CONDITION_OPTIONS[condition_label]
+        st.caption(condition_description)
 
     st.divider()
     st.subheader("Bewertungsdatum")
