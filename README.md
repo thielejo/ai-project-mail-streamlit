@@ -8,6 +8,8 @@
 
 A hybrid AI agent for dynamic used car pricing. The system combines a machine learning baseline model with macroeconomic adjustment and seasonal rules to produce a current, market-aware price estimate for any vehicle.
 
+**Live Demo:** [https://ai-project-mail.streamlit.app](https://ai-project-mail.streamlit.app)
+
 ---
 
 ## Architecture
