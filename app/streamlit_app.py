@@ -225,20 +225,20 @@ with right_column:
         label="Finaler Preis: Markt + Saison",
         value=format_currency(final_price),
         delta=f"{seasonal_delta:+,.0f} saisonaler Effekt",
-        help="Stage-2-Marktpreis x saisonaler Faktor fuer Karosserieform und Monat.",
+        help="CPI-adjustierter Marktpreis x saisonaler Faktor fuer Karosserieform und Monat.",
     )
 
     col1, col2, col3 = st.columns(3)
     col1.metric(
-        "Stage 1: Fahrzeugwert-Baseline",
+        "ML-Basispreis",
         format_currency(stage1_price),
         help=f"Vorhersage aus Fahrzeugmerkmalen mit der festen Marktreferenz {REFERENCE_YEAR_MONTH}.",
     )
     col2.metric(
-        "Stage 2: Marktpreis",
+        "CPI-adjustierter Marktpreis",
         format_currency(stage2_price),
         delta=f"{price_delta:+,.0f}",
-        help="Stage-1-Basispreis x CPI-Multiplikator fuer das gewaehlte Bewertungsdatum.",
+        help="ML-Basispreis x CPI-Multiplikator fuer das gewaehlte Bewertungsdatum.",
     )
     col3.metric(
         f"Saisonfaktor ({MONTH_NAMES[target_month]})",
@@ -318,7 +318,7 @@ with right_column:
     r2 = metrics.get("metrics", {}).get("r2")
     if mae is not None and r2 is not None:
         mq_left, mq_right = st.columns(2)
-        mq_left.metric("Ø Fehler Stage 1 (MAE)", format_currency(float(mae)))
+        mq_left.metric("Ø Fehler ML-Modell (MAE)", format_currency(float(mae)))
         mq_right.metric("R² Score", f"{float(r2):.3f}")
 
     st.dataframe(
@@ -336,46 +336,6 @@ with right_column:
         ),
         width="stretch",
         hide_index=True,
-    )
-
-st.divider()
-
-summary_cols = st.columns(3)
-summary_cols[0].metric("Trainingsdaten", f"{metrics.get('rows_used', 0):,}".replace(",", "."))
-summary_cols[1].metric("Testdaten", f"{metrics.get('test_rows', 0):,}".replace(",", "."))
-summary_cols[2].metric("Modell", metrics.get("model_name", "Preis-Modell"))
-
-with st.expander("Was passiert hier – Schritt für Schritt?"):
-    st.markdown(
-        f"""
-**Stage 1 – Fahrzeugwert-Baseline**
-
-1. Die App nimmt deine Fahrzeugdaten (Marke, Modell, Alter, Mileage, Zustand).
-2. Das trainierte HistGradientBoostingRegressor-Modell (`models/price_model.joblib`)
-   berechnet daraus einen Basispreis mit der festen Marktreferenz {REFERENCE_YEAR_MONTH}.
-
-**Stage 2 – CPI-Marktpreisanpassung**
-
-3. Der Stage-1-Basispreis wird mit dem CPI-Multiplikator für das gewählte
-   Bewertungsdatum ({target_ym}) multipliziert:
-
-   `Stage-2-Preis = Stage-1-Preis × {cpi_multiplier:.4f}`
-
-4. Der Multiplikator kommt aus dem FRED-Datensatz *CPI Used Cars & Trucks*
-   (CUSR0000SETA01), normiert auf den 2015-Jahresdurchschnitt (= 1.000).
-
-5. Für den COVID-Angebotsengpass (2021–2022) erreichte der Multiplikator bis
-   zu **1.22** (+22%). Aktuell (2026-06) liegt er stabil bei ~1.22.
-
-**Stage 3 – Saisonale Anpassung**
-
-6. Der Stage-2-Preis wird mit dem Faktor für Karosserieform und Zielmonat
-   multipliziert: `Finaler Preis = Stage-2-Preis × {seasonal_factor:.4f}`.
-
-7. Die Faktoren vergleichen CPI-bereinigte Verkaufspreise mit vergleichbaren
-   Stage-1-Schätzungen. Monate mit wenigen Daten werden stark gedämpft; für
-   Monate ohne historische Verkäufe bleibt der Faktor neutral bei 1.0.
-"""
     )
 
 with st.expander(f"Makroökonomischer Kontext – {target_ym}"):
@@ -425,20 +385,20 @@ with st.expander(f"Saisonale Datenbasis – {selected_body}"):
             "August bis November sind im historischen Datensatz nicht enthalten und bleiben neutral."
         )
 
-with st.expander("Stage-2-Backtestergebnis (historisches Testset 2014–2015)"):
+with st.expander("CPI-Backtestergebnis (historisches Testset 2014–2015)"):
     if stage2_eval:
         s1 = stage2_eval.get("stage1_metrics_historical", {})
         s2 = stage2_eval.get("stage2_metrics_historical", {})
         mult_stats = stage2_eval.get("test_multiplier_stats", {})
         cmp_data = {
             "Metrik": ["MAE ($)", "RMSE ($)", "R²", "MAPE (%)"],
-            "Stage 1": [
+            "ML-Referenz": [
                 f"${s1.get('mae', 0):,.2f}",
                 f"${s1.get('rmse', 0):,.2f}",
                 f"{s1.get('r2', 0):.4f}",
                 f"{s1.get('mape_percent', 0):.2f}%",
             ],
-            "Stage 2": [
+            "Mit CPI": [
                 f"${s2.get('mae', 0):,.2f}",
                 f"${s2.get('rmse', 0):,.2f}",
                 f"{s2.get('r2', 0):.4f}",
@@ -450,20 +410,13 @@ with st.expander("Stage-2-Backtestergebnis (historisches Testset 2014–2015)"):
             f"CPI-Multiplikator im Testset (2014–2015): "
             f"min={mult_stats.get('min', 0):.4f} / max={mult_stats.get('max', 0):.4f} / "
             f"ø={mult_stats.get('mean', 0):.4f}. "
-            f"Stage 2 verändert die historische Genauigkeit um <$1 MAE, weil die "
+            f"Die CPI-Anpassung verändert die historische Genauigkeit um <$1 MAE, weil die "
             f"Trainingsperiode im CPI-Basisjahr-Bereich liegt."
         )
     else:
-        st.write("Noch keine Stage-2-Evaluationsdaten. Bitte `uv run python scripts/evaluate_stage2.py` ausführen.")
+        st.write("Noch keine CPI-Evaluationsdaten. Bitte `uv run python scripts/evaluate_stage2.py` ausführen.")
 
-with st.expander("Wichtigste Einflussfaktoren (Stage 1)"):
-    top_features = metrics.get("top_features", [])
-    if top_features:
-        st.dataframe(pd.DataFrame(top_features), width="stretch", hide_index=True)
-    else:
-        st.write("Noch keine Feature-Importance gespeichert.")
-
-with st.expander("Modellgenauigkeit nach Preissegment (Stage 1)"):
+with st.expander("Modellgenauigkeit nach Preissegment"):
     segment_metrics = metrics.get("segment_metrics", [])
     if segment_metrics:
         df_seg = pd.DataFrame(segment_metrics).rename(
