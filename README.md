@@ -25,7 +25,7 @@ Stage 3 (Seasonal)  Rule-based by body type & month     → Best-time-to-sell ad
 ## Repository Structure
 
 ```
-app/                        Streamlit demo app (Stage 1 + Stage 2)
+app/                        Streamlit demo app (Stage 1 + Stage 2 + Stage 3)
 docs/                       Project proposal, session notes, data documentation
 model_comparison/           Model benchmarking results (6 models compared)
 models/                     Trained model files and evaluation results
@@ -34,7 +34,9 @@ scripts/
   build_features.py         Feature engineering from cleaned CSV
   train_price_model.py      Train Stage 1 model (XGBoost with HistGB fallback)
   stage2_macro.py           Stage 2 module: CPI lookup and price adjustment
+  stage3_seasonality.py     Stage 3 module: seasonal factors by body type/month
   evaluate_stage2.py        Stage 2 backtest and forward projection
+  evaluate_stage3.py        Stage 3 factor generation and seasonal summary
   evaluate_segments.py      Segment error analysis on existing model
   compare_models.py         Full model comparison benchmark
   enrich_macro.py           Download FRED macro indicators → macro_index.csv
@@ -45,6 +47,7 @@ car_prices_features.csv     Engineered features ready for model training (534,31
 macro_index.csv             FRED macro indicators 1996–2026-06 (CPI, rates, sentiment)
 model_results.md            Stage 1 evaluation results incl. segment breakdown
 model_results_stage2.md     Stage 2 evaluation: backtest and forward projections
+model_results_stage3.md     Stage 3 evaluation: seasonal factors and best months
 ```
 
 > `car_prices_macro.csv` (98 MB) is gitignored. Regenerate with:
@@ -67,7 +70,10 @@ uv run python scripts/train_price_model.py
 # 3. Evaluate Stage 2
 uv run python scripts/evaluate_stage2.py
 
-# 4. Run Streamlit demo
+# 4. Evaluate Stage 3
+uv run python scripts/evaluate_stage3.py
+
+# 5. Run Streamlit demo
 uv run streamlit run app/streamlit_app.py
 ```
 
@@ -96,8 +102,17 @@ Full model comparison (6 models): see [`model_comparison/model_comparison.md`](m
 | 2023-09 (all-time high) | 1.2200 | +22% vs. baseline |
 | 2026-06 (current) | 1.2177 | +21.8% vs. baseline |
 
-Backtest on historical test set: Δ MAE = −$0.15 (0.01%) — does not hurt accuracy on 2014–2015 data.
+Architecture-aligned backtest with fixed Stage-1 reference 2015-02:
+MAE $1,890.21 → $1,889.19 (displayed Δ −$1.02) on 2014–2015 data.
 See [`model_results_stage2.md`](model_results_stage2.md)
+
+### Stage 3 — Seasonal Adjustment
+
+Rule-based seasonal factors are generated from CPI-normalized Stage-1 residuals by body type and sale month.
+This controls for vehicle mix, uses a fixed February 2015 Stage-1 reference, and avoids counting the target month twice.
+Sparse months are strongly smoothed toward neutral; months absent from the data remain at 1.0.
+Best/worst month advice is shown only when at least two months each have 100 observations.
+See [`model_results_stage3.md`](model_results_stage3.md)
 
 ---
 
