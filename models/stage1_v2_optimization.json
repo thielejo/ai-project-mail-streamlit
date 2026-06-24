@@ -1,0 +1,93 @@
+{
+  "method": "200k development sample; 64% train, 16% validation, 20% untouched test",
+  "train_rows": 128000,
+  "validation_rows": 32000,
+  "untouched_test_rows": 40000,
+  "features": [
+    "model_year",
+    "vehicle_age",
+    "odometer",
+    "condition",
+    "make",
+    "model",
+    "trim",
+    "body",
+    "transmission",
+    "state",
+    "color",
+    "interior",
+    "make_model"
+  ],
+  "trials": [
+    {
+      "name": "raw_squared",
+      "objective": "reg:squarederror",
+      "target_mode": "raw",
+      "max_depth": 9,
+      "min_child_weight": 12,
+      "learning_rate": 0.045,
+      "iterations": 700,
+      "validation_mae": 1423.33,
+      "seconds": 7.03
+    },
+    {
+      "name": "log_absolute",
+      "objective": "reg:absoluteerror",
+      "target_mode": "log",
+      "max_depth": 9,
+      "min_child_weight": 12,
+      "learning_rate": 0.045,
+      "iterations": 700,
+      "validation_mae": 1443.21,
+      "seconds": 42.64
+    },
+    {
+      "name": "log_squared",
+      "objective": "reg:squarederror",
+      "target_mode": "log",
+      "max_depth": 9,
+      "min_child_weight": 12,
+      "learning_rate": 0.045,
+      "iterations": 700,
+      "validation_mae": 1457.51,
+      "seconds": 7.94
+    },
+    {
+      "name": "raw_absolute",
+      "objective": "reg:absoluteerror",
+      "target_mode": "raw",
+      "max_depth": 9,
+      "min_child_weight": 12,
+      "learning_rate": 0.045,
+      "iterations": 700,
+      "validation_mae": 1473.63,
+      "seconds": 43.21
+    }
+  ],
+  "ensembles": [
+    {
+      "models": [
+        "raw_squared",
+        "log_absolute"
+      ],
+      "first_model_weight": 0.5,
+      "validation_mae": 1393.35
+    },
+    {
+      "models": [
+        "raw_squared",
+        "log_absolute"
+      ],
+      "first_model_weight": 0.75,
+      "validation_mae": 1396.83
+    },
+    {
+      "models": [
+        "raw_squared",
+        "log_absolute"
+      ],
+      "first_model_weight": 0.25,
+      "validation_mae": 1409.1
+    }
+  ]
+}
