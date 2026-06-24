@@ -254,11 +254,25 @@ with right_column:
         delta=f"{delta_pct:+.1f}% vs. 2015",
         help="Verhaeltnis des CPI Gebrauchtwagen zum 2015-Jahresdurchschnitt (FRED: CUSR0000SETA01).",
     )
+    has_recommendation = bool(seasonal_row.get("has_recommendation", False))
+    best_month_value = (
+        str(seasonal_row.get("best_month_name", MONTH_NAMES[target_month]))
+        if has_recommendation
+        else "Keine belastbare Empfehlung"
+    )
+    best_month_delta = (
+        f"{(float(seasonal_row.get('best_factor', 1.0)) - seasonal_factor) * 100:+.1f} Prozentpunkte"
+        if has_recommendation
+        else None
+    )
     col5.metric(
         "Bester Verkaufsmonat",
-        str(seasonal_row.get("best_month_name", MONTH_NAMES[target_month])),
-        delta=f"{(float(seasonal_row.get('best_factor', 1.0)) - seasonal_factor) * 100:+.1f} Prozentpunkte",
-        help="Stärkster historisch beobachteter Monat mit ausreichender Datenbasis.",
+        best_month_value,
+        delta=best_month_delta,
+        help=(
+            "Stärkster historisch beobachteter Monat. Eine Empfehlung wird nur "
+            "bei mindestens zwei Monaten mit jeweils 100 Verkäufen angezeigt."
+        ),
     )
 
     if delta_pct > 10:
@@ -285,10 +299,14 @@ with right_column:
             f"({seasonal_delta_pct:+.1f}%)."
         )
     elif seasonal_delta_pct < -2:
+        better_month_hint = (
+            f" Historisch besser: **{seasonal_row.get('best_month_name')}**."
+            if has_recommendation
+            else " Für einen Monatsvergleich ist die Datenbasis zu klein."
+        )
         st.warning(
             f"Saisonal ist {MONTH_NAMES[target_month]} fuer **{selected_body}** eher schwach "
-            f"({seasonal_delta_pct:+.1f}%). Historisch besser: "
-            f"**{seasonal_row.get('best_month_name', MONTH_NAMES[target_month])}**."
+            f"({seasonal_delta_pct:+.1f}%).{better_month_hint}"
         )
     else:
         st.info(

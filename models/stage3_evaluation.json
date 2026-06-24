@@ -1,11 +1,17 @@
 {
-  "created_at": "2026-06-22T15:25:36.715192+00:00",
+  "created_at": "2026-06-24T09:43:28.437585+00:00",
   "method": "cpi_normalized_model_residual_by_body_month",
   "reference_year_month": "2015-02",
   "factor_min": 0.85,
   "factor_max": 1.15,
   "shrinkage_observations": 1000,
   "minimum_recommendation_observations": 100,
+  "minimum_recommendation_months": 2,
+  "recommendation_coverage": {
+    "bodies_total": 45,
+    "bodies_with_recommendation": 20,
+    "bodies_without_recommendation": 25
+  },
   "observed_months": [
     1,
     2,
@@ -39,7 +45,8 @@
       "best_month": "Mar",
       "best_factor": 1.0381,
       "worst_month": "Dec",
-      "worst_factor": 0.9286
+      "worst_factor": 0.9286,
+      "has_recommendation": true
     },
     {
       "body": "suv",
@@ -48,7 +55,8 @@
       "best_month": "Mar",
       "best_factor": 1.029,
       "worst_month": "Dec",
-      "worst_factor": 0.9158
+      "worst_factor": 0.9158,
+      "has_recommendation": true
     },
     {
       "body": "hatchback",
@@ -57,7 +65,8 @@
       "best_month": "Jan",
       "best_factor": 1.0292,
       "worst_month": "Jun",
-      "worst_factor": 0.9506
+      "worst_factor": 0.9506,
+      "has_recommendation": true
     },
     {
       "body": "minivan",
@@ -66,7 +75,8 @@
       "best_month": "Mar",
       "best_factor": 1.0149,
       "worst_month": "Dec",
-      "worst_factor": 0.9357
+      "worst_factor": 0.9357,
+      "has_recommendation": true
     },
     {
       "body": "coupe",
@@ -75,7 +85,8 @@
       "best_month": "Mar",
       "best_factor": 1.022,
       "worst_month": "Dec",
-      "worst_factor": 0.9514
+      "worst_factor": 0.9514,
+      "has_recommendation": true
     },
     {
       "body": "crew cab",
@@ -84,7 +95,8 @@
       "best_month": "Jun",
       "best_factor": 1.012,
       "worst_month": "Dec",
-      "worst_factor": 0.9587
+      "worst_factor": 0.9587,
+      "has_recommendation": true
     },
     {
       "body": "wagon",
@@ -93,7 +105,8 @@
       "best_month": "Mar",
       "best_factor": 1.0212,
       "worst_month": "Dec",
-      "worst_factor": 0.9489
+      "worst_factor": 0.9489,
+      "has_recommendation": true
     },
     {
       "body": "convertible",
@@ -102,7 +115,8 @@
       "best_month": "Mar",
       "best_factor": 1.0197,
       "worst_month": "Dec",
-      "worst_factor": 0.9487
+      "worst_factor": 0.9487,
+      "has_recommendation": true
     },
     {
       "body": "supercrew",
@@ -111,7 +125,8 @@
       "best_month": "Jun",
       "best_factor": 1.0289,
       "worst_month": "Dec",
-      "worst_factor": 0.9712
+      "worst_factor": 0.9712,
+      "has_recommendation": true
     },
     {
       "body": "g sedan",
@@ -120,7 +135,8 @@
       "best_month": "Jan",
       "best_factor": 1.0197,
       "worst_month": "Jun",
-      "worst_factor": 0.9757
+      "worst_factor": 0.9757,
+      "has_recommendation": true
     },
     {
       "body": "supercab",
@@ -129,7 +145,8 @@
       "best_month": "Jun",
       "best_factor": 1.0106,
       "worst_month": "Dec",
-      "worst_factor": 0.9759
+      "worst_factor": 0.9759,
+      "has_recommendation": true
     },
     {
       "body": "regular cab",
@@ -138,7 +155,8 @@
       "best_month": "Mar",
       "best_factor": 1.0096,
       "worst_month": "Dec",
-      "worst_factor": 0.9656
+      "worst_factor": 0.9656,
+      "has_recommendation": true
     }
   ]
 }

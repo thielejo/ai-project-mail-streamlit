@@ -102,7 +102,8 @@ Full model comparison (6 models): see [`model_comparison/model_comparison.md`](m
 | 2023-09 (all-time high) | 1.2200 | +22% vs. baseline |
 | 2026-06 (current) | 1.2177 | +21.8% vs. baseline |
 
-Backtest on historical test set: Δ MAE = −$0.15 (0.01%) — does not hurt accuracy on 2014–2015 data.
+Architecture-aligned backtest with fixed Stage-1 reference 2015-02:
+MAE $1,890.21 → $1,889.19 (displayed Δ −$1.02) on 2014–2015 data.
 See [`model_results_stage2.md`](model_results_stage2.md)
 
 ### Stage 3 — Seasonal Adjustment
@@ -110,6 +111,7 @@ See [`model_results_stage2.md`](model_results_stage2.md)
 Rule-based seasonal factors are generated from CPI-normalized Stage-1 residuals by body type and sale month.
 This controls for vehicle mix, uses a fixed February 2015 Stage-1 reference, and avoids counting the target month twice.
 Sparse months are strongly smoothed toward neutral; months absent from the data remain at 1.0.
+Best/worst month advice is shown only when at least two months each have 100 observations.
 See [`model_results_stage3.md`](model_results_stage3.md)
 
 ---

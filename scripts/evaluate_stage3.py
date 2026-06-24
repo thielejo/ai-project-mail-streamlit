@@ -12,6 +12,7 @@ from stage3_seasonality import (
     FACTOR_MAX,
     FACTOR_MIN,
     MIN_RECOMMENDATION_OBSERVATIONS,
+    MIN_RECOMMENDATION_MONTHS,
     REFERENCE_YEAR_MONTH,
     SHRINKAGE_OBSERVATIONS,
     calculate_seasonality_factors,
@@ -34,6 +35,7 @@ def _top_body_summary(factors: pd.DataFrame, top_n: int = 12) -> pd.DataFrame:
             best_factor=("best_factor", "first"),
             worst_month=("worst_month_name", "first"),
             worst_factor=("worst_factor", "first"),
+            has_recommendation=("has_recommendation", "first"),
         )
         .reset_index()
         .sort_values("total_observations", ascending=False)
@@ -104,6 +106,9 @@ def _write_markdown(
         for body in examples
     )
     observed_text = ", ".join(str(month) for month in observed_months)
+    recommendation_by_body = factors.groupby("body")["has_recommendation"].first()
+    recommendation_bodies = int(recommendation_by_body.sum())
+    total_bodies = int(len(recommendation_by_body))
     content = f"""# Stage 3 Evaluation: Seasonal Adjustment
 
 ## Methode
@@ -130,8 +135,12 @@ Gesamtmedian berechnet. Alle Effekte werden mit einer Prior-Stärke von
 - Beobachtete Verkaufsmonate: {observed_text}
 - August bis November fehlen im Datensatz vollständig und erhalten deshalb
   neutral den Faktor 1.0. Für diese Monate wird keine Empfehlung behauptet.
-- Ein Monat wird nur ab {MIN_RECOMMENDATION_OBSERVATIONS} Beobachtungen als
-  bester oder schwächster Verkaufsmonat berücksichtigt.
+- Eine Best-/Worst-Month-Empfehlung wird nur ausgegeben, wenn mindestens
+  {MIN_RECOMMENDATION_MONTHS} Monate jeweils wenigstens
+  {MIN_RECOMMENDATION_OBSERVATIONS} Beobachtungen besitzen. Seltene
+  Karosserieformen erhalten ausdrücklich keine belastbare Empfehlung.
+- Aktuell erfüllen {recommendation_bodies} von {total_bodies} Karosserieformen
+  diese Mindestanforderung.
 
 ## Getrennte 80/20-Prüfung der Saisonregel
 
@@ -184,6 +193,7 @@ def main() -> None:
         f"({holdout['mae_change_percent']:+.2f}%)"
     )
     observed_months = sorted(adjusted_rows["sale_month"].unique().astype(int).tolist())
+    recommendation_by_body = factors.groupby("body")["has_recommendation"].first()
     output = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "method": "cpi_normalized_model_residual_by_body_month",
@@ -192,6 +202,12 @@ def main() -> None:
         "factor_max": FACTOR_MAX,
         "shrinkage_observations": SHRINKAGE_OBSERVATIONS,
         "minimum_recommendation_observations": MIN_RECOMMENDATION_OBSERVATIONS,
+        "minimum_recommendation_months": MIN_RECOMMENDATION_MONTHS,
+        "recommendation_coverage": {
+            "bodies_total": int(len(recommendation_by_body)),
+            "bodies_with_recommendation": int(recommendation_by_body.sum()),
+            "bodies_without_recommendation": int((~recommendation_by_body).sum()),
+        },
         "observed_months": observed_months,
         "unobserved_months": [month for month in range(1, 13) if month not in observed_months],
         "holdout_evaluation": holdout,

@@ -1,7 +1,7 @@
 # Aktueller Stand — Team MAIL (BIS5522)
 
 > **Für KI-Assistenten:** Diese Datei zuerst lesen. Sie ist der zentrale Kontext für den aktuellen Projektstand, getroffene Entscheidungen und nächste Schritte.
-> Zuletzt aktualisiert: 2026-06-19
+> Zuletzt aktualisiert: 2026-06-24
 
 ---
 
@@ -15,6 +15,18 @@ Wir bauen einen **hybriden KI-Agenten für dynamische Gebrauchtwagenpreisgestalt
 
 **Trainingsdaten:** 558.743 US-Auktionsverkäufe 2014–2015 (Manheim via Kaggle).
 **Endprodukt:** Streamlit-Demo + LLM-Orchestrierung.
+
+---
+
+## Update vom 24.06.2026 — Stage 2 und Stage 3 vollständig geprüft
+
+- **Stage 2:** Die Evaluation verwendet eine feste Stage-1-Referenz (`2015-02`) und trennt damit Basispreis und CPI-Anpassung sauber. Der Rückwärtstest verbessert den MAE von **1.890,21 $ auf 1.889,19 $**.
+- **Stage 3:** Alle **529.790** auswertbaren Verkäufe, **45** Karosserieformen und **540** Kombinationen aus Karosserieform und Monat wurden erneut validiert.
+- Der Stage-3-Test-MAE verbessert sich von **1.895,03 $ auf 1.870,20 $** (**−24,82 $ / −1,31 %**).
+- Saisonfaktoren bleiben auf **0,85 bis 1,15** begrenzt. Für August bis November fehlen historische Verkäufe; diese Monate bleiben deshalb neutral bei **1,0** und werden als `no_data` gekennzeichnet.
+- Eine Empfehlung für den besten bzw. schwächsten Verkaufsmonat wird nur noch ausgegeben, wenn mindestens **zwei Monate mit jeweils 100 Beobachtungen** verfügbar sind. Das trifft auf **20 von 45** Karosserieformen zu; bei den übrigen **25** zeigt die App transparent „Keine belastbare Empfehlung“.
+- Fehlende historische CPI-Werte und ungültige Verkaufsmonate werden nun ausdrücklich abgefangen, statt stillschweigend einen neutralen Wert zu verwenden.
+- Die aktualisierten Präsentations- und Sprechtextfassungen liegen unter `outputs/`. Die vorherigen Fassungen bleiben dort unter ihren bisherigen Dateinamen als Backup erhalten.
 
 ---
 
@@ -37,7 +49,7 @@ Eingabe: Fahrzeugbeschreibung (Marke, Modell, Karosserie, Baujahr, Km, Zustand)
 │  Stage 2 — Macro (FERTIG ✅)                                           │
 │  CPI Gebrauchtwagen (FRED: CUSR0000SETA01), Basis 2015 = 1,000        │
 │  Aktueller Multiplikator (2026-06): 1,2177 → +21,8% vs. 2015         │
-│  Rückwärtstest: Δ MAE = −0,15 $ (0,01%) — schadet historisch nicht    │
+│  Rückwärtstest: MAE 1.890,21 → 1.889,19 $ (feste Referenz 2015-02)   │
 │  Modul: scripts/stage2_macro.py                                        │
 │  Evaluation: scripts/evaluate_stage2.py                                │
 └───────────────────────┬────────────────────────────────────────────────┘
@@ -47,6 +59,7 @@ Eingabe: Fahrzeugbeschreibung (Marke, Modell, Karosserie, Baujahr, Km, Zustand)
 │  Stage 3 — Saisonal (FERTIG ✅)                                        │
 │  Regelbasiert: bereinigte Modellabweichung nach Karosserie × Monat   │
 │  → „Bester Monat zum Verkaufen" + saisonaler Anpassungsfaktor         │
+│  → Empfehlung nur bei ≥2 Monaten mit jeweils ≥100 Beobachtungen       │
 └───────────────────────┬────────────────────────────────────────────────┘
                         │
                         ▼
@@ -163,7 +176,7 @@ uv run python scripts/enrich_macro.py
 | Stage-1-R² | 0,882 | Median-Baseline R² = −0,025 |
 | Stage-1-MAPE | 16,4% | Bestes Segment: Mid-Range 10,7% |
 | Stage-2-CPI-Mult. (2026-06) | 1,2177 | +21,8% vs. 2015-Basis |
-| Stage-2-Backtest Δ MAE | −$0,15 | 0,01% Änderung — neutrales Verhalten |
+| Stage-2-Backtest | $1.890,21 → $1.889,19 | feste Stage-1-Referenz 2015-02; angezeigtes Δ −$1,02 |
 | Trainingszeilen | 200.000 | Teilmenge; voller Datensatz: 534.318 |
 
 **Fehler nach Preissegment (Stage 1):**

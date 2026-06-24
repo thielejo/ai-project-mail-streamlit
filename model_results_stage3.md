@@ -24,8 +24,12 @@ Gesamtmedian berechnet. Alle Effekte werden mit einer Prior-Stärke von
 - Beobachtete Verkaufsmonate: 1, 2, 3, 4, 5, 6, 7, 12
 - August bis November fehlen im Datensatz vollständig und erhalten deshalb
   neutral den Faktor 1.0. Für diese Monate wird keine Empfehlung behauptet.
-- Ein Monat wird nur ab 100 Beobachtungen als
-  bester oder schwächster Verkaufsmonat berücksichtigt.
+- Eine Best-/Worst-Month-Empfehlung wird nur ausgegeben, wenn mindestens
+  2 Monate jeweils wenigstens
+  100 Beobachtungen besitzen. Seltene
+  Karosserieformen erhalten ausdrücklich keine belastbare Empfehlung.
+- Aktuell erfüllen 20 von 45 Karosserieformen
+  diese Mindestanforderung.
 
 ## Getrennte 80/20-Prüfung der Saisonregel
 
