@@ -376,6 +376,34 @@ summary_cols[0].metric("Trainingsdaten", f"{metrics.get('train_rows', metrics.ge
 summary_cols[1].metric("Testdaten", f"{metrics.get('test_rows', 0):,}".replace(",", "."))
 summary_cols[2].metric("Modell", "Stage 1 V2" if model_version == "v2" else metrics.get("model_name", "Stage 1 V1"))
 
+if model_version == "v2":
+    v2_mae = metrics.get("v2_metrics", {}).get("mae")
+    v1_mae = metrics.get("current_model_metrics_same_test", {}).get("mae")
+    if v1_mae is not None and v2_mae is not None:
+        improvement_dollars = float(v1_mae) - float(v2_mae)
+        improvement_percent = improvement_dollars / float(v1_mae) * 100
+        st.subheader("Direkter Modellvergleich: V1 vs. V2")
+        st.caption("Identische Auswertung auf denselben 105.834 zurückgehaltenen Testfahrzeugen.")
+        comparison_cols = st.columns(3)
+        comparison_cols[0].metric(
+            "V1 – bisheriges Modell",
+            format_currency(float(v1_mae)),
+            help="Mittlerer absoluter Fehler des bisherigen Stage-1-Modells.",
+        )
+        comparison_cols[1].metric(
+            "V2 – neues Produktionsmodell",
+            format_currency(float(v2_mae)),
+            delta=f"-{format_currency(improvement_dollars)} Fehler",
+            delta_color="inverse",
+            help="Mittlerer absoluter Fehler des neuen V2-Ensembles.",
+        )
+        comparison_cols[2].metric(
+            "MAE-Verbesserung",
+            f"{improvement_percent:.2f}%",
+            delta="V2 ist genauer",
+            help="Relative Verringerung des MAE von V1 auf V2.",
+        )
+
 with st.expander("Was passiert hier – Schritt für Schritt?"):
     st.markdown(
         f"""
