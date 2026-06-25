@@ -13,10 +13,11 @@ import numpy as np
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-FEATURES_PATH = PROJECT_ROOT / "car_prices_features.csv"
-MODEL_PATH = PROJECT_ROOT / "models" / "price_model.joblib"
+FEATURES_PATH = PROJECT_ROOT / "car_prices_clean.csv"
+MODEL_PATH = PROJECT_ROOT / "models" / "price_model_v2.joblib"
+LEGACY_MODEL_PATH = PROJECT_ROOT / "models" / "price_model.joblib"
 MACRO_PATH = PROJECT_ROOT / "macro_index.csv"
-SEASONALITY_PATH = PROJECT_ROOT / "models" / "seasonality_factors.csv"
+SEASONALITY_PATH = PROJECT_ROOT / "models" / "seasonality_factors_v2.csv"
 
 FEATURE_COLUMNS = [
     "vehicle_age",
@@ -59,22 +60,28 @@ def prepare_seasonality_data(
     macro_path: Path = MACRO_PATH,
 ) -> pd.DataFrame:
     """Create vehicle-mix and CPI-adjusted rows used to estimate seasonality."""
-    required = FEATURE_COLUMNS + ["sellingprice"]
-    df = pd.read_csv(features_path, usecols=required).dropna(subset=required)
-    df = df[
-        df["sellingprice"].between(500, 150_000)
-        & df["odometer"].between(1, 500_000)
-        & df["vehicle_age"].between(0, 30)
-        & df["sale_month"].between(1, 12)
-    ].copy()
+    if model_path.name == "price_model_v2.joblib":
+        from train_stage1_v2 import FEATURES as V2_FEATURES, load_data
+
+        df = load_data(features_path, max_rows=0)
+        prediction_input = df[V2_FEATURES]
+    else:
+        required = FEATURE_COLUMNS + ["sellingprice"]
+        df = pd.read_csv(features_path, usecols=required).dropna(subset=required)
+        df = df[
+            df["sellingprice"].between(500, 150_000)
+            & df["odometer"].between(1, 500_000)
+            & df["vehicle_age"].between(0, 30)
+            & df["sale_month"].between(1, 12)
+        ].copy()
+        prediction_input = df[FEATURE_COLUMNS].copy()
+        prediction_input["sale_month"] = REFERENCE_MONTH
+        prediction_input["year_month"] = REFERENCE_YEAR_MONTH
     df["body"] = df["body"].astype(str).str.lower().str.strip()
     df["sale_month"] = df["sale_month"].astype(int)
 
-    reference_input = df[FEATURE_COLUMNS].copy()
-    reference_input["sale_month"] = REFERENCE_MONTH
-    reference_input["year_month"] = REFERENCE_YEAR_MONTH
     model = joblib.load(model_path)
-    df["reference_prediction"] = np.maximum(model.predict(reference_input), 500.0)
+    df["reference_prediction"] = np.maximum(model.predict(prediction_input), 500.0)
 
     macro = pd.read_csv(macro_path, usecols=["year_month", "cpi_multiplier"])
     cpi_lookup = macro.set_index("year_month")["cpi_multiplier"]

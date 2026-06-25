@@ -83,14 +83,18 @@ uv run streamlit run app/streamlit_app.py
 
 ## Model Performance
 
-### Stage 1 — HistGradientBoostingRegressor (200,000 training rows)
+### Stage 1 — V2 XGBoost Ensemble (529,169 rows)
 
-| Metric | Model | Median baseline |
+| Metric | V2 | Previous V1 on same test rows |
 |---|---:|---:|
-| MAE | $1,850 | $6,932 |
-| RMSE | $3,299 | $9,705 |
-| R² | 0.882 | −0.025 |
-| MAPE | 16.4% | 121.1% |
+| MAE | $1,370 | $1,831 |
+| RMSE | $2,400 | $3,277 |
+| R² | 0.9366 | 0.8818 |
+| MAPE | 15.13% | 16.45% |
+
+Both models were retrained from scratch on the same 423,335 training rows and
+evaluated on the same 105,834 previously untouched test rows. V2 reduces MAE by
+**$460.80 (25.17%)**; the paired 95% bootstrap interval is $450.74–$470.83.
 
 Error by price segment: see [`model_results.md`](model_results.md)
 Full model comparison (6 models): see [`model_comparison/model_comparison.md`](model_comparison/model_comparison.md)
@@ -104,16 +108,17 @@ Full model comparison (6 models): see [`model_comparison/model_comparison.md`](m
 | 2023-09 (all-time high) | 1.2200 | +22% vs. baseline |
 | 2026-06 (current) | 1.2177 | +21.8% vs. baseline |
 
-Architecture-aligned backtest with fixed Stage-1 reference 2015-02:
-MAE $1,890.21 → $1,889.19 (displayed Δ −$1.02) on 2014–2015 data.
+Architecture-aligned V2 backtest: MAE $1,370.16 → $1,376.22 after CPI
+on the basis-near 2014–2015 data (+0.44%).
 See [`model_results_stage2.md`](model_results_stage2.md)
 
 ### Stage 3 — Seasonal Adjustment
 
 Rule-based seasonal factors are generated from CPI-normalized Stage-1 residuals by body type and sale month.
-This controls for vehicle mix, uses a fixed February 2015 Stage-1 reference, and avoids counting the target month twice.
+This controls for vehicle mix and uses the time-neutral V2 baseline, avoiding counting the target month twice.
 Sparse months are strongly smoothed toward neutral; months absent from the data remain at 1.0.
 Best/worst month advice is shown only when at least two months each have 100 observations.
+On the separated rule holdout, Stage 3 improves MAE from $1,353.15 to $1,339.84 (−0.98%).
 See [`model_results_stage3.md`](model_results_stage3.md)
 
 ---

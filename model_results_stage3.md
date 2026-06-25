@@ -10,7 +10,7 @@ final_price = stage2_price x seasonal_factor(body, month)
 ```
 
 Die Berechnung vergleicht CPI-normalisierte Verkaufspreise mit Vorhersagen des
-Stage-1-Modells für die feste Referenz `2015-02`. Dadurch werden
+zeitneutralen Stage-1-V2-Modells. V2 enthält bewusst keinen Verkaufsmonat. Dadurch werden
 Unterschiede im Fahrzeugmix (Modell, Alter, Laufleistung und Zustand) weitgehend
 herausgerechnet. Der Zielmonat fließt nicht doppelt in Stage 1 und Stage 3 ein.
 
@@ -35,28 +35,28 @@ Gesamtmedian berechnet. Alle Effekte werden mit einer Prior-Stärke von
 
 | Kennzahl | Ohne Stage 3 | Mit Stage 3 | Änderung |
 |---|---:|---:|---:|
-| MAE auf CPI-normalisierten Preisen | $1,895.03 | $1,870.20 | -1.31% |
+| MAE auf CPI-normalisierten Preisen | $1,353.15 | $1,339.84 | -0.98% |
 
 Die Faktoren wurden dabei nur aus den 80% Regel-Trainingsdaten abgeleitet und
-auf den übrigen 105,806 Zeilen geprüft. Dies ist eine Prüfung
+auf den übrigen 105,688 Zeilen geprüft. Dies ist eine Prüfung
 der Saisonregel, kein vollständig unabhängiger neuer Stage-1-Modelltest.
 
 ## Wichtigste Muster
 
 | Karosserie | Beobachtungen | Monate mit Daten | Bester Monat | Effekt | Schwächster Monat | Effekt |
 |---|---:|---:|---|---:|---|---:|
-| sedan | 234,034 | 8 | Mar | +3.8% | Dec | -7.1% |
-| suv | 139,924 | 8 | Mar | +2.9% | Dec | -8.4% |
-| hatchback | 25,651 | 8 | Jan | +2.9% | Jun | -4.9% |
-| minivan | 24,626 | 8 | Mar | +1.5% | Dec | -6.4% |
-| coupe | 16,955 | 8 | Mar | +2.2% | Dec | -4.9% |
-| crew cab | 16,005 | 8 | Jun | +1.2% | Dec | -4.1% |
-| wagon | 15,521 | 8 | Mar | +2.1% | Dec | -5.1% |
-| convertible | 10,148 | 8 | Mar | +2.0% | Dec | -5.1% |
-| supercrew | 8,882 | 8 | Jun | +2.9% | Dec | -2.9% |
-| g sedan | 7,417 | 8 | Jan | +2.0% | Jun | -2.4% |
-| supercab | 5,152 | 8 | Jun | +1.1% | Dec | -2.4% |
-| regular cab | 4,668 | 8 | Mar | +1.0% | Dec | -3.4% |
+| sedan | 233,725 | 8 | Mar | +3.2% | Jun | -2.6% |
+| suv | 139,801 | 8 | Mar | +2.0% | Apr | -4.5% |
+| hatchback | 25,620 | 8 | Jan | +2.1% | Jun | -4.5% |
+| minivan | 24,619 | 8 | Mar | +1.4% | Dec | -2.0% |
+| coupe | 16,916 | 8 | Mar | +1.8% | Dec | -1.6% |
+| crew cab | 15,996 | 8 | Mar | +0.4% | Dec | -1.0% |
+| wagon | 15,507 | 8 | Mar | +1.7% | Jun | -1.6% |
+| convertible | 10,102 | 8 | Mar | +1.3% | Dec | -1.6% |
+| supercrew | 8,871 | 8 | Jun | +0.9% | Dec | -0.7% |
+| g sedan | 7,412 | 8 | Jan | +1.7% | Jun | -2.2% |
+| supercab | 5,144 | 8 | Jun | +1.0% | Dec | -0.6% |
+| regular cab | 4,658 | 8 | Mar | +0.6% | Dec | -1.9% |
 
 ## Beispiel-Faktoren
 
@@ -64,69 +64,69 @@ der Saisonregel, kein vollständig unabhängiger neuer Stage-1-Modelltest.
 
 | Monat | Faktor | Effekt | Beobachtungen | Sicherheit |
 |---|---:|---:|---:|---|
-| Jan | 0.9861 | -1.4% | 2,449 | high |
-| Feb | 1.0087 | +0.9% | 2,935 | high |
-| Mar | 1.0197 | +2.0% | 888 | medium |
-| Apr | 1.0032 | +0.3% | 32 | low |
-| May | 1.0155 | +1.5% | 1,088 | high |
-| Jun | 1.0029 | +0.3% | 1,886 | high |
-| Jul | 1.0013 | +0.1% | 38 | low |
+| Jan | 0.9847 | -1.5% | 2,439 | high |
+| Feb | 1.0045 | +0.4% | 2,925 | high |
+| Mar | 1.0126 | +1.3% | 884 | medium |
+| Apr | 1.0005 | +0.0% | 32 | low |
+| May | 1.0092 | +0.9% | 1,082 | high |
+| Jun | 1.0052 | +0.5% | 1,875 | high |
+| Jul | 1.0003 | +0.0% | 37 | low |
 | Aug | 1.0000 | +0.0% | 0 | no_data |
 | Sep | 1.0000 | +0.0% | 0 | no_data |
 | Oct | 1.0000 | +0.0% | 0 | no_data |
 | Nov | 1.0000 | +0.0% | 0 | no_data |
-| Dec | 0.9487 | -5.1% | 832 | medium |
+| Dec | 0.9835 | -1.7% | 828 | medium |
 
 ### suv
 
 | Monat | Faktor | Effekt | Beobachtungen | Sicherheit |
 |---|---:|---:|---:|---|
-| Jan | 1.0048 | +0.5% | 36,390 | high |
-| Feb | 1.0165 | +1.6% | 41,323 | high |
-| Mar | 1.0290 | +2.9% | 11,742 | high |
-| Apr | 0.9595 | -4.0% | 371 | medium |
-| May | 0.9923 | -0.8% | 13,646 | high |
-| Jun | 0.9904 | -1.0% | 25,788 | high |
-| Jul | 0.9988 | -0.1% | 380 | medium |
+| Jan | 0.9998 | -0.0% | 36,371 | high |
+| Feb | 1.0105 | +1.1% | 41,275 | high |
+| Mar | 1.0204 | +2.0% | 11,729 | high |
+| Apr | 0.9552 | -4.5% | 371 | medium |
+| May | 0.9879 | -1.2% | 13,634 | high |
+| Jun | 0.9874 | -1.3% | 25,765 | high |
+| Jul | 0.9995 | -0.0% | 380 | medium |
 | Aug | 1.0000 | +0.0% | 0 | no_data |
 | Sep | 1.0000 | +0.0% | 0 | no_data |
 | Oct | 1.0000 | +0.0% | 0 | no_data |
 | Nov | 1.0000 | +0.0% | 0 | no_data |
-| Dec | 0.9158 | -8.4% | 10,284 | high |
+| Dec | 0.9795 | -2.0% | 10,276 | high |
 
 ### sedan
 
 | Monat | Faktor | Effekt | Beobachtungen | Sicherheit |
 |---|---:|---:|---:|---|
-| Jan | 1.0085 | +0.8% | 60,233 | high |
-| Feb | 1.0217 | +2.2% | 69,757 | high |
-| Mar | 1.0381 | +3.8% | 19,589 | high |
-| Apr | 0.9789 | -2.1% | 580 | medium |
-| May | 0.9775 | -2.3% | 22,242 | high |
-| Jun | 0.9742 | -2.6% | 43,012 | high |
-| Jul | 0.9996 | -0.0% | 464 | medium |
+| Jan | 1.0041 | +0.4% | 60,160 | high |
+| Feb | 1.0146 | +1.5% | 69,657 | high |
+| Mar | 1.0317 | +3.2% | 19,567 | high |
+| Apr | 0.9749 | -2.5% | 579 | medium |
+| May | 0.9769 | -2.3% | 22,208 | high |
+| Jun | 0.9735 | -2.6% | 42,955 | high |
+| Jul | 0.9968 | -0.3% | 464 | medium |
 | Aug | 1.0000 | +0.0% | 0 | no_data |
 | Sep | 1.0000 | +0.0% | 0 | no_data |
 | Oct | 1.0000 | +0.0% | 0 | no_data |
 | Nov | 1.0000 | +0.0% | 0 | no_data |
-| Dec | 0.9286 | -7.1% | 18,157 | high |
+| Dec | 0.9910 | -0.9% | 18,135 | high |
 
 ### coupe
 
 | Monat | Faktor | Effekt | Beobachtungen | Sicherheit |
 |---|---:|---:|---:|---|
-| Jan | 0.9961 | -0.4% | 4,242 | high |
-| Feb | 1.0157 | +1.6% | 5,037 | high |
-| Mar | 1.0220 | +2.2% | 1,403 | high |
-| Apr | 1.0006 | +0.1% | 37 | low |
-| May | 0.9957 | -0.4% | 1,625 | high |
-| Jun | 0.9996 | -0.0% | 3,094 | high |
-| Jul | 1.0014 | +0.1% | 69 | low |
+| Jan | 0.9872 | -1.3% | 4,230 | high |
+| Feb | 1.0093 | +0.9% | 5,029 | high |
+| Mar | 1.0177 | +1.8% | 1,401 | high |
+| Apr | 1.0002 | +0.0% | 37 | low |
+| May | 0.9984 | -0.2% | 1,618 | high |
+| Jun | 0.9997 | -0.0% | 3,085 | high |
+| Jul | 1.0018 | +0.2% | 69 | low |
 | Aug | 1.0000 | +0.0% | 0 | no_data |
 | Sep | 1.0000 | +0.0% | 0 | no_data |
 | Oct | 1.0000 | +0.0% | 0 | no_data |
 | Nov | 1.0000 | +0.0% | 0 | no_data |
-| Dec | 0.9514 | -4.9% | 1,448 | high |
+| Dec | 0.9839 | -1.6% | 1,447 | high |
 
 ## Einordnung
 
