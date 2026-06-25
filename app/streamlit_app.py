@@ -43,11 +43,11 @@ MONTH_NAMES = {
     7: "Jul", 8: "Aug", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez",
 }
 CONDITION_OPTIONS = {
-    "★★★★★ 5 Sterne – sehr gut": (5.0, "5 Sterne: kaum sichtbare Gebrauchsspuren und keine bekannten größeren Mängel."),
-    "★★★★☆ 4 Sterne – gut": (4.0, "4 Sterne: gepflegter Zustand mit kleineren Gebrauchsspuren."),
-    "★★★☆☆ 3 Sterne – durchschnittlich": (3.0, "3 Sterne: normale altersbedingte Abnutzung und Gebrauchsspuren."),
-    "★★☆☆☆ 2 Sterne – reparaturbedürftig": (2.0, "2 Sterne: deutliche optische oder technische Mängel."),
-    "★☆☆☆☆ 1 Stern – stark reparaturbedürftig": (1.0, "1 Stern: erhebliche Schäden und umfassender Reparaturbedarf."),
+    "★★★★★": (5.0, "5 Sterne: kaum sichtbare Gebrauchsspuren und keine bekannten größeren Mängel."),
+    "★★★★☆": (4.0, "4 Sterne: gepflegter Zustand mit kleineren Gebrauchsspuren."),
+    "★★★☆☆": (3.0, "3 Sterne: normale altersbedingte Abnutzung und Gebrauchsspuren."),
+    "★★☆☆☆": (2.0, "2 Sterne: deutliche optische oder technische Mängel."),
+    "★☆☆☆☆": (1.0, "1 Stern: erhebliche Schäden und umfassender Reparaturbedarf."),
 }
 MILES_PER_KILOMETER = 0.621371
 
@@ -288,7 +288,7 @@ with left_column:
         condition_label = st.select_slider(
             "Fahrzeugzustand",
             options=list(CONDITION_OPTIONS),
-            value="★★★★☆ 4 Sterne – gut",
+            value="★★★★☆",
         )
         condition, condition_description = CONDITION_OPTIONS[condition_label]
         st.caption(condition_description)
