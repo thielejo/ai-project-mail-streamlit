@@ -43,11 +43,11 @@ MONTH_NAMES = {
     7: "Jul", 8: "Aug", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez",
 }
 CONDITION_OPTIONS = {
-    "Sehr gut": (5.0, "Kaum sichtbare Gebrauchsspuren und keine bekannten größeren Mängel."),
-    "Gut": (4.0, "Gepflegter Zustand mit kleineren Gebrauchsspuren."),
-    "Durchschnittlich": (3.0, "Normale altersbedingte Abnutzung und Gebrauchsspuren."),
-    "Reparaturbedürftig": (2.0, "Deutliche optische oder technische Mängel."),
-    "Stark reparaturbedürftig": (1.0, "Erhebliche Schäden und umfassender Reparaturbedarf."),
+    "★★★★★ 5 Sterne – sehr gut": (5.0, "5 Sterne: kaum sichtbare Gebrauchsspuren und keine bekannten größeren Mängel."),
+    "★★★★☆ 4 Sterne – gut": (4.0, "4 Sterne: gepflegter Zustand mit kleineren Gebrauchsspuren."),
+    "★★★☆☆ 3 Sterne – durchschnittlich": (3.0, "3 Sterne: normale altersbedingte Abnutzung und Gebrauchsspuren."),
+    "★★☆☆☆ 2 Sterne – reparaturbedürftig": (2.0, "2 Sterne: deutliche optische oder technische Mängel."),
+    "★☆☆☆☆ 1 Stern – stark reparaturbedürftig": (1.0, "1 Stern: erhebliche Schäden und umfassender Reparaturbedarf."),
 }
 MILES_PER_KILOMETER = 0.621371
 
@@ -223,7 +223,12 @@ with left_column:
         model_options = sorted(data["model"].dropna().unique(), key=format_model)
     selected_model = st.selectbox("Modell", model_options, format_func=format_model)
 
-    body_options = sorted(data["body"].dropna().unique(), key=format_body)
+    model_data = make_data[make_data["model"] == selected_model]
+    body_options = sorted(model_data["body"].dropna().unique(), key=format_body)
+    if not body_options:
+        body_options = sorted(make_data["body"].dropna().unique(), key=format_body)
+    if not body_options:
+        body_options = sorted(data["body"].dropna().unique(), key=format_body)
     selected_body = st.selectbox(
         "Karosserieform",
         body_options,
@@ -283,7 +288,7 @@ with left_column:
         condition_label = st.select_slider(
             "Fahrzeugzustand",
             options=list(CONDITION_OPTIONS),
-            value="Gut",
+            value="★★★★☆ 4 Sterne – gut",
         )
         condition, condition_description = CONDITION_OPTIONS[condition_label]
         st.caption(condition_description)
@@ -350,42 +355,12 @@ with right_column:
     seasonal_delta_pct = (seasonal_factor - 1.0) * 100
 
     st.metric(
-        label="Finaler Preis: Markt + Saison",
+        label="Geschätzter Verkaufspreis",
         value=format_currency(final_price),
         delta=f"{seasonal_delta:+,.0f} saisonaler Effekt",
-        help="Stage-2-Marktpreis × saisonaler Faktor für Karosserieform und Monat.",
+        help="Fahrzeugwert plus Markt- und Saisonanpassung.",
     )
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric(
-        "Stage 1: Fahrzeugwert-Basiswert",
-        format_currency(stage1_price),
-        help=(
-            "Zeitneutrale V2-Vorhersage nur aus Fahrzeugmerkmalen."
-            if model_version == "v2"
-            else "V1-Vorhersage mit der festen Marktreferenz 2015-02."
-        ),
-    )
-    col2.metric(
-        "Stage 2: Marktpreis",
-        format_currency(stage2_price),
-        delta=f"{price_delta:+,.0f}",
-        help="Stage-1-Basispreis × CPI-Multiplikator für das gewählte Bewertungsdatum.",
-    )
-    col3.metric(
-        f"Saisonfaktor ({MONTH_NAMES[target_month]})",
-        f"{seasonal_factor:.4f}",
-        delta=f"{seasonal_delta_pct:+.1f}%",
-        help="Faktor aus CPI- und fahrzeugmixbereinigten historischen Preisabweichungen.",
-    )
-
-    col4, col5 = st.columns(2)
-    col4.metric(
-        f"CPI-Multiplikator ({target_ym})",
-        f"{cpi_multiplier:.4f}",
-        delta=f"{delta_pct:+.1f}% gegenüber 2015",
-        help="Verhältnis des Gebrauchtwagen-CPI zum Jahresdurchschnitt 2015 (FRED: CUSR0000SETA01).",
-    )
     has_recommendation = bool(seasonal_row.get("has_recommendation", False))
     best_month_number = int(seasonal_row.get("best_month", target_month))
     best_month_value = (
@@ -398,7 +373,8 @@ with right_column:
         if has_recommendation
         else None
     )
-    col5.metric(
+    quick_cols = st.columns(2)
+    quick_cols[0].metric(
         "Bester Verkaufsmonat",
         best_month_value,
         delta=best_month_delta,
@@ -407,18 +383,64 @@ with right_column:
             "bei mindestens zwei Monaten mit jeweils 100 Verkäufen angezeigt."
         ),
     )
+    quick_cols[1].metric(
+        "Marktanpassung",
+        f"{delta_pct:+.1f}%",
+        help="Veränderung des Gebrauchtwagenpreisniveaus gegenüber dem 2015-Referenzniveau.",
+    )
 
-    if delta_pct > 10:
-        st.warning(
-            f"Gebrauchtwagenpreise liegen **{delta_pct:.1f}% über** dem 2015-Niveau — "
-            f"hauptsächlich durch den COVID-bedingten Angebotsengpass (2021–2022)."
+    show_price_breakdown = st.toggle(
+        "Preisaufbau anzeigen",
+        value=False,
+        help="Zeigt die drei Rechenschritte: Fahrzeugwert, Marktpreis und Saisonfaktor.",
+    )
+    if show_price_breakdown:
+        col1, col2, col3 = st.columns(3)
+        col1.metric(
+            "Stage 1: Fahrzeugwert",
+            format_currency(stage1_price),
+            help=(
+                "Zeitneutrale V2-Vorhersage nur aus Fahrzeugmerkmalen."
+                if model_version == "v2"
+                else "V1-Vorhersage mit der festen Marktreferenz 2015-02."
+            ),
         )
-    elif delta_pct < -5:
-        st.info(
-            f"Gebrauchtwagenpreise liegen **{abs(delta_pct):.1f}% unter** dem 2015-Niveau."
+        col2.metric(
+            "Stage 2: Marktpreis",
+            format_currency(stage2_price),
+            delta=f"{price_delta:+,.0f}",
+            help="Stage-1-Basispreis × CPI-Multiplikator für das gewählte Bewertungsdatum.",
         )
-    else:
-        st.info(f"Gebrauchtwagenpreise nahe am 2015-Referenzniveau ({delta_pct:+.1f}%).")
+        col3.metric(
+            f"Stage 3: Saison ({MONTH_NAMES[target_month]})",
+            f"{seasonal_factor:.4f}",
+            delta=f"{seasonal_delta_pct:+.1f}%",
+            help="Faktor aus CPI- und fahrzeugmixbereinigten historischen Preisabweichungen.",
+        )
+        st.metric(
+            f"CPI-Multiplikator ({target_ym})",
+            f"{cpi_multiplier:.4f}",
+            delta=f"{delta_pct:+.1f}% gegenüber 2015",
+            help="Verhältnis des Gebrauchtwagen-CPI zum Jahresdurchschnitt 2015 (FRED: CUSR0000SETA01).",
+        )
+
+    show_market_explanation = st.toggle(
+        "Marktpreis-Erklärung anzeigen",
+        value=False,
+        help="Zeigt kurz, warum der CPI-Multiplikator den Preis nach oben oder unten anpasst.",
+    )
+    if show_market_explanation:
+        if delta_pct > 10:
+            st.warning(
+                f"Gebrauchtwagenpreise liegen **{delta_pct:.1f}% über** dem 2015-Niveau — "
+                f"hauptsächlich durch den COVID-bedingten Angebotsengpass (2021–2022)."
+            )
+        elif delta_pct < -5:
+            st.info(
+                f"Gebrauchtwagenpreise liegen **{abs(delta_pct):.1f}% unter** dem 2015-Niveau."
+            )
+        else:
+            st.info(f"Gebrauchtwagenpreise nahe am 2015-Referenzniveau ({delta_pct:+.1f}%).")
 
     seasonal_observations = int(seasonal_row.get("observations", 0))
     if seasonal_observations == 0:
@@ -447,30 +469,36 @@ with right_column:
             f"({seasonal_delta_pct:+.1f}%)."
         )
 
-    metric_values = metrics.get("shared_split_benchmark", {}).get(
-        "v2_metrics", metrics.get("v2_metrics", metrics.get("metrics", {}))
+    show_model_quality = st.toggle(
+        "Modellgenauigkeit anzeigen",
+        value=False,
+        help="Zeigt die internen Testkennzahlen des Preismodells.",
     )
-    mae = metric_values.get("mae")
-    r2 = metric_values.get("r2")
-    if mae is not None and r2 is not None:
-        mq_left, mq_right = st.columns(2)
-        benchmark = metrics.get("shared_split_benchmark", {})
-        previous_mae = benchmark.get("v1_metrics", {}).get(
-            "mae", metrics.get("current_model_metrics_same_test", {}).get("mae")
+    if show_model_quality:
+        metric_values = metrics.get("shared_split_benchmark", {}).get(
+            "v2_metrics", metrics.get("v2_metrics", metrics.get("metrics", {}))
         )
-        mae = benchmark.get("v2_metrics", {}).get("mae", mae)
-        if model_version == "v2" and previous_mae is not None:
-            improvement_pct = (float(previous_mae) - float(mae)) / float(previous_mae) * 100
-            mq_left.metric(
-                "Durchschnittlicher Fehler Stage 1 V2 (MAE)",
-                format_currency(float(mae)),
-                delta=f"-{improvement_pct:.2f}% gegenüber V1 ({format_currency(float(previous_mae))})",
-                delta_color="inverse",
-                help="V1 und V2 wurden auf denselben 105.834 Testfahrzeugen verglichen.",
+        mae = metric_values.get("mae")
+        r2 = metric_values.get("r2")
+        if mae is not None and r2 is not None:
+            mq_left, mq_right = st.columns(2)
+            benchmark = metrics.get("shared_split_benchmark", {})
+            previous_mae = benchmark.get("v1_metrics", {}).get(
+                "mae", metrics.get("current_model_metrics_same_test", {}).get("mae")
             )
-        else:
-            mq_left.metric("Durchschnittlicher Fehler Stage 1 (MAE)", format_currency(float(mae)))
-        mq_right.metric("Bestimmtheitsmaß R²", f"{float(r2):.3f}")
+            mae = benchmark.get("v2_metrics", {}).get("mae", mae)
+            if model_version == "v2" and previous_mae is not None:
+                improvement_pct = (float(previous_mae) - float(mae)) / float(previous_mae) * 100
+                mq_left.metric(
+                    "Durchschnittlicher Fehler Stage 1 V2 (MAE)",
+                    format_currency(float(mae)),
+                    delta=f"-{improvement_pct:.2f}% gegenüber V1 ({format_currency(float(previous_mae))})",
+                    delta_color="inverse",
+                    help="V1 und V2 wurden auf denselben 105.834 Testfahrzeugen verglichen.",
+                )
+            else:
+                mq_left.metric("Durchschnittlicher Fehler Stage 1 (MAE)", format_currency(float(mae)))
+            mq_right.metric("Bestimmtheitsmaß R²", f"{float(r2):.3f}")
 
     display_input = {
         "Marke": format_make(selected_make),
@@ -493,190 +521,197 @@ with right_column:
 
 st.divider()
 
-summary_cols = st.columns(3)
-summary_cols[0].metric("Trainingsdaten", f"{metrics.get('train_rows', metrics.get('rows_used', 0)):,}".replace(",", "."))
-summary_cols[1].metric("Testdaten", f"{metrics.get('test_rows', 0):,}".replace(",", "."))
-summary_cols[2].metric("Modell", "Stage 1 V2" if model_version == "v2" else metrics.get("model_name", "Stage 1 V1"))
+show_developer_details = st.toggle(
+    "Entwicklerdetails anzeigen",
+    value=False,
+    help="Zeigt Modellvergleich, Backtests, Makrodaten und technische Tabellen.",
+)
 
-if model_version == "v2":
-    benchmark = metrics.get("shared_split_benchmark", {})
-    v2_mae = benchmark.get("v2_metrics", {}).get(
-        "mae", metrics.get("v2_metrics", {}).get("mae")
-    )
-    v1_mae = benchmark.get("v1_metrics", {}).get(
-        "mae", metrics.get("current_model_metrics_same_test", {}).get("mae")
-    )
-    if v1_mae is not None and v2_mae is not None:
-        improvement_dollars = float(v1_mae) - float(v2_mae)
-        improvement_percent = improvement_dollars / float(v1_mae) * 100
-        st.subheader("Direkter Modellvergleich: V1 und V2")
+if show_developer_details:
+    summary_cols = st.columns(3)
+    summary_cols[0].metric("Trainingsdaten", f"{metrics.get('train_rows', metrics.get('rows_used', 0)):,}".replace(",", "."))
+    summary_cols[1].metric("Testdaten", f"{metrics.get('test_rows', 0):,}".replace(",", "."))
+    summary_cols[2].metric("Modell", "Stage 1 V2" if model_version == "v2" else metrics.get("model_name", "Stage 1 V1"))
+
+    if model_version == "v2":
+        benchmark = metrics.get("shared_split_benchmark", {})
+        v2_mae = benchmark.get("v2_metrics", {}).get(
+            "mae", metrics.get("v2_metrics", {}).get("mae")
+        )
+        v1_mae = benchmark.get("v1_metrics", {}).get(
+            "mae", metrics.get("current_model_metrics_same_test", {}).get("mae")
+        )
+        if v1_mae is not None and v2_mae is not None:
+            improvement_dollars = float(v1_mae) - float(v2_mae)
+            improvement_percent = improvement_dollars / float(v1_mae) * 100
+            st.subheader("Direkter Modellvergleich: V1 und V2")
+            st.caption(
+                "Beide Modelle wurden auf denselben 423.335 Zeilen neu trainiert und auf "
+                "denselben 105.834 zuvor unangetasteten Testfahrzeugen bewertet."
+            )
+            comparison_cols = st.columns(3)
+            comparison_cols[0].metric(
+                "V1 – bisheriges Modell",
+                format_currency(float(v1_mae)),
+                help="Mittlerer absoluter Fehler des bisherigen Stage-1-Modells.",
+            )
+            comparison_cols[1].metric(
+                "V2 – neues Produktionsmodell",
+                format_currency(float(v2_mae)),
+                delta=f"-{format_currency(improvement_dollars)} Fehler",
+                delta_color="inverse",
+                help="Mittlerer absoluter Fehler des neuen V2-Ensembles.",
+            )
+            comparison_cols[2].metric(
+                "MAE-Verbesserung",
+                f"{improvement_percent:.2f}%",
+                delta="V2 ist genauer",
+                help="Relative Verringerung des MAE von V1 auf V2.",
+            )
+
+    with st.expander("Was passiert hier – Schritt für Schritt?"):
+        st.markdown(
+            f"""
+    **Stage 1 – Fahrzeugwert-Basiswert**
+
+    1. Die App nimmt deine Fahrzeugdaten (Marke, Modell, Alter, Kilometerstand, Zustand).
+    2. Das Produktionsmodell ({'V2 XGBoost-Ensemble' if model_version == 'v2' else 'V1 HistGradientBoosting'})
+       berechnet daraus einen Basispreis. V2 enthält bewusst keinen Verkaufsmonat;
+       Markt und Saison werden erst in Stage 2 und 3 ergänzt.
+
+    **Stage 2 – CPI-Marktpreisanpassung**
+
+    3. Der Stage-1-Basispreis wird mit dem CPI-Multiplikator für das gewählte
+       Bewertungsdatum ({target_ym}) multipliziert:
+
+       `Stage-2-Preis = Stage-1-Preis × {cpi_multiplier:.4f}`
+
+    4. Der Multiplikator kommt aus dem FRED-Datensatz *CPI Used Cars & Trucks*
+       (CUSR0000SETA01), normiert auf den 2015-Jahresdurchschnitt (= 1.000).
+
+    5. Für den COVID-Angebotsengpass (2021–2022) erreichte der Multiplikator bis
+       zu **1.22** (+22%). Aktuell (2026-06) liegt er stabil bei ~1.22.
+
+    **Stage 3 – Saisonale Anpassung**
+
+    6. Der Stage-2-Preis wird mit dem Faktor für Karosserieform und Zielmonat
+       multipliziert: `Finaler Preis = Stage-2-Preis × {seasonal_factor:.4f}`.
+
+    7. Die Faktoren vergleichen CPI-bereinigte Verkaufspreise mit vergleichbaren
+       Stage-1-Schätzungen. Monate mit wenigen Daten werden stark gedämpft; für
+       Monate ohne historische Verkäufe bleibt der Faktor neutral bei 1.0.
+    """
+        )
+
+    with st.expander(f"Makroökonomischer Kontext – {target_ym}"):
+        ctx = get_macro_context(target_ym, macro)
+        ctx_rows = [
+            {"Indikator": "CPI-Multiplikator (2015 = 1.000)", "Wert": f"{ctx['cpi_multiplier']:.4f}"},
+        ]
+        for col, label in MACRO_SIGNAL_LABELS.items():
+            val = ctx.get(col)
+            if val is not None:
+                formatted = f"{int(val)}" if col == "recession" else f"{val:,.4g}"
+                ctx_rows.append({"Indikator": label, "Wert": formatted})
+        st.dataframe(pd.DataFrame(ctx_rows), width="stretch", hide_index=True)
         st.caption(
-            "Beide Modelle wurden auf denselben 423.335 Zeilen neu trainiert und auf "
-            "denselben 105.834 zuvor unangetasteten Testfahrzeugen bewertet."
-        )
-        comparison_cols = st.columns(3)
-        comparison_cols[0].metric(
-            "V1 – bisheriges Modell",
-            format_currency(float(v1_mae)),
-            help="Mittlerer absoluter Fehler des bisherigen Stage-1-Modells.",
-        )
-        comparison_cols[1].metric(
-            "V2 – neues Produktionsmodell",
-            format_currency(float(v2_mae)),
-            delta=f"-{format_currency(improvement_dollars)} Fehler",
-            delta_color="inverse",
-            help="Mittlerer absoluter Fehler des neuen V2-Ensembles.",
-        )
-        comparison_cols[2].metric(
-            "MAE-Verbesserung",
-            f"{improvement_percent:.2f}%",
-            delta="V2 ist genauer",
-            help="Relative Verringerung des MAE von V1 auf V2.",
+            f"Quelle: FRED (St. Louis Fed). Für Monate ohne aktuelle Daten wird der "
+            f"zuletzt verfügbare Wert genutzt (Forward-Fill). Dargestellt: {ctx['year_month']}."
         )
 
-with st.expander("Was passiert hier – Schritt für Schritt?"):
-    st.markdown(
-        f"""
-**Stage 1 – Fahrzeugwert-Basiswert**
-
-1. Die App nimmt deine Fahrzeugdaten (Marke, Modell, Alter, Kilometerstand, Zustand).
-2. Das Produktionsmodell ({'V2 XGBoost-Ensemble' if model_version == 'v2' else 'V1 HistGradientBoosting'})
-   berechnet daraus einen Basispreis. V2 enthält bewusst keinen Verkaufsmonat;
-   Markt und Saison werden erst in Stage 2 und 3 ergänzt.
-
-**Stage 2 – CPI-Marktpreisanpassung**
-
-3. Der Stage-1-Basispreis wird mit dem CPI-Multiplikator für das gewählte
-   Bewertungsdatum ({target_ym}) multipliziert:
-
-   `Stage-2-Preis = Stage-1-Preis × {cpi_multiplier:.4f}`
-
-4. Der Multiplikator kommt aus dem FRED-Datensatz *CPI Used Cars & Trucks*
-   (CUSR0000SETA01), normiert auf den 2015-Jahresdurchschnitt (= 1.000).
-
-5. Für den COVID-Angebotsengpass (2021–2022) erreichte der Multiplikator bis
-   zu **1.22** (+22%). Aktuell (2026-06) liegt er stabil bei ~1.22.
-
-**Stage 3 – Saisonale Anpassung**
-
-6. Der Stage-2-Preis wird mit dem Faktor für Karosserieform und Zielmonat
-   multipliziert: `Finaler Preis = Stage-2-Preis × {seasonal_factor:.4f}`.
-
-7. Die Faktoren vergleichen CPI-bereinigte Verkaufspreise mit vergleichbaren
-   Stage-1-Schätzungen. Monate mit wenigen Daten werden stark gedämpft; für
-   Monate ohne historische Verkäufe bleibt der Faktor neutral bei 1.0.
-"""
-    )
-
-with st.expander(f"Makroökonomischer Kontext – {target_ym}"):
-    ctx = get_macro_context(target_ym, macro)
-    ctx_rows = [
-        {"Indikator": "CPI-Multiplikator (2015 = 1.000)", "Wert": f"{ctx['cpi_multiplier']:.4f}"},
-    ]
-    for col, label in MACRO_SIGNAL_LABELS.items():
-        val = ctx.get(col)
-        if val is not None:
-            formatted = f"{int(val)}" if col == "recession" else f"{val:,.4g}"
-            ctx_rows.append({"Indikator": label, "Wert": formatted})
-    st.dataframe(pd.DataFrame(ctx_rows), width="stretch", hide_index=True)
-    st.caption(
-        f"Quelle: FRED (St. Louis Fed). Für Monate ohne aktuelle Daten wird der "
-        f"zuletzt verfügbare Wert genutzt (Forward-Fill). Dargestellt: {ctx['year_month']}."
-    )
-
-with st.expander(f"Saisonale Datenbasis – {format_body(selected_body)}"):
-    body_seasonality = seasonality[seasonality["body"] == selected_body].copy()
-    if not body_seasonality.empty:
-        confidence_labels = {
-            "high": "hoch",
-            "medium": "mittel",
-            "low": "niedrig",
-            "no_data": "keine Daten",
-        }
-        body_seasonality["confidence"] = body_seasonality["confidence"].map(
-            confidence_labels
-        ).fillna(body_seasonality["confidence"])
-        body_seasonality["month_name"] = body_seasonality["sale_month"].map(MONTH_NAMES)
-        st.dataframe(
-            body_seasonality[
-                ["month_name", "seasonal_factor", "seasonal_delta_pct", "observations", "confidence"]
-            ].rename(
-                columns={
-                    "month_name": "Monat",
-                    "seasonal_factor": "Faktor",
-                    "seasonal_delta_pct": "Effekt (%)",
-                    "observations": "Verkäufe",
-                    "confidence": "Datenbasis",
-                }
-            ),
-            width="stretch",
-            hide_index=True,
-        )
-        st.caption(
-            "August bis November sind im historischen Datensatz nicht enthalten und bleiben neutral."
-        )
-
-with st.expander("Stage-2-Backtestergebnis (historische Testdaten 2014–2015)"):
-    if stage2_eval:
-        s1 = stage2_eval.get("stage1_metrics_historical", {})
-        s2 = stage2_eval.get("stage2_metrics_historical", {})
-        mult_stats = stage2_eval.get("test_multiplier_stats", {})
-        cmp_data = {
-            "Metrik": ["MAE ($)", "RMSE ($)", "R²", "MAPE (%)"],
-            "Stage 1": [
-                f"${s1.get('mae', 0):,.2f}",
-                f"${s1.get('rmse', 0):,.2f}",
-                f"{s1.get('r2', 0):.4f}",
-                f"{s1.get('mape_percent', 0):.2f}%",
-            ],
-            "Stage 2": [
-                f"${s2.get('mae', 0):,.2f}",
-                f"${s2.get('rmse', 0):,.2f}",
-                f"{s2.get('r2', 0):.4f}",
-                f"{s2.get('mape_percent', 0):.2f}%",
-            ],
-        }
-        st.dataframe(pd.DataFrame(cmp_data), width="stretch", hide_index=True)
-        st.caption(
-            f"CPI-Multiplikator in den Testdaten (2014–2015): "
-            f"min={mult_stats.get('min', 0):.4f} / max={mult_stats.get('max', 0):.4f} / "
-            f"ø={mult_stats.get('mean', 0):.4f}. "
-            f"Stage 2 verändert die historische Genauigkeit um <$1 MAE, weil die "
-            f"Trainingsperiode im CPI-Basisjahr-Bereich liegt."
-        )
-    else:
-        st.write("Noch keine Stage-2-Evaluationsdaten. Bitte `uv run python scripts/evaluate_stage2.py` ausführen.")
-
-with st.expander("Wichtigste Einflussfaktoren (Stage 1)"):
-    top_features = metrics.get("top_features", [])
-    if top_features:
-        st.dataframe(pd.DataFrame(top_features), width="stretch", hide_index=True)
-    else:
-        st.write("Noch keine Merkmalsbedeutung gespeichert.")
-
-with st.expander("Modellgenauigkeit nach Preissegment (Stage 1)"):
-    segment_metrics = metrics.get("segment_metrics", [])
-    if segment_metrics:
-        df_seg = pd.DataFrame(segment_metrics).rename(
-            columns={
-                "segment": "Segment",
-                "price_range": "Preisbereich",
-                "n": "Testdaten",
-                "mae": "MAE ($)",
-                "rmse": "RMSE ($)",
-                "mape_percent": "MAPE (%)",
+    with st.expander(f"Saisonale Datenbasis – {format_body(selected_body)}"):
+        body_seasonality = seasonality[seasonality["body"] == selected_body].copy()
+        if not body_seasonality.empty:
+            confidence_labels = {
+                "high": "hoch",
+                "medium": "mittel",
+                "low": "niedrig",
+                "no_data": "keine Daten",
             }
-        )
-        segment_labels = {
-            "Budget": "Sehr günstig", "Economy": "Günstig", "Mid-Range": "Mittelklasse",
-            "Premium": "Premium", "Luxury": "Luxusklasse",
-        }
-        if "Segment" in df_seg.columns:
-            df_seg["Segment"] = df_seg["Segment"].map(segment_labels).fillna(df_seg["Segment"])
-        st.dataframe(df_seg, width="stretch", hide_index=True)
-        st.caption(
-            "Das Modell ist am genauesten im Mittelklasse-Segment ($10k–$20k). "
-            "Budget-Fahrzeuge (MAPE ~35%) und Luxusfahrzeuge (MAPE ~21%) sind schwerer vorherzusagen."
-        )
-    else:
-        st.write("Segmentauswertung noch nicht verfügbar.")
+            body_seasonality["confidence"] = body_seasonality["confidence"].map(
+                confidence_labels
+            ).fillna(body_seasonality["confidence"])
+            body_seasonality["month_name"] = body_seasonality["sale_month"].map(MONTH_NAMES)
+            st.dataframe(
+                body_seasonality[
+                    ["month_name", "seasonal_factor", "seasonal_delta_pct", "observations", "confidence"]
+                ].rename(
+                    columns={
+                        "month_name": "Monat",
+                        "seasonal_factor": "Faktor",
+                        "seasonal_delta_pct": "Effekt (%)",
+                        "observations": "Verkäufe",
+                        "confidence": "Datenbasis",
+                    }
+                ),
+                width="stretch",
+                hide_index=True,
+            )
+            st.caption(
+                "August bis November sind im historischen Datensatz nicht enthalten und bleiben neutral."
+            )
+
+    with st.expander("Stage-2-Backtestergebnis (historische Testdaten 2014–2015)"):
+        if stage2_eval:
+            s1 = stage2_eval.get("stage1_metrics_historical", {})
+            s2 = stage2_eval.get("stage2_metrics_historical", {})
+            mult_stats = stage2_eval.get("test_multiplier_stats", {})
+            cmp_data = {
+                "Metrik": ["MAE ($)", "RMSE ($)", "R²", "MAPE (%)"],
+                "Stage 1": [
+                    f"${s1.get('mae', 0):,.2f}",
+                    f"${s1.get('rmse', 0):,.2f}",
+                    f"{s1.get('r2', 0):.4f}",
+                    f"{s1.get('mape_percent', 0):.2f}%",
+                ],
+                "Stage 2": [
+                    f"${s2.get('mae', 0):,.2f}",
+                    f"${s2.get('rmse', 0):,.2f}",
+                    f"{s2.get('r2', 0):.4f}",
+                    f"{s2.get('mape_percent', 0):.2f}%",
+                ],
+            }
+            st.dataframe(pd.DataFrame(cmp_data), width="stretch", hide_index=True)
+            st.caption(
+                f"CPI-Multiplikator in den Testdaten (2014–2015): "
+                f"min={mult_stats.get('min', 0):.4f} / max={mult_stats.get('max', 0):.4f} / "
+                f"ø={mult_stats.get('mean', 0):.4f}. "
+                f"Stage 2 verändert die historische Genauigkeit um <$1 MAE, weil die "
+                f"Trainingsperiode im CPI-Basisjahr-Bereich liegt."
+            )
+        else:
+            st.write("Noch keine Stage-2-Evaluationsdaten. Bitte `uv run python scripts/evaluate_stage2.py` ausführen.")
+
+    with st.expander("Wichtigste Einflussfaktoren (Stage 1)"):
+        top_features = metrics.get("top_features", [])
+        if top_features:
+            st.dataframe(pd.DataFrame(top_features), width="stretch", hide_index=True)
+        else:
+            st.write("Noch keine Merkmalsbedeutung gespeichert.")
+
+    with st.expander("Modellgenauigkeit nach Preissegment (Stage 1)"):
+        segment_metrics = metrics.get("segment_metrics", [])
+        if segment_metrics:
+            df_seg = pd.DataFrame(segment_metrics).rename(
+                columns={
+                    "segment": "Segment",
+                    "price_range": "Preisbereich",
+                    "n": "Testdaten",
+                    "mae": "MAE ($)",
+                    "rmse": "RMSE ($)",
+                    "mape_percent": "MAPE (%)",
+                }
+            )
+            segment_labels = {
+                "Budget": "Sehr günstig", "Economy": "Günstig", "Mid-Range": "Mittelklasse",
+                "Premium": "Premium", "Luxury": "Luxusklasse",
+            }
+            if "Segment" in df_seg.columns:
+                df_seg["Segment"] = df_seg["Segment"].map(segment_labels).fillna(df_seg["Segment"])
+            st.dataframe(df_seg, width="stretch", hide_index=True)
+            st.caption(
+                "Das Modell ist am genauesten im Mittelklasse-Segment ($10k–$20k). "
+                "Budget-Fahrzeuge (MAPE ~35%) und Luxusfahrzeuge (MAPE ~21%) sind schwerer vorherzusagen."
+            )
+        else:
+            st.write("Segmentauswertung noch nicht verfügbar.")
