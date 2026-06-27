@@ -18,7 +18,7 @@ Unlike the existing model, V2 deliberately excludes sale month and `year_month`.
 
 ## Evaluation
 
-> Preferred scientific comparison: `model_results_stage1_v1_v2_shared_split.md`.
+> Preferred scientific comparison: `docs/stage1/model_results_stage1_v1_v2_shared_split.md`.
 > In that benchmark both models are retrained from scratch on the same split;
 > V2 reduces MAE from $1,830.95 to $1,370.15 (25.17%).
 

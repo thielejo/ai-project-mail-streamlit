@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import argparse
 import json
@@ -20,7 +20,7 @@ from xgboost import XGBRegressor
 INPUT_PATH = Path("car_prices_clean.csv")
 MODEL_PATH = Path("models/price_model_v2.joblib")
 METRICS_PATH = Path("models/price_model_v2_metrics.json")
-RESULTS_PATH = Path("docs/stage1/model_results_stage1_v2.md")
+RESULTS_PATH = Path("model_results_stage1_v2.md")
 CURRENT_MODEL_PATH = Path("models/price_model.joblib")
 
 RANDOM_STATE = 42

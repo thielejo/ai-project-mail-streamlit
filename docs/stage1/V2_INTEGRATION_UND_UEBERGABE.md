@@ -196,7 +196,7 @@ deutlich und nicht nur eine zufällige Schwankung.
 Ergebnisdateien:
 
 - `models/stage1_v1_v2_shared_split.json`
-- `model_results_stage1_v1_v2_shared_split.md`
+- `docs/stage1/model_results_stage1_v1_v2_shared_split.md`
 
 Verbleibende Einschränkung: Der Split ist zufällig und kein zeitlicher Zukunftstest.
 
@@ -297,7 +297,7 @@ Verbesserung: 13,31 $ beziehungsweise 0,98 %. Stage 3 ist bewusst nur eine Feink
 | `models/price_model_v2.joblib` | V2-Produktionsmodell |
 | `models/price_model.joblib` | V1-Fallback |
 | `models/price_model_v2_metrics.json` | V2-Metriken und V1-Vergleich |
-| `model_results_stage1_v2.md` | lesbare V2-Ergebnisse |
+| `docs/stage1/model_results_stage1_v2.md` | lesbare V2-Ergebnisse |
 | `scripts/stage2_macro.py` | CPI-Anpassung |
 | `scripts/evaluate_stage2.py` | Stage-2-Evaluation mit V2 |
 | `models/stage2_evaluation.json` | Stage-2-Rohresultate |

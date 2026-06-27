@@ -1,4 +1,4 @@
-"""Train V1 and V2 from scratch on one shared, untouched train/test split.
+﻿"""Train V1 and V2 from scratch on one shared, untouched train/test split.
 
 This is the strict Stage-1 comparison. Both models receive exactly the same
 rows for training and exactly the same rows for testing. Existing saved model
@@ -30,7 +30,7 @@ from train_stage1_v2 import (
 
 INPUT_PATH = Path("car_prices_clean.csv")
 OUTPUT_JSON = Path("models/stage1_v1_v2_shared_split.json")
-OUTPUT_MD = Path("docs/stage1/model_results_stage1_v1_v2_shared_split.md")
+OUTPUT_MD = Path("model_results_stage1_v1_v2_shared_split.md")
 RANDOM_STATE = 42
 BOOTSTRAP_SAMPLES = 1_000
 

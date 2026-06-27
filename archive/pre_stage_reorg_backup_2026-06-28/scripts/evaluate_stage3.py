@@ -1,4 +1,4 @@
-"""Generate and evaluate Stage-3 seasonal adjustment factors."""
+﻿"""Generate and evaluate Stage-3 seasonal adjustment factors."""
 from __future__ import annotations
 
 import json
@@ -20,7 +20,7 @@ from stage3_seasonality import (
 )
 
 OUTPUT_JSON = Path("models/stage3_evaluation.json")
-OUTPUT_MD = Path("docs/stage3/model_results_stage3.md")
+OUTPUT_MD = Path("model_results_stage3.md")
 SEASONALITY_CSV = Path("models/seasonality_factors_v2.csv")
 RANDOM_STATE = 42
 

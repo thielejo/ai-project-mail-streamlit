@@ -1,7 +1,7 @@
-# Aktueller Stand — Team MAIL (BIS5522)
+﻿# Aktueller Stand — Team MAIL (BIS5522)
 
 > **Für KI-Assistenten:** Diese Datei zuerst lesen. Sie ist der zentrale Kontext für den aktuellen Projektstand, getroffene Entscheidungen und nächste Schritte.
-> Zuletzt aktualisiert: 2026-06-28
+> Zuletzt aktualisiert: 2026-06-24
 
 ---
 
@@ -18,19 +18,17 @@ Wir bauen einen **hybriden KI-Agenten für dynamische Gebrauchtwagenpreisgestalt
 
 ---
 
-## Update vom 28.06.2026 — Stages fachlich neu sortiert
+## Update vom 24.06.2026 — Stage 2 und Stage 3 vollständig geprüft
 
-Die aktuelle Implementierung ist jetzt wieder am Projektplan ausgerichtet:
+- **Stage 2:** V2 ist zeitneutral und enthält weder Verkaufsmonat noch Makrovariable. Im basisnahen Rückwärtstest verändert die CPI-Korrektur den MAE von **1.370,16 $ auf 1.376,22 $** (+0,44 %).
+- **Stage 3:** Alle **529.790** auswertbaren Verkäufe, **45** Karosserieformen und **540** Kombinationen aus Karosserieform und Monat wurden erneut validiert.
+- Der Stage-3-Test-MAE verbessert sich von **1.895,03 $ auf 1.870,20 $** (**−24,82 $ / −1,31 %**).
+- Saisonfaktoren bleiben auf **0,85 bis 1,15** begrenzt. Für August bis November fehlen historische Verkäufe; diese Monate bleiben deshalb neutral bei **1,0** und werden als `no_data` gekennzeichnet.
+- Eine Empfehlung für den besten bzw. schwächsten Verkaufsmonat wird nur noch ausgegeben, wenn mindestens **zwei Monate mit jeweils 100 Beobachtungen** verfügbar sind. Das trifft auf **20 von 45** Karosserieformen zu; bei den übrigen **25** zeigt die App transparent „Keine belastbare Empfehlung“.
+- Fehlende historische CPI-Werte und ungültige Verkaufsmonate werden nun ausdrücklich abgefangen, statt stillschweigend einen neutralen Wert zu verwenden.
+- Die aktualisierten Präsentations- und Sprechtextfassungen liegen unter `outputs/`. Die vorherigen Fassungen bleiben dort unter ihren bisherigen Dateinamen als Backup erhalten.
 
-- **Stage 1:** Fahrzeugwert-Modell. Hierhin gehört das neue V2-XGBoost-Ensemble inklusive zusätzlicher Fahrzeugmerkmale und V1/V2-Vergleich.
-- **Stage 2:** CPI-Marktpreisanpassung. Hierhin gehört ausschließlich das Marktpreisniveau über den Gebrauchtwagen-CPI.
-- **Stage 3:** Saisonalität. Hierhin gehört ausschließlich die saisonale Feinkorrektur nach Karosserieform und Monat.
-- **App / UX:** Streamlit-Oberfläche, deutsche Labels, Kilometer-Umrechnung, Sterne-Skala, Toggle-Bereiche und Eingabevalidierung.
-
-Die verbindliche Zuordnung steht in `docs/stage_ownership.md`.
-Alte, missverständlich benannte Übergaben wurden nach `archive/` verschoben.
-
-### Stage 1 — Neues V2-Fahrzeugwertmodell
+### Neues Stage-1-V2-Modell
 
 - Zusätzlich zum bisherigen Produktionsmodell wurde ein separates **Stage-1-V2-Modell** entwickelt. Das bisherige Modell `models/price_model.joblib` und seine Trainingspipeline bleiben unverändert als Backup erhalten.
 - V2 ist ein **50/50-Ensemble aus zwei XGBoost-Modellen**: Eine Komponente prognostiziert den Preis direkt in Dollar, die andere den logarithmierten Preis. Architektur, Hyperparameter und Gewichtung wurden auf einem separaten Validierungsanteil gewählt.
@@ -39,21 +37,8 @@ Alte, missverständlich benannte Übergaben wurden nach `archive/` verschoben.
 - Im strengen gemeinsamen Neutraining auf exakt demselben Split sinkt der MAE von V1 mit **1.830,95 $** auf **1.370,15 $** bei V2. Das entspricht **460,80 $ beziehungsweise 25,17 % weniger MAE**. Das gepaarte 95%-Bootstrap-Intervall liegt bei **450,74 $ bis 470,83 $**.
 - Weitere V2-Testwerte: **RMSE 2.400,34 $**, **R² 0,9366**, **MAPE 15,13 %**. Das Ensemble ist gezielt auf den MAE in Dollar optimiert; andere Fehlermaße können gegenüber einer einzelnen V2-Komponente einen Trade-off zeigen.
 - Das neue Modell liegt unter `models/price_model_v2.joblib` und ist jetzt das **Produktionsmodell der Streamlit-App**. Die App bietet die zusätzlichen V2-Eingaben an; das bisherige Modell bleibt als automatischer Fallback erhalten.
-- Wichtig: Die **25,17-%-Verbesserung gehört zu Stage 1**, nicht zu Stage 3.
-
-### Stage 2 — CPI-Marktpreisanpassung
-
 - Stage 2 wurde auf dem vollständigen V2-Testset neu geprüft: **MAE 1.370,16 $ vor CPI und 1.376,22 $ nach CPI** im basisnahen Zeitraum 2014–2015 (+0,44 %).
-- Stage 2 verändert die historische Genauigkeit nur leicht, weil die Testdaten nahe am CPI-Basisjahr 2015 liegen.
-- Der eigentliche Nutzen von Stage 2 liegt in der Projektion auf spätere Marktpreisniveaus, z. B. 2021–2026.
-
-### Stage 3 — Saisonale Feinkorrektur
-
-- Stage 3 wurde mit dem zeitneutralen Stage-1-V2-Basiswert neu berechnet.
-- Auf dem getrennten Regel-Holdout sinkt der MAE von **1.353,15 $ auf 1.339,84 $** (−0,98 %).
-- Saisonfaktoren bleiben auf **0,85 bis 1,15** begrenzt. Für August bis November fehlen historische Verkäufe; diese Monate bleiben deshalb neutral bei **1,0** und werden als `no_data` gekennzeichnet.
-- Eine Empfehlung für den besten bzw. schwächsten Verkaufsmonat wird nur ausgegeben, wenn mindestens **zwei Monate mit jeweils 100 Beobachtungen** verfügbar sind. Das trifft auf **20 von 45** Karosserieformen zu.
-- Stage 3 baut **kein neues Modell**. Sie ist nur die Saisonregel auf Basis der bereinigten Stage-1-Abweichungen.
+- Stage 3 wurde mit V2 neu berechnet. Auf dem getrennten Regel-Holdout sinkt der MAE von **1.353,15 $ auf 1.339,84 $** (−0,98 %).
 
 ---
 
@@ -128,54 +113,31 @@ scripts/
                               prepare_seasonality_data(),
                               build_seasonality_factors(), apply_stage3()
   evaluate_stage2.py        ← Backtest + Vorwärtsprojektion für Stage 2.
-                              Schreibt models/stage2_evaluation.json und
-                              docs/stage2/model_results_stage2.md
+                              Schreibt models/stage2_evaluation.json
   evaluate_stage3.py        ← Saisonalitätsfaktoren + Summary.
-                              Schreibt models/seasonality_factors_v2.csv,
+                              Schreibt models/seasonality_factors.csv,
                               models/stage3_evaluation.json und
-                              docs/stage3/model_results_stage3.md
-  compare_stage1_v1_v2_shared_split.py
-                            ← Strenger Stage-1-V1/V2-Vergleich auf identischem Split.
-                              Schreibt docs/stage1/model_results_stage1_v1_v2_shared_split.md
+                              model_results_stage3.md
   evaluate_segments.py      ← Segmentanalyse auf gespeichertem Modell.
   compare_models.py         ← 6-Modell-Benchmark (Ergebnisse in model_comparison/)
   enrich_macro.py           ← FRED-Download → macro_index.csv (Internet nötig)
   train_stage1.py           ← Ältere XGBoost-Pipeline (nicht primär, Vergleich)
 
 models/
-  price_model.joblib        ← V1-Fallback (HistGradientBoosting)
-  price_model_v2.joblib     ← Produktionsmodell für Stage 1 V2
-  price_model_metrics.json  ← V1-Metriken inkl. Segmentaufschlüsselung
-  price_model_v2_metrics.json
-                            ← Stage-1-V2-Metriken
+  price_model.joblib        ← Produktions-Stage-1-Modell (HistGradientBoosting)
+  price_model_metrics.json  ← Stage-1-Metriken inkl. Segmentaufschlüsselung
   stage2_evaluation.json    ← Stage-2-Backtest + Projektion
-  stage3_evaluation.json    ← Stage-3-Regel-Holdout
   stage1_xgboost.json       ← Älteres XGBoost-Modell (nicht primär)
-
-docs/
-  stage_ownership.md        ← Verbindliche fachliche Zuordnung der Stages.
-  stage1/                   ← V2-Übergabe und Stage-1-V1/V2-Ergebnisse.
-  stage2/                   ← CPI-Report.
-  stage3/                   ← Saison-Report.
-
-archive/
-  legacy_stage3_handoff_2026-06-22/
-                            ← alte Stage-3-Übergabe, nur noch Historie.
   stage1_encoder.pkl        ← Encoder für ältere Pipeline
 
 model_comparison/
   model_comparison.md       ← Vergleich 6 Modelle (lesbar)
   model_comparison.json     ← Rohdaten des Benchmarks
 
-model_results.md            ← ursprüngliche Stage-1-V1-Ergebnisse
-docs/stage1/model_results_stage1_v2.md
-                            ← Stage-1-V2-Ergebnisse
-docs/stage1/model_results_stage1_v1_v2_shared_split.md
-                            ← strenger Stage-1-V1/V2-Vergleich
-docs/stage2/model_results_stage2.md
-                            ← Stage-2-Evaluierung
-docs/stage3/model_results_stage3.md
-                            ← Stage-3-Saisonalität inkl. Datenabdeckung
+model_results.md            ← Stage-1-Ergebnisse (auto-generiert beim Training)
+model_results_stage2.md     ← Stage-2-Evaluierung (auto-generiert)
+model_results_stage3.md     ← Stage-3-Saisonalität (auto-generiert)
+                              inkl. Datenabdeckung und 80/20-Prüfung
 
 docs/
   project_proposal_v2.md   ← Offizieller Projektvorschlag
