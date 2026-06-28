@@ -1,0 +1,62 @@
+{
+  "created_at": "2026-06-28T18:52:24.206725+00:00",
+  "model_name": "Stage1 V2 + FIN (XGBoost VotingRegressor + displacement)",
+  "rows_used": 529169,
+  "train_rows": 423335,
+  "test_rows": 105834,
+  "features": [
+    "model_year",
+    "vehicle_age",
+    "odometer",
+    "condition",
+    "displacement",
+    "make",
+    "model",
+    "trim",
+    "body",
+    "transmission",
+    "state",
+    "color",
+    "interior",
+    "make_model"
+  ],
+  "target": "sellingprice",
+  "metrics": {
+    "mae": 1200.83,
+    "rmse": 2039.97,
+    "r2": 0.9542,
+    "mape_percent": 13.7
+  },
+  "segment_metrics": [
+    {
+      "segment": "Budget",
+      "n": 17773,
+      "mae": 794.94,
+      "mape_percent": 38.5
+    },
+    {
+      "segment": "Economy",
+      "n": 21689,
+      "mae": 991.8,
+      "mape_percent": 13.48
+    },
+    {
+      "segment": "Mid-Range",
+      "n": 46049,
+      "mae": 1050.06,
+      "mape_percent": 7.42
+    },
+    {
+      "segment": "Premium",
+      "n": 20475,
+      "mae": 1764.19,
+      "mape_percent": 6.76
+    },
+    {
+      "segment": "Luxury",
+      "n": 1780,
+      "mae": 5191.71,
+      "mape_percent": 9.11
+    }
+  ]
+}

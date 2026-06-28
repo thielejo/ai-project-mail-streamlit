@@ -12,3 +12,7 @@ wheels/
 
 # Generated large datasets (regenerate via scripts/enrich_macro.py)
 car_prices_macro.csv
+
+# VIN/FIN enrichment — large generated files (regenerate via experiments/vin_fin_enrichment/)
+experiments/vin_fin_enrichment/vin_decoded_cache_full.csv
+car_prices_fin.csv

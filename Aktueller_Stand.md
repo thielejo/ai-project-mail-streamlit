@@ -41,6 +41,14 @@ Alte, missverständlich benannte Übergaben wurden nach `archive/` verschoben.
 - Das neue Modell liegt unter `models/price_model_v2.joblib` und ist jetzt das **Produktionsmodell der Streamlit-App**. Die App bietet die zusätzlichen V2-Eingaben an; das bisherige Modell bleibt als automatischer Fallback erhalten.
 - Wichtig: Die **25,17-%-Verbesserung gehört zu Stage 1**, nicht zu Stage 3.
 
+### Stage 1 — FIN-Erweiterung (Hubraum)
+
+- Aus der VIN (US-Pendant zur FIN) lässt sich über die kostenlose NHTSA-API der **Hubraum** nachladen (Abdeckung 99 %). Eine ausführliche Voruntersuchung (6 Tests) liegt unter `experiments/vin_fin_enrichment/` (`FIN_Test.md`).
+- Ergänzt man V2 um den Hubraum, sinkt der MAE auf dem vollen Datensatz (529.169 Zeilen) von **1.365 $ (V2) auf 1.201 $** — **−12 %**, R² 0,937 → **0,954**. Damit ist es der **beste Stage-1-Wert** des Projekts.
+- Der Hubraum trägt den gesamten FIN-Effekt; Kraftstoff/Zylinder sind redundant (Per-Feature-Ablation, Test 6). Der Effekt hält auch zusätzlich zu trim/Farbe/Ausstattung — also kein Overlap.
+- Integriertes Modell: `models/price_model_v2_fin.joblib`, Skript `scripts/train_stage1_v2_fin.py` (= V2-Pipeline + `displacement`). Details: `experiments/vin_fin_enrichment/INTEGRATION_V2_FIN.md` und `docs/stage1/model_results_stage1_v2_fin.md`.
+- Status: trainiert und dokumentiert; **noch nicht** in die Streamlit-App eingebunden (V2 bleibt vorerst Produktionsmodell). Der 47-MB-Voll-Decode-Cache ist nicht im Repo (regenerierbar via `experiments/vin_fin_enrichment/build_full_vin_cache.py`).
+
 ### Stage 2 — CPI-Marktpreisanpassung
 
 - Stage 2 wurde auf dem vollständigen V2-Testset neu geprüft: **MAE 1.370,16 $ vor CPI und 1.376,22 $ nach CPI** im basisnahen Zeitraum 2014–2015 (+0,44 %).
