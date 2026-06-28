@@ -285,6 +285,12 @@ Das alte UI trennte `sale_year` und `model_year` nicht klar. Ein einziges „Bew
 | 1 | **Preisrange in App** | ±MAE des jeweiligen Segments statt einer einzigen Zahl anzeigen |
 | 2 | **LLM-Orchestrierung** | Stage 1–3-Output + `get_macro_context()` → natürlichsprachliche Erklärung |
 | 3 | **Paper schreiben** | LNCS 12 Seiten; Architekturdiagramm; Stage-1+2+3-Ergebnisse sind fertig |
+| 4 | **Eingabe-Plausibilisierung in App** | Nur Karosserieformen/Optionen anbieten, die zum gewählten Modell passen (z. B. Modell → erlaubte `body`-Werte aus den Trainingsdaten ableiten); zusätzlich Warnhinweis bei sehr seltener Marke/Modell-Kombination |
+
+> **Bekanntes Problem (Eingabe-Plausibilisierung) — Beispiel für das Limitations-Kapitel:**
+> Wählt man in der App `make=lamborghini`, `model=gallardo`, `body=g sedan`, liefert das Modell nur ~$8.300 Basispreis — völlig unrealistisch für einen Supersportwagen.
+> Ursachen: (1) **Widersprüchliche Eingabe** — die echten 4 Gallardos im Datensatz sind `convertible`; „g sedan" ist eine **günstige Limousinen-Kategorie** (Ø ~$19.900), der das Modell folgt. (2) **Kaum Datenbasis** — nur 4 Lamborghinis unter 558.743 Zeilen; das Modell kann kein Markenpremium lernen und regrediert zum Mittelwert. (3) **Dokumentierte Luxus-Schwäche** — Segment >$40k hat die höchste MAPE (~21 %); nur 0,085 % aller Fahrzeuge kosten über $80k.
+> Die App lässt aktuell **beliebige Marke-Modell-Karosserie-Kombinationen** zu, auch unmögliche. Eine Plausibilisierung (nur valide Kombinationen zulassen) würde solche irreführenden Schätzungen verhindern. Bis dahin: im Paper als bewusste Datenabdeckungs-Grenze benennen (Modell ist für den Massenmarkt $5k–$40k zuverlässig, nicht für Exoten).
 
 ---
 

@@ -66,3 +66,57 @@ Einschätzung abgeglichen.
 
 Kurz gesagt: Die KI war im Projekt eher eine ausführende und unterstützende
 Arbeitskraft. Die Richtung, Bewertung und finale Verantwortung lagen beim Team.
+
+---
+
+## Ergänzung: Vollständige Auflistung der eingesetzten KI-Tools
+
+Zur Transparenz nennen wir alle tatsächlich genutzten Werkzeuge und wofür:
+
+- **ChatGPT / Codex (OpenAI):** technische Code-Unterstützung, Debugging,
+  Repository-Refactoring, erste Textentwürfe für Doku und Hausarbeit.
+- **Claude / Claude Code (Anthropic):** eingesetzt für die datengetriebenen
+  Experimente rund um die FIN-Anreicherung — u. a. das Schreiben der
+  Abdeckungs- und Ablationsskripte, das Ausführen der Tests, das Erstellen der
+  Präsentationsfolien und der zugehörigen Dokumentation.
+
+Beide Tools wurden als **Assistenten** genutzt. Die Fragestellungen, die
+Versuchsplanung, die Bewertung der Ergebnisse und die daraus abgeleiteten
+Entscheidungen kamen vom Team.
+
+## Ergänzung: Konkrete Belege für eigenes Verständnis und Kontrolle
+
+Damit nachvollziehbar ist, dass wir die KI-Ausgaben nicht ungeprüft übernommen,
+sondern fachlich verstanden und kontrolliert haben, hier konkrete Beispiele:
+
+- **Lamborghini-Fehlprognose erkannt und diagnostiziert:** Beim Testen der App
+  fiel uns auf, dass ein Lamborghini Gallardo nur ~8.300 $ vorhergesagt bekam.
+  Wir haben die Ursachen selbst hergeleitet: widersprüchliche Eingabe
+  (Karosserie „g sedan"), nur 4 Lamborghinis im Datensatz und die generelle
+  Schwäche des Modells im Luxussegment. Daraus folgte die bewusste Einordnung
+  als Datenabdeckungs-Grenze und ein To-Do zur Eingabe-Plausibilisierung.
+- **Data Leakage aktiv vermieden:** Wir haben entschieden, `MMR`, `VIN` und
+  `seller` nicht als Modell-Features zu verwenden, weil sie das Ergebnis
+  verfälschen würden (MMR ist bereits eine Preisschätzung; VIN/seller sind
+  Kennungen). Das ist eine fachliche, keine von der KI vorgegebene Entscheidung.
+- **Statistischen Trugschluss erkannt und gegengeprüft:** Eine erste
+  FIN-Ablation auf kleiner Stichprobe zeigte ~20 % Verbesserung. Wir haben
+  erkannt, dass dieser Wert durch Stichprobengröße und Merkmals-Kardinalität
+  verzerrt sein kann, und ihn auf dem **vollen Datensatz** gegengeprüft
+  (Ergebnis: belastbare ~12–13 %). Die anfängliche Interpretation wurde
+  daraufhin bewusst korrigiert.
+- **Ursache des Effekts isoliert:** Per Einzel-Feature-Ablation haben wir
+  festgestellt, dass von den FIN-Daten allein der **Hubraum** den Effekt trägt
+  (Kraftstoff/Zylinder redundant) — und das Modell entsprechend schlank gehalten.
+
+Diese Punkte zeigen das Arbeitsmuster im gesamten Projekt: KI liefert Tempo,
+das Team liefert Idee, Prüfung, Interpretation und Entscheidung.
+
+## Ergänzung: Quellen und wissenschaftliche Belege
+
+Alle fachlichen und quantitativen Aussagen im Paper werden mit Quellen belegt –
+u. a. die Datenquellen (Manheim/Cox Automotive, FRED der US-Notenbank, NHTSA
+vPIC-API) sowie die methodische Literatur zu hedonischen Preismodellen und
+Gradient-Boosting-Verfahren. KI-generierte Textentwürfe wurden nicht als Quelle
+verwendet, sondern nur als Formulierungshilfe; die inhaltliche Absicherung
+erfolgt ausschließlich über zitierfähige Fachquellen.
