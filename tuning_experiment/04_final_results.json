@@ -1,0 +1,55 @@
+{
+  "setup": {
+    "transform": "log",
+    "loss": "MAE",
+    "use_derived": false,
+    "use_monotonic": false,
+    "params": {
+      "learning_rate": 0.05988715015642537,
+      "depth": 10,
+      "l2_leaf_reg": 3.369446753344074,
+      "random_strength": 0.7592849564817107,
+      "bagging_temperature": 1.7569362887347286,
+      "min_data_in_leaf": 15
+    }
+  },
+  "metrics": {
+    "mae": 1042.3108541978022,
+    "rmse": 1875.211806633351,
+    "r2": 0.9613005046519656,
+    "mape": 11.792759694469266
+  },
+  "reference_mae": 1120,
+  "segments": [
+    {
+      "segment": "Budget",
+      "n": 17773,
+      "mae": 702.3602320145135,
+      "mape": 32.92983169653047
+    },
+    {
+      "segment": "Economy",
+      "n": 21689,
+      "mae": 872.1908016715252,
+      "mape": 11.894253639893062
+    },
+    {
+      "segment": "Mid-Range",
+      "n": 46049,
+      "mae": 884.8921335032243,
+      "mape": 6.275628359467987
+    },
+    {
+      "segment": "Premium",
+      "n": 20475,
+      "mae": 1553.9521667415736,
+      "mape": 5.944736934189829
+    },
+    {
+      "segment": "Luxury",
+      "n": 1780,
+      "mae": 4694.478671779773,
+      "mape": 8.232654877962336
+    }
+  ]
+}
