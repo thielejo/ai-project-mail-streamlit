@@ -15,12 +15,14 @@ A hybrid AI agent for dynamic used car pricing. The system combines a machine le
 ## Architecture
 
 ```
-Stage 1 (Micro)     XGBoost/HistGB on vehicle attributes → Baseline price (2015 USD)
-Stage 2 (Macro)     CPI multiplier from FRED data       → Inflation-adjusted live price
-Stage 3 (Seasonal)  Rule-based by body type & month     → Best-time-to-sell advice
+Stage 1 (Micro)     Vehicle-value ML model              → Time-neutral baseline price
+Stage 2 (Macro)     CPI multiplier from FRED data       → Market-level price adjustment
+Stage 3 (Seasonal)  Rule-based by body type & month     → Seasonal fine-tuning
 ```
 
 **End product:** Streamlit app + LLM orchestration layer
+
+Stage ownership is documented in [`docs/stage_ownership.md`](docs/stage_ownership.md).
 
 ---
 
@@ -29,12 +31,20 @@ Stage 3 (Seasonal)  Rule-based by body type & month     → Best-time-to-sell ad
 ```
 app/                        Streamlit demo app (Stage 1 + Stage 2 + Stage 3)
 docs/                       Project proposal, session notes, data documentation
+  stage1/                   Stage 1 model reports and V2 handoff
+  stage2/                   Stage 2 CPI evaluation
+  stage3/                   Stage 3 seasonality evaluation
+archive/                    Historical handoffs / deprecated notes
 model_comparison/           Model benchmarking results (6 models compared)
 models/                     Trained model files and evaluation results
 notebooks/                  Exploratory notebooks
 scripts/
   build_features.py         Feature engineering from cleaned CSV
-  train_price_model.py      Train Stage 1 model (XGBoost with HistGB fallback)
+  train_price_model.py      Train original Stage 1 model
+  train_stage1_v2.py        Train Stage 1 V2 XGBoost ensemble
+  optimize_stage1_v2.py     Stage 1 V2 tuning experiments
+  stage1_runtime.py         Load Stage 1 V2 with V1 fallback for the app
+  compare_stage1_v1_v2_shared_split.py  Strict V1/V2 comparison
   stage2_macro.py           Stage 2 module: CPI lookup and price adjustment
   stage3_seasonality.py     Stage 3 module: seasonal factors by body type/month
   evaluate_stage2.py        Stage 2 backtest and forward projection
@@ -48,8 +58,9 @@ car_prices_clean.csv        Cleaned Manheim auction data (558,743 rows, 2014–2
 car_prices_features.csv     Engineered features ready for model training (534,318 rows)
 macro_index.csv             FRED macro indicators 1996–2026-06 (CPI, rates, sentiment)
 model_results.md            Stage 1 evaluation results incl. segment breakdown
-model_results_stage2.md     Stage 2 evaluation: backtest and forward projections
-model_results_stage3.md     Stage 3 evaluation: seasonal factors and best months
+docs/stage1/                Stage 1 V2 reports and handoff
+docs/stage2/model_results_stage2.md
+docs/stage3/model_results_stage3.md
 ```
 
 > `car_prices_macro.csv` (98 MB) is gitignored. Regenerate with:
@@ -66,8 +77,8 @@ uv sync
 # 1. Build feature dataset (from car_prices_clean.csv)
 uv run python scripts/build_features.py
 
-# 2. Train Stage 1 model
-uv run python scripts/train_price_model.py
+# 2. Train Stage 1 V2 model
+uv run python scripts/train_stage1_v2.py --max-rows 0
 
 # 3. Evaluate Stage 2
 uv run python scripts/evaluate_stage2.py
@@ -83,15 +94,23 @@ uv run streamlit run app/streamlit_app.py
 
 ## Model Performance
 
-### Stage 1 — HistGradientBoostingRegressor (200,000 training rows)
+### Stage 1 — V2 XGBoost Ensemble (529,169 rows)
 
-| Metric | Model | Median baseline |
+| Metric | V2 | Previous V1 on same test rows |
 |---|---:|---:|
-| MAE | $1,850 | $6,932 |
-| RMSE | $3,299 | $9,705 |
-| R² | 0.882 | −0.025 |
-| MAPE | 16.4% | 121.1% |
+| MAE | $1,370 | $1,831 |
+| RMSE | $2,400 | $3,277 |
+| R² | 0.9366 | 0.8818 |
+| MAPE | 15.13% | 16.45% |
 
+Both models were retrained from scratch on the same 423,335 training rows and
+evaluated on the same 105,834 previously untouched test rows. V2 reduces MAE by
+**$460.80 (25.17%)**; the paired 95% bootstrap interval is $450.74–$470.83.
+
+The V2 improvement is a Stage 1 result. It does not belong to Stage 3.
+
+Strict V1/V2 report: see [`docs/stage1/model_results_stage1_v1_v2_shared_split.md`](docs/stage1/model_results_stage1_v1_v2_shared_split.md)  
+V2 handoff: see [`docs/stage1/V2_INTEGRATION_UND_UEBERGABE.md`](docs/stage1/V2_INTEGRATION_UND_UEBERGABE.md)  
 Error by price segment: see [`model_results.md`](model_results.md)
 Full model comparison (6 models): see [`model_comparison/model_comparison.md`](model_comparison/model_comparison.md)
 
@@ -104,17 +123,20 @@ Full model comparison (6 models): see [`model_comparison/model_comparison.md`](m
 | 2023-09 (all-time high) | 1.2200 | +22% vs. baseline |
 | 2026-06 (current) | 1.2177 | +21.8% vs. baseline |
 
-Architecture-aligned backtest with fixed Stage-1 reference 2015-02:
-MAE $1,890.21 → $1,889.19 (displayed Δ −$1.02) on 2014–2015 data.
-See [`model_results_stage2.md`](model_results_stage2.md)
+Architecture-aligned V2 backtest: MAE $1,370.16 → $1,376.22 after CPI
+on the basis-near 2014–2015 data (+0.44%).
+See [`docs/stage2/model_results_stage2.md`](docs/stage2/model_results_stage2.md)
 
 ### Stage 3 — Seasonal Adjustment
 
 Rule-based seasonal factors are generated from CPI-normalized Stage-1 residuals by body type and sale month.
-This controls for vehicle mix, uses a fixed February 2015 Stage-1 reference, and avoids counting the target month twice.
+This controls for vehicle mix and uses the time-neutral V2 baseline, avoiding counting the target month twice.
 Sparse months are strongly smoothed toward neutral; months absent from the data remain at 1.0.
 Best/worst month advice is shown only when at least two months each have 100 observations.
-See [`model_results_stage3.md`](model_results_stage3.md)
+On the separated rule holdout, Stage 3 improves MAE from $1,353.15 to $1,339.84 (−0.98%).
+Stage 3 contains only this seasonal rule. It does not train or replace the
+vehicle-value model.
+See [`docs/stage3/model_results_stage3.md`](docs/stage3/model_results_stage3.md)
 
 ---
 

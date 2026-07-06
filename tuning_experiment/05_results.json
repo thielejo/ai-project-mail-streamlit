@@ -1,0 +1,43 @@
+{
+  "monotone_constraints": {
+    "condition": 1,
+    "odometer": -1
+  },
+  "note_age": "vehicle_age/model_year bewusst frei (Oldtimer, U-Kurve)",
+  "transform": "log",
+  "loss": "MAE",
+  "metrics": {
+    "mae": 1725.8493072717981,
+    "rmse": 2627.8339247450135,
+    "r2": 0.9240022955780517,
+    "mape": 14.937479174308526
+  },
+  "reference_mae": 1042,
+  "segments": [
+    {
+      "segment": "Budget",
+      "n": 17773,
+      "mae": 664.1380778202149
+    },
+    {
+      "segment": "Economy",
+      "n": 21689,
+      "mae": 1061.4130519798782
+    },
+    {
+      "segment": "Mid-Range",
+      "n": 46049,
+      "mae": 1576.907154830286
+    },
+    {
+      "segment": "Premium",
+      "n": 20475,
+      "mae": 3111.000884268008
+    },
+    {
+      "segment": "Luxury",
+      "n": 1780,
+      "mae": 8099.2337783127105
+    }
+  ]
+}

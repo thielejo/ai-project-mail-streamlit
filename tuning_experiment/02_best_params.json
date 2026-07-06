@@ -1,0 +1,14 @@
+{
+  "transform": "log",
+  "loss": "MAE",
+  "best_value_mae": 1199.6919649565432,
+  "best_params": {
+    "learning_rate": 0.05988715015642537,
+    "depth": 10,
+    "l2_leaf_reg": 3.369446753344074,
+    "random_strength": 0.7592849564817107,
+    "bagging_temperature": 1.7569362887347286,
+    "min_data_in_leaf": 15
+  },
+  "n_trials": 29
+}

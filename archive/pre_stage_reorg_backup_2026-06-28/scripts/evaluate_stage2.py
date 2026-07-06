@@ -1,4 +1,4 @@
-"""Evaluate Stage 2 CPI adjustment on the historical test set.
+﻿"""Evaluate Stage 2 CPI adjustment on the historical test set.
 
 The evaluation has three angles:
   1. Architecture-aligned backtest on the 2014-2015 test set. Stage 1 is first
@@ -12,7 +12,7 @@ Run from project root:
 
 Outputs:
     models/stage2_evaluation.json  (machine-readable)
-    docs/stage2/model_results_stage2.md        (human-readable summary)
+    model_results_stage2.md        (human-readable summary)
 """
 from __future__ import annotations
 
@@ -46,7 +46,7 @@ FEATURES_PATH = Path("car_prices_clean.csv")
 MODEL_PATH = Path("models/price_model_v2.joblib")
 MACRO_PATH = Path("macro_index.csv")
 OUTPUT_JSON = Path("models/stage2_evaluation.json")
-OUTPUT_MD = Path("docs/stage2/model_results_stage2.md")
+OUTPUT_MD = Path("model_results_stage2.md")
 
 FORWARD_PROJECTION_MONTHS = [
     "2015-01", "2016-01", "2017-01", "2018-01", "2019-01",

@@ -1,0 +1,134 @@
+{
+  "created_at": "2026-06-24T19:13:41.306305+00:00",
+  "method": "both_models_retrained_on_one_shared_untouched_split",
+  "input_path": "car_prices_clean.csv",
+  "rows_used": 529169,
+  "train_rows": 423335,
+  "test_rows": 105834,
+  "random_state": 42,
+  "test_split_sha256": "23cb375ec013b689d45cfb717cc8073e31129aabd45dae8cc74e83a894f3ab20",
+  "v1": {
+    "model": "HistGradientBoostingRegressor with log target",
+    "features": [
+      "vehicle_age",
+      "sale_month",
+      "odometer",
+      "condition",
+      "year_month",
+      "make",
+      "model",
+      "body"
+    ]
+  },
+  "v2": {
+    "model": "50/50 XGBoost raw/log ensemble",
+    "features": [
+      "model_year",
+      "vehicle_age",
+      "odometer",
+      "condition",
+      "make",
+      "model",
+      "trim",
+      "body",
+      "transmission",
+      "state",
+      "color",
+      "interior",
+      "make_model"
+    ]
+  },
+  "v1_metrics": {
+    "mae": 1830.95,
+    "rmse": 3276.81,
+    "r2": 0.8818,
+    "mape_percent": 16.45
+  },
+  "v2_metrics": {
+    "mae": 1370.15,
+    "rmse": 2400.34,
+    "r2": 0.9366,
+    "mape_percent": 15.13
+  },
+  "comparison": {
+    "mae_improvement_dollars": 460.8,
+    "mae_improvement_percent": 25.17
+  },
+  "paired_analysis": {
+    "bootstrap_samples": 1000,
+    "mean_mae_improvement_dollars": 460.8,
+    "ci95_low_dollars": 450.74,
+    "ci95_high_dollars": 470.83,
+    "v2_lower_error_row_percent": 60.27,
+    "equal_error_row_percent": 0.0
+  },
+  "v1_segment_metrics": [
+    {
+      "segment": "Budget",
+      "n": 17773,
+      "mae": 784.52,
+      "mape_percent": 35.91
+    },
+    {
+      "segment": "Economy",
+      "n": 21689,
+      "mae": 1200.36,
+      "mape_percent": 16.14
+    },
+    {
+      "segment": "Mid-Range",
+      "n": 46049,
+      "mae": 1551.01,
+      "mape_percent": 10.83
+    },
+    {
+      "segment": "Premium",
+      "n": 20475,
+      "mae": 3169.13,
+      "mape_percent": 11.99
+    },
+    {
+      "segment": "Luxury",
+      "n": 1780,
+      "mae": 11693.63,
+      "mape_percent": 21.15
+    }
+  ],
+  "v2_segment_metrics": [
+    {
+      "segment": "Budget",
+      "n": 17773,
+      "mae": 868.55,
+      "mape_percent": 42.2
+    },
+    {
+      "segment": "Economy",
+      "n": 21689,
+      "mae": 1076.31,
+      "mape_percent": 14.62
+    },
+    {
+      "segment": "Mid-Range",
+      "n": 46049,
+      "mae": 1148.19,
+      "mape_percent": 8.13
+    },
+    {
+      "segment": "Premium",
+      "n": 20475,
+      "mae": 2069.77,
+      "mape_percent": 7.85
+    },
+    {
+      "segment": "Luxury",
+      "n": 1780,
+      "mae": 7581.99,
+      "mape_percent": 13.35
+    }
+  ],
+  "limitations": [
+    "Random split, not a temporal future holdout.",
+    "Shared row set requires all V2 features to be present.",
+    "Measures the combined effect of architecture and feature changes."
+  ]
+}
