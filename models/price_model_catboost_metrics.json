@@ -1,0 +1,65 @@
+{
+  "created_at": "2026-07-07T20:17:21.997767+00:00",
+  "model_name": "Stage 1 CatBoost (tuned, log-target) + FIN displacement",
+  "rows_used": 529169,
+  "train_rows": 423335,
+  "test_rows": 105834,
+  "features": [
+    "model_year",
+    "vehicle_age",
+    "odometer",
+    "condition",
+    "displacement",
+    "make",
+    "model",
+    "trim",
+    "body",
+    "transmission",
+    "state",
+    "color",
+    "interior",
+    "make_model"
+  ],
+  "target": "sellingprice",
+  "params": {
+    "learning_rate": 0.05988715015642537,
+    "depth": 8,
+    "l2_leaf_reg": 3.369446753344074,
+    "random_strength": 0.7592849564817107,
+    "bagging_temperature": 1.7569362887347286,
+    "min_data_in_leaf": 15
+  },
+  "metrics": {
+    "mae": 1119.41,
+    "rmse": 2062.2,
+    "r2": 0.9532,
+    "mape_percent": 12.36
+  },
+  "segment_metrics": [
+    {
+      "segment": "Budget",
+      "n": 17773,
+      "mae": 721.68
+    },
+    {
+      "segment": "Economy",
+      "n": 21689,
+      "mae": 909.7
+    },
+    {
+      "segment": "Mid-Range",
+      "n": 46049,
+      "mae": 921.17
+    },
+    {
+      "segment": "Premium",
+      "n": 20475,
+      "mae": 1728.39
+    },
+    {
+      "segment": "Luxury",
+      "n": 1780,
+      "mae": 5742.9
+    }
+  ]
+}

@@ -23,9 +23,15 @@ from stage3_seasonality import (  # noqa: E402
 from stage1_runtime import (  # noqa: E402
     V1_METRICS_PATH,
     V2_METRICS_PATH,
+    CATBOOST_METRICS_PATH,
     build_v1_input,
     build_v2_input,
+    build_catboost_input,
     get_v2_category_options,
+    get_catboost_category_options,
+    load_displacement_lookup,
+    lookup_displacement,
+    predict_stage1,
     load_production_model,
 )
 
@@ -120,7 +126,10 @@ def load_feature_data() -> pd.DataFrame:
 
 @st.cache_data
 def load_metrics(model_version: str) -> dict:
-    path = V2_METRICS_PATH if model_version == "v2" else V1_METRICS_PATH
+    if model_version == "catboost":
+        path = CATBOOST_METRICS_PATH
+    else:
+        path = V2_METRICS_PATH if model_version == "v2" else V1_METRICS_PATH
     if not path.exists():
         return {}
     payload = json.loads(path.read_text(encoding="utf-8"))
@@ -145,7 +154,8 @@ def load_macro() -> pd.DataFrame:
 
 @st.cache_data
 def load_seasonality(model_version: str) -> pd.DataFrame:
-    path = SEASONALITY_V2_PATH if model_version == "v2" else SEASONALITY_V1_PATH
+    # CatBoost nutzt (wie V2) das zeitneutrale, reichhaltige Feature-Set → V2-Saisonfaktoren.
+    path = SEASONALITY_V2_PATH if model_version in ("v2", "catboost") else SEASONALITY_V1_PATH
     return load_seasonality_factors(path)
 
 
@@ -196,7 +206,15 @@ metrics = load_metrics(model_version)
 stage2_eval = load_stage2_eval()
 macro = load_macro()
 seasonality = load_seasonality(model_version)
-v2_options = get_v2_category_options(model) if model_version == "v2" else {}
+# Reichhaltiges Feature-Set (V2 und CatBoost) nutzt trim/state/color/… als Eingaben.
+is_rich = model_version in ("v2", "catboost")
+if model_version == "v2":
+    v2_options = get_v2_category_options(model)
+elif model_version == "catboost":
+    v2_options = get_catboost_category_options()
+else:
+    v2_options = {}
+displacement_lookup = load_displacement_lookup() if model_version == "catboost" else {}
 
 st.title("Universal Pricing Agent")
 st.caption(
@@ -236,8 +254,11 @@ with left_column:
         format_func=format_body,
     )
 
-    if model_version == "v2":
-        st.caption("Stage 1 V2 nutzt zusätzliche Fahrzeugdetails für eine genauere Schätzung.")
+    if is_rich:
+        if model_version == "catboost":
+            st.caption("Das Stage-1-Modell (CatBoost) nutzt zusätzliche Fahrzeugdetails inkl. Hubraum für eine genauere Schätzung.")
+        else:
+            st.caption("Stage 1 V2 nutzt zusätzliche Fahrzeugdetails für eine genauere Schätzung.")
         trim_options = sorted(v2_options["trim"], key=format_trim)
         state_options = sorted(v2_options["state"], key=format_state)
         trim = st.selectbox(
@@ -293,6 +314,19 @@ with left_column:
         condition, condition_description = CONDITION_OPTIONS[condition_label]
         st.caption(condition_description)
 
+    if model_version == "catboost":
+        suggested_disp = lookup_displacement(selected_make, selected_model, displacement_lookup)
+        displacement = st.number_input(
+            "Hubraum (Liter)",
+            min_value=0.5,
+            max_value=8.5,
+            value=float(suggested_disp),
+            step=0.1,
+            help="Automatisch aus Marke/Modell vorgeschlagen — bei Bedarf anpassen.",
+        )
+    else:
+        displacement = 0.0
+
     st.divider()
     st.subheader("Bewertungsdatum")
     st.caption("Für welchen Zeitpunkt soll der Marktpreis berechnet werden?")
@@ -316,7 +350,23 @@ with left_column:
 with right_column:
     st.subheader("Preisprognose")
 
-    if model_version == "v2":
+    if model_version == "catboost":
+        prediction_input = build_catboost_input(
+            model_year=int(model_year),
+            vehicle_age=vehicle_age,
+            odometer=int(round(odometer_miles)),
+            condition=float(condition),
+            displacement=float(displacement),
+            make=selected_make,
+            model=selected_model,
+            trim=trim,
+            body=selected_body,
+            transmission=transmission,
+            state=state,
+            color=color,
+            interior=interior,
+        )
+    elif model_version == "v2":
         prediction_input = build_v2_input(
             model_year=int(model_year),
             vehicle_age=vehicle_age,
@@ -341,7 +391,7 @@ with right_column:
             body=selected_body,
         )
 
-    stage1_price = float(model.predict(prediction_input)[0])
+    stage1_price = predict_stage1(model, model_version, prediction_input)
     stage2_price, cpi_multiplier = apply_stage2(stage1_price, target_ym, macro)
     final_price, seasonal_factor, seasonal_row = apply_stage3(
         stage2_price,

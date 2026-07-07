@@ -1,0 +1,875 @@
+make_model,displacement
+acura|cl,3.2
+acura|ilx,2.0
+acura|integra,1.8
+acura|legend,3.2
+acura|mdx,3.7
+acura|rdx,2.4
+acura|rl,3.5
+acura|rlx,3.5
+acura|rsx,2.0
+acura|tl,3.2
+acura|tlx,2.4
+acura|tsx,2.4
+acura|tsx sport wagon,2.4
+acura|zdx,3.5
+aston martin|db9,5.9
+aston martin|rapide,5.9
+aston martin|v8 vantage,4.3
+audi|a3,2.0
+audi|a4,2.0
+audi|a5,2.0
+audi|a6,3.0
+audi|a7,3.0
+audi|a8,4.2
+audi|allroad,2.0
+audi|allroad quattro,2.7
+audi|cabriolet,2.8
+audi|q3,2.0
+audi|q5,2.0
+audi|q7,3.6
+audi|r8,4.2
+audi|rs 4,4.2
+audi|rs 5,4.2
+audi|rs 6,4.2
+audi|rs 7,4.0
+audi|s4,3.0
+audi|s5,4.2
+audi|s6,5.2
+audi|s7,4.0
+audi|s8,5.2
+audi|sq5,3.0
+audi|tt,1.8
+audi|tt rs,2.5
+audi|tts,2.0
+bentley|continental flying spur,6.0
+bentley|continental flying spur speed,6.0
+bentley|continental gt,6.0
+bentley|continental gt speed,6.0
+bentley|continental gtc,6.0
+bentley|continental gtc speed,6.0
+bentley|continental supersports,6.0
+bentley|flying spur,6.0
+bmw|1,3.0
+bmw|1 series,3.0
+bmw|2 series,3.0
+bmw|3 series,3.0
+bmw|3 series gran turismo,2.0
+bmw|328i,3.0
+bmw|4 series,2.0
+bmw|4 series gran coupe,2.0
+bmw|5 series,3.0
+bmw|5 series gran turismo,3.0
+bmw|6 series,4.4
+bmw|6 series gran coupe,4.4
+bmw|7,4.8
+bmw|7 series,4.4
+bmw|750i,4.8
+bmw|750li,4.4
+bmw|750lxi,4.4
+bmw|8 series,5.0
+bmw|activehybrid 5,3.0
+bmw|activehybrid 7,4.4
+bmw|activehybrid x6,4.4
+bmw|alp,4.4
+bmw|i8,1.5
+bmw|m,3.2
+bmw|m3,4.0
+bmw|m4,3.0
+bmw|m5,4.9
+bmw|m6,4.4
+bmw|m6 gran coupe,4.4
+bmw|x1,2.0
+bmw|x3,3.0
+bmw|x4,3.0
+bmw|x5,3.0
+bmw|x5 m,4.4
+bmw|x6,3.0
+bmw|x6 m,4.4
+bmw|z3,2.5
+bmw|z4,3.0
+bmw|z4 m,3.0
+buick|allure,3.8
+buick|century,3.1
+buick|enclave,3.6
+buick|encore,1.4
+buick|lacrosse,3.6
+buick|lesabre,3.8
+buick|lucerne,3.8
+buick|park avenue,3.8
+buick|rainier,4.2
+buick|regal,2.4
+buick|rendezvous,3.4
+buick|riviera,3.8
+buick|roadmaster,5.7
+buick|terraza,3.5
+buick|verano,2.4
+cadillac|ats,2.5
+cadillac|catera,3.0
+cadillac|cts,3.6
+cadillac|cts coupe,3.6
+cadillac|cts wagon,3.6
+cadillac|cts-v,6.2
+cadillac|cts-v coupe,6.2
+cadillac|cts-v wagon,6.2
+cadillac|deville,4.6
+cadillac|dts,4.6
+cadillac|eldorado,4.6
+cadillac|elr,1.4
+cadillac|escalade,6.2
+cadillac|escalade esv,6.2
+cadillac|escalade ext,6.2
+cadillac|escalade hybrid,6.0
+cadillac|fleetwood,5.7
+cadillac|seville,4.6
+cadillac|srx,3.6
+cadillac|sts,3.6
+cadillac|sts-v,4.4
+cadillac|xlr,4.6
+cadillac|xts,3.6
+chev truck|s10,4.3
+chevrolet|1500,5.3
+chevrolet|2500,6.0
+chevrolet|3500,2.2
+chevrolet|astro,4.3
+chevrolet|astro cargo,4.3
+chevrolet|avalanche,5.3
+chevrolet|aveo,1.6
+chevrolet|black diamond avalanche,5.3
+chevrolet|blazer,4.3
+chevrolet|c/k 1500 series,4.3
+chevrolet|c/k 2500 series,5.7
+chevrolet|c/k 3500 series,6.6
+chevrolet|camaro,3.6
+chevrolet|caprice,5.0
+chevrolet|capt,2.4
+chevrolet|captiva sport,2.4
+chevrolet|cavalier,2.2
+chevrolet|classic,2.2
+chevrolet|cobalt,2.2
+chevrolet|colorado,3.5
+chevrolet|comm,4.8
+chevrolet|corsica,3.1
+chevrolet|corvette,6.0
+chevrolet|corvette stingray,6.2
+chevrolet|cruze,1.4
+chevrolet|equinox,2.4
+chevrolet|express,6.0
+chevrolet|express cargo,4.8
+chevrolet|g1500,5.3
+chevrolet|g2500,5.7
+chevrolet|g3500,6.0
+chevrolet|hhr,2.2
+chevrolet|impala,3.6
+chevrolet|impala limited,3.6
+chevrolet|lumina,3.1
+chevrolet|malibu,2.4
+chevrolet|malibu classic,3.5
+chevrolet|malibu hybrid,2.4
+chevrolet|malibu maxx,3.5
+chevrolet|monte carlo,3.5
+chevrolet|optra,2.0
+chevrolet|prizm,1.8
+chevrolet|s-10,4.3
+chevrolet|s-10 blazer,4.3
+chevrolet|s10,4.3
+chevrolet|silverado 1500,5.3
+chevrolet|silverado 1500 classic,4.3
+chevrolet|silverado 1500 hybrid,6.0
+chevrolet|silverado 1500hd,6.0
+chevrolet|silverado 2500,6.0
+chevrolet|silverado 2500hd,6.0
+chevrolet|silverado 2500hd classic,2.2
+chevrolet|silverado 3500,6.6
+chevrolet|silverado 3500 classic,2.2
+chevrolet|silverado 3500hd,6.6
+chevrolet|sonic,1.8
+chevrolet|spark,1.2
+chevrolet|ss,6.2
+chevrolet|ssr,5.3
+chevrolet|suburban,5.3
+chevrolet|tahoe,5.3
+chevrolet|tahoe hybrid,6.0
+chevrolet|tahoe limited/z71,5.7
+chevrolet|tracker,2.5
+chevrolet|trailblazer,4.2
+chevrolet|trailblazer ext,4.2
+chevrolet|traverse,3.6
+chevrolet|uplander,3.9
+chevrolet|uplandr,3.5
+chevrolet|venture,3.4
+chevrolet|volt,1.4
+chrysler|200,2.4
+chrysler|300,3.6
+chrysler|300m,3.5
+chrysler|aspen,5.7
+chrysler|cirrus,2.5
+chrysler|concorde,3.2
+chrysler|crossfire,3.2
+chrysler|grand,3.3
+chrysler|le baron,3.0
+chrysler|lhs,3.5
+chrysler|pacifica,4.0
+chrysler|prowler,3.5
+chrysler|pt,2.4
+chrysler|pt cruiser,2.4
+chrysler|sebring,2.5
+chrysler|town,3.3
+chrysler|town and country,3.6
+chrysler|twn&country,3.8
+chrysler|twn/cntry,3.3
+chrysler|voyager,3.3
+daewoo|leganza,2.2
+daewoo|nubira,2.0
+dodge tk|gr,3.3
+dodge|avenger,2.4
+dodge|b1500,5.2
+dodge|caliber,2.0
+dodge|caravan,3.3
+dodge|challenger,5.7
+dodge|charger,3.6
+dodge|dakota,4.7
+dodge|dart,2.0
+dodge|durango,4.7
+dodge|gr,3.6
+dodge|grand,3.3
+dodge|grand caravan,3.6
+dodge|intrepid,2.7
+dodge|journey,3.5
+dodge|magnum,3.5
+dodge|neon,2.0
+dodge|nitro,3.7
+dodge|ram,5.9
+dodge|ram cargo,5.2
+dodge|ram pickup 1500,5.7
+dodge|ram pickup 2500,5.9
+dodge|ram pickup 3500,5.9
+dodge|ram van,3.9
+dodge|ram3500,5.9
+dodge|spirit,2.5
+dodge|sprinter,2.7
+dodge|sprinter cargo,3.9
+dodge|stratus,2.4
+dodge|viper,8.3
+dot|durango,5.2
+ferrari|360,3.6
+ferrari|458 italia,4.5
+ferrari|california,4.3
+ferrari|f430,4.3
+fiat|500,1.4
+fiat|500l,1.4
+fisker|karma,2.0
+ford tk|ranger,4.0
+ford truck|expedition,5.4
+ford truck|explorer,5.0
+ford|350,6.0
+ford|aspire,1.3
+ford|bronco,5.8
+ford|c-max energi,2.0
+ford|c-max hybrid,2.0
+ford|contour,2.0
+ford|crown,4.6
+ford|crown victoria,4.6
+ford|e,4.6
+ford|e-150,4.2
+ford|e-250,4.2
+ford|e-350,5.4
+ford|e-series van,4.6
+ford|e-series wagon,5.4
+ford|e150,4.6
+ford|e250,5.4
+ford|e350,5.4
+ford|econoline cargo,4.6
+ford|econoline wagon,5.4
+ford|edge,3.5
+ford|escape,2.3
+ford|escape hybrid,2.5
+ford|escort,2.0
+ford|excurs,7.3
+ford|excursion,6.0
+ford|expedit,5.4
+ford|expedition,5.4
+ford|expedition el,5.4
+ford|expeditn,5.4
+ford|explorer,3.5
+ford|explorer sport,4.0
+ford|explorer sport trac,4.0
+ford|f-150,5.0
+ford|f-150 heritage,4.6
+ford|f-150 svt lightning,5.4
+ford|f-250,5.8
+ford|f-250 super duty,6.2
+ford|f-350 super duty,6.4
+ford|f-450 super duty,6.4
+ford|f150,5.4
+ford|f250,6.2
+ford|f350,7.3
+ford|fiesta,1.6
+ford|five hundred,3.0
+ford|flex,3.5
+ford|focus,2.0
+ford|focus st,2.0
+ford|freestar,3.9
+ford|freestyle,3.0
+ford|fusion,2.5
+ford|fusion energi,2.0
+ford|fusion hybrid,2.0
+ford|mustang,3.7
+ford|mustang svt cobra,4.6
+ford|police,4.6
+ford|ranger,3.0
+ford|shelby gt500,5.4
+ford|taurus,3.5
+ford|taurus x,3.5
+ford|tempo,2.3
+ford|thunderbird,3.9
+ford|transit connect,2.0
+ford|transit van,3.7
+ford|transit wagon,3.7
+ford|windstar,3.8
+ford|windstar cargo,3.8
+geo|metro,1.3
+geo|prizm,1.6
+gmc truck|1500,5.3
+gmc truck|safari,4.3
+gmc truck|siera,6.6
+gmc truck|sr,5.3
+gmc truck|yukon,5.3
+gmc|1500,5.7
+gmc|2500,6.6
+gmc|acadia,3.6
+gmc|canyon,3.5
+gmc|envoy,4.2
+gmc|envoy xl,4.2
+gmc|envoy xuv,4.2
+gmc|jimmy,4.3
+gmc|safari,4.3
+gmc|safari cargo,4.3
+gmc|savana,4.8
+gmc|savana cargo,4.8
+gmc|sierra 1500,5.3
+gmc|sierra 1500 classic,3.6
+gmc|sierra 1500 hybrid,6.0
+gmc|sierra 1500hd,6.0
+gmc|sierra 2500,6.0
+gmc|sierra 2500hd,6.6
+gmc|sierra 2500hd classic,2.2
+gmc|sierra 3500,4.4
+gmc|sierra 3500hd,6.6
+gmc|sonoma,4.3
+gmc|sr,5.3
+gmc|subrbn,7.4
+gmc|suburban,5.7
+gmc|terrain,2.4
+gmc|yukon,5.3
+gmc|yukon denali,5.7
+gmc|yukon hybrid,6.0
+gmc|yukon xl,5.3
+honda|accord,2.4
+honda|accord crosstour,3.5
+honda|accord hybrid,2.0
+honda|civic,1.8
+honda|civic del sol,1.5
+honda|cr-v,2.4
+honda|cr-z,1.5
+honda|crosstour,3.5
+honda|element,2.4
+honda|fit,1.5
+honda|insight,1.3
+honda|odyssey,3.5
+honda|passport,3.2
+honda|pilot,3.5
+honda|prelude,2.2
+honda|ridgelin,3.5
+honda|ridgeline,3.5
+honda|s2000,2.2
+hummer|h1,6.5
+hummer|h2,6.0
+hummer|h2 sut,6.0
+hummer|h3,3.7
+hummer|h3t,3.7
+hyundai tk|santa,2.7
+hyundai|accent,1.6
+hyundai|azera,3.8
+hyundai|elantra,1.8
+hyundai|elantra coupe,1.8
+hyundai|elantra gt,1.8
+hyundai|elantra touring,2.0
+hyundai|entourage,3.8
+hyundai|equus,5.0
+hyundai|genesis,3.8
+hyundai|genesis coupe,2.0
+hyundai|santa,2.7
+hyundai|santa fe,2.7
+hyundai|santa fe sport,2.4
+hyundai|sonata,2.4
+hyundai|sonata hybrid,2.4
+hyundai|tiburon,2.7
+hyundai|tucson,2.4
+hyundai|veloster,1.6
+hyundai|veracruz,3.8
+hyundai|xg300,2.7
+hyundai|xg350,3.5
+infiniti|ex,3.5
+infiniti|ex35,3.5
+infiniti|fx,3.5
+infiniti|fx35,3.5
+infiniti|fx45,4.5
+infiniti|fx50,5.0
+infiniti|g convertible,3.7
+infiniti|g coupe,3.7
+infiniti|g sedan,3.7
+infiniti|g20,2.0
+infiniti|g35,3.5
+infiniti|g37,3.7
+infiniti|g37 convertible,3.7
+infiniti|g37 coupe,3.7
+infiniti|i30,3.0
+infiniti|i35,3.5
+infiniti|j30,3.0
+infiniti|jx,3.5
+infiniti|m,3.7
+infiniti|m35,3.5
+infiniti|m37,3.7
+infiniti|m45,4.5
+infiniti|m56,5.6
+infiniti|q45,4.5
+infiniti|q50,3.7
+infiniti|q60 convertible,3.7
+infiniti|q60 coupe,3.7
+infiniti|q70,3.7
+infiniti|qx,5.6
+infiniti|qx4,3.5
+infiniti|qx50,3.7
+infiniti|qx56,5.6
+infiniti|qx60,3.5
+infiniti|qx70,3.7
+infiniti|qx80,5.6
+isuzu|amigo,3.2
+isuzu|ascender,4.2
+isuzu|axiom,3.5
+isuzu|i-series,2.9
+isuzu|rodeo,3.2
+isuzu|rodeo sport,3.2
+isuzu|trooper,3.5
+jaguar|f-type,5.0
+jaguar|s-type,3.0
+jaguar|x-type,3.0
+jaguar|xf,5.0
+jaguar|xj,5.0
+jaguar|xj-series,4.2
+jaguar|xk,5.0
+jaguar|xk-series,4.2
+jeep|cherokee,3.2
+jeep|commander,4.7
+jeep|compass,2.4
+jeep|gr,4.7
+jeep|grand,5.0
+jeep|grand cherokee,3.7
+jeep|grand cherokee srt,6.4
+jeep|liberty,3.7
+jeep|patriot,2.4
+jeep|wrangler,3.8
+kia|amanti,3.5
+kia|borrego,3.8
+kia|cadenza,3.3
+kia|forte,1.8
+kia|k900,5.0
+kia|optima,2.4
+kia|rio,1.6
+kia|rondo,2.4
+kia|sedona,3.5
+kia|sephia,1.8
+kia|sorento,2.4
+kia|soul,2.0
+kia|spectra,2.0
+kia|sportage,2.4
+lamborghini|gallardo,5.0
+land rover|discovery,4.6
+land rover|discovery series ii,4.0
+land rover|freelander,2.5
+land rover|lr2,3.2
+land rover|lr3,4.4
+land rover|lr4,5.0
+land rover|range,4.4
+land rover|range rover,5.0
+land rover|range rover evoque,2.0
+land rover|range rover sport,5.0
+land rover|rr,5.0
+land rover|rrs,4.4
+landrover|discovery,4.6
+landrover|lr3,4.4
+landrover|range,4.4
+landrover|rangerover,4.4
+lexus|ct 200h,1.8
+lexus|es 300,3.0
+lexus|es 300h,2.5
+lexus|es 330,3.3
+lexus|es 350,3.5
+lexus|gs 300,3.0
+lexus|gs 350,3.5
+lexus|gs 400,4.0
+lexus|gs 430,4.3
+lexus|gs 450h,3.5
+lexus|gs 460,4.6
+lexus|gx,4.7
+lexus|gx 460,4.6
+lexus|gx 470,4.7
+lexus|hs 250h,2.4
+lexus|is 250,2.5
+lexus|is 250 c,2.5
+lexus|is 300,3.0
+lexus|is 350,3.5
+lexus|is 350 c,3.5
+lexus|is f,5.0
+lexus|ls 400,4.0
+lexus|ls 430,4.3
+lexus|ls 460,4.6
+lexus|ls 600h l,5.0
+lexus|lx,4.7
+lexus|lx 450,4.5
+lexus|lx 470,4.7
+lexus|lx 570,5.7
+lexus|rc 350,3.5
+lexus|rc f,5.0
+lexus|rx 300,3.0
+lexus|rx 330,3.3
+lexus|rx 350,3.5
+lexus|rx 400h,3.3
+lexus|rx 450h,3.5
+lexus|sc 300,3.0
+lexus|sc 400,4.0
+lexus|sc 430,4.3
+lincoln|aviator,4.6
+lincoln|blackwood,5.4
+lincoln|continental,4.6
+lincoln|ls,3.9
+lincoln|mark lt,5.4
+lincoln|mark viii,4.6
+lincoln|mkc,2.0
+lincoln|mks,3.7
+lincoln|mkt,3.5
+lincoln|mkx,3.7
+lincoln|mkz,3.5
+lincoln|mkz hybrid,2.5
+lincoln|navigator,5.4
+lincoln|navigator l,5.4
+lincoln|town,4.6
+lincoln|town car,4.6
+lincoln|zephyr,3.0
+maserati|coupe,4.2
+maserati|ghibli,3.0
+maserati|gransport,4.2
+maserati|granturismo,4.7
+maserati|granturismo convertible,4.7
+maserati|quattroporte,4.2
+maserati|spyder,4.2
+mazda tk|cx-7,2.3
+mazda|3,2.5
+mazda|6,2.5
+mazda|626,2.0
+mazda|b-series,3.0
+mazda|b-series pickup,2.5
+mazda|b-series truck,4.0
+mazda|b2300,2.3
+mazda|cx-5,2.5
+mazda|cx-7,2.3
+mazda|cx-9,3.7
+mazda|mazda2,1.5
+mazda|mazda3,2.0
+mazda|mazda5,2.5
+mazda|mazda6,2.5
+mazda|mazdaspeed 3,2.3
+mazda|mazdaspeed mazda3,2.3
+mazda|mazdaspeed mazda6,2.3
+mazda|mazdaspeed protege,2.0
+mazda|mazdaspeed3,2.3
+mazda|millenia,2.5
+mazda|mpv,3.0
+mazda|mx-5 miata,2.0
+mazda|protege,2.0
+mazda|protege5,2.0
+mazda|rx-8,1.3
+mazda|rx8,1.3
+mazda|tribute,3.0
+mazda|tribute hybrid,2.3
+mazda|truck,3.0
+mercedes-benz|190-class,2.3
+mercedes-benz|300-class,2.8
+mercedes-benz|400-class,4.2
+mercedes-benz|500-class,5.0
+mercedes-benz|c-class,3.0
+mercedes-benz|cl-class,5.5
+mercedes-benz|cla-class,2.0
+mercedes-benz|clk-class,3.5
+mercedes-benz|cls-class,5.0
+mercedes-benz|e-class,3.5
+mercedes-benz|g-class,5.5
+mercedes-benz|gl-class,4.7
+mercedes-benz|gla-class,2.0
+mercedes-benz|glk-class,3.5
+mercedes-benz|m-class,3.5
+mercedes-benz|ml55 amg,5.4
+mercedes-benz|r-class,3.5
+mercedes-benz|s-class,5.0
+mercedes-benz|sl-class,5.0
+mercedes-benz|slk-class,3.0
+mercedes-benz|sls amg,6.2
+mercedes-benz|sls amg gt,6.2
+mercedes-b|c230wz,2.5
+mercedes-b|sl55,5.5
+mercedes|300e,2.6
+mercedes|c230,2.5
+mercedes|c230wz,2.5
+mercedes|c240s,2.6
+mercedes|c240w,2.6
+mercedes|cl55,5.5
+mercedes|e300dt,3.0
+mercedes|g500,5.0
+mercedes|g55,5.4
+mercedes|s55,5.5
+mercury|cougar,2.5
+mercury|grand,4.6
+mercury|grand marquis,4.6
+mercury|marauder,4.6
+mercury|mariner,3.0
+mercury|mariner hybrid,2.3
+mercury|milan,2.5
+mercury|milan hybrid,2.5
+mercury|montego,3.0
+mercury|monterey,4.2
+mercury|mountaineer,4.0
+mercury|mountnr,5.0
+mercury|mystique,2.5
+mercury|sable,3.0
+mercury|tracer,1.9
+mercury|villager,3.3
+mini|cooper,1.6
+mini|cooper clubman,1.6
+mini|cooper countryman,1.6
+mini|cooper coupe,1.6
+mini|cooper paceman,1.6
+mini|cooper roadster,1.6
+mitsubishi|3000gt,3.0
+mitsubishi|diamante,3.5
+mitsubishi|eclipse,2.4
+mitsubishi|eclipse spyder,2.4
+mitsubishi|endeavor,3.8
+mitsubishi|galant,2.4
+mitsubishi|lancer,2.0
+mitsubishi|lancer evolution,2.0
+mitsubishi|lancer sportback,2.0
+mitsubishi|mirage,1.2
+mitsubishi|montero,3.5
+mitsubishi|montero sport,3.0
+mitsubishi|outlander,2.4
+mitsubishi|outlander sport,2.0
+mitsubishi|raider,3.7
+nissan|200sx,1.6
+nissan|300zx,3.0
+nissan|350z,3.5
+nissan|370z,3.7
+nissan|altima,2.5
+nissan|altima hybrid,2.5
+nissan|armada,5.6
+nissan|cube,1.8
+nissan|frontier,4.0
+nissan|gt-r,3.8
+nissan|juke,1.6
+nissan|maxima,3.5
+nissan|murano,3.5
+nissan|murano crosscabriolet,3.5
+nissan|nv,4.0
+nissan|nv cargo,5.6
+nissan|nv passenger,4.0
+nissan|nv200,2.0
+nissan|pathfind,3.3
+nissan|pathfinder,3.5
+nissan|quest,3.5
+nissan|rogue,2.5
+nissan|rogue select,2.5
+nissan|sentra,2.0
+nissan|titan,5.6
+nissan|truck,2.4
+nissan|versa,1.6
+nissan|versa note,1.6
+nissan|x-trail,2.5
+nissan|xterra,4.0
+oldsmobile|achieva,3.1
+oldsmobile|alero,2.4
+oldsmobile|aurora,3.5
+oldsmobile|bravada,4.3
+oldsmobile|ciera,3.3
+oldsmobile|cutlass,3.1
+oldsmobile|cutlass ciera,3.1
+oldsmobile|cutlass supreme,3.1
+oldsmobile|eighty-eight,3.8
+oldsmobile|eighty-eight royale,3.8
+oldsmobile|intrigue,3.5
+oldsmobile|regency,3.8
+oldsmobile|silhouette,3.4
+plymouth|breeze,2.0
+plymouth|grand,3.3
+plymouth|neon,2.0
+plymouth|prowler,3.5
+plymouth|voyager,2.4
+pontiac|aztek,3.4
+pontiac|bonneville,3.8
+pontiac|firebird,3.8
+pontiac|g3,1.6
+pontiac|g5,2.2
+pontiac|g6,3.5
+pontiac|g8,3.6
+pontiac|grand,3.6
+pontiac|grand am,3.4
+pontiac|grand prix,3.8
+pontiac|gto,6.0
+pontiac|montana,3.4
+pontiac|montana sv6,3.5
+pontiac|pursuit,2.2
+pontiac|solstice,2.4
+pontiac|sunfire,2.2
+pontiac|torrent,3.4
+pontiac|vibe,1.8
+pontiac|wave,1.6
+porsche|911,3.6
+porsche|boxster,2.9
+porsche|carrera,3.6
+porsche|cayenne,4.5
+porsche|cayman,2.7
+porsche|cayman s,3.4
+porsche|macan,3.0
+porsche|panamera,3.6
+ram|1500,5.7
+ram|2500,6.7
+ram|3500,6.7
+ram|c/v cargo van,3.6
+ram|c/v tradesman,3.6
+ram|cv tradesman,3.6
+ram|dakota,3.7
+ram|promaster cargo van,3.6
+rolls-royce|ghost,6.6
+saab|9-2x,2.5
+saab|9-3,2.0
+saab|9-5,2.3
+saab|9-7x,4.2
+saturn|astra,3.9
+saturn|aura,3.5
+saturn|aura hybrid,2.4
+saturn|ion,2.2
+saturn|l-series,2.2
+saturn|l300,3.0
+saturn|outlook,3.6
+saturn|relay,3.5
+saturn|s-series,1.9
+saturn|sky,2.4
+saturn|vue,3.5
+saturn|vue hybrid,2.4
+scion|fr-s,2.0
+scion|iq,1.3
+scion|tc,2.5
+scion|xa,1.5
+scion|xb,2.4
+scion|xd,1.8
+smart|fortwo,1.0
+subaru|b9 tribeca,3.0
+subaru|baja,2.5
+subaru|brz,2.0
+subaru|forester,2.5
+subaru|impreza,2.5
+subaru|impreza wrx,2.5
+subaru|legacy,2.5
+subaru|outback,2.5
+subaru|tribeca,3.6
+subaru|wrx,2.5
+subaru|xv crosstrek,2.0
+suzuki|aerio,2.3
+suzuki|equator,4.0
+suzuki|esteem,1.8
+suzuki|forenza,2.0
+suzuki|grand,2.4
+suzuki|grand vitara,2.5
+suzuki|kizashi,2.4
+suzuki|reno,2.0
+suzuki|sidekick,1.8
+suzuki|swift,1.6
+suzuki|sx4,2.0
+suzuki|verona,2.5
+suzuki|vitara,2.0
+suzuki|xl-7,2.7
+suzuki|xl7,3.6
+toyota|4runner,4.0
+toyota|avalon,3.5
+toyota|avalon hybrid,2.5
+toyota|camry,2.5
+toyota|camry hybrid,2.5
+toyota|camry solara,3.3
+toyota|celica,1.8
+toyota|corolla,1.8
+toyota|echo,1.5
+toyota|fj cruiser,4.0
+toyota|highlander,3.5
+toyota|highlander hybrid,3.3
+toyota|land cruiser,4.7
+toyota|matrix,1.8
+toyota|mr2 spyder,1.8
+toyota|paseo,1.5
+toyota|pickup,2.4
+toyota|previa,2.4
+toyota|prius,1.8
+toyota|prius c,1.5
+toyota|prius plug-in,1.8
+toyota|prius v,1.8
+toyota|rav4,2.5
+toyota|sequoia,4.7
+toyota|sienna,3.5
+toyota|t100,3.4
+toyota|tacoma,4.0
+toyota|tercel,1.5
+toyota|tundra,5.7
+toyota|venza,2.7
+toyota|yaris,1.5
+volkswagen|beetle,2.5
+volkswagen|beetle convertible,2.5
+volkswagen|cabrio,2.0
+volkswagen|cc,2.0
+volkswagen|eos,2.0
+volkswagen|eurovan,2.8
+volkswagen|gli,2.0
+volkswagen|golf,2.5
+volkswagen|golf gti,2.0
+volkswagen|golf r,2.0
+volkswagen|gti,2.0
+volkswagen|jetta,2.5
+volkswagen|jetta gli,2.0
+volkswagen|jetta hybrid,1.4
+volkswagen|jetta sportwagen,2.0
+volkswagen|new beetle,2.0
+volkswagen|passat,2.5
+volkswagen|phaeton,4.2
+volkswagen|r32,3.2
+volkswagen|rabbit,2.5
+volkswagen|routan,3.7
+volkswagen|tiguan,2.0
+volkswagen|touareg,3.6
+volkswagen|touareg 2,3.6
+volvo|850,2.4
+volvo|940,2.3
+volvo|960,2.9
+volvo|c30,2.5
+volvo|c70,2.5
+volvo|s40,2.4
+volvo|s60,2.5
+volvo|s70,2.4
+volvo|s80,3.2
+volvo|s90,2.9
+volvo|v40,1.9
+volvo|v50,2.4
+volvo|v60,2.0
+volvo|v70,2.4
+volvo|xc60,3.2
+volvo|xc70,3.2
+volvo|xc90,3.2
+vw|beetle,1.9
+vw|jetta,2.0
+vw|routan,3.6
