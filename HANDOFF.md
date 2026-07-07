@@ -1,4 +1,4 @@
-# Chat-Handoff für andere KIs / neue Chats
+# Projekt-Handoff / neuer Chat
 
 Stand: 01.07.2026  
 Repo lokal: `C:\Users\xariv\Documents\GitHub\ai-project-mail-stage3`  
@@ -6,7 +6,7 @@ Remote: `https://github.com/digital-business-lectures/ai-project-mail.git`
 Aktueller Branch laut letztem Check: `main`  
 Letzter sichtbarer Commit: `e349888 Document AI usage in project`
 
-Diese Datei fasst den bisherigen Codex-Chat und den aktuellen Projektstand zusammen, damit ein anderer KI-Chat direkt weiterarbeiten kann.
+Diese Datei fasst den bisherigen Chat-Verlauf und den aktuellen Projektstand zusammen, damit später direkt weitergearbeitet werden kann.
 
 Wichtig: Diese Datei ist nur eine Übergabe-/Kontextdatei. Sie wurde nicht automatisch gepusht.
 
