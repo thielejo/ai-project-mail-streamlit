@@ -18,6 +18,8 @@ schwerpunktmäßig bei:
 - Refactoring und Aufräumen der Repository-Struktur,
 - Formulieren von Dokumentationsentwürfen,
 - Erstellen erster Textentwürfe für README, Projektstand und Hausarbeit,
+- Weiterentwicklung der Streamlit-Oberfläche, insbesondere Preisrange,
+  Vertrauensbewertung, Ampellogik, Branding und Deployment-Fragen,
 - Überprüfen, ob Ergebnisse logisch zu Stage 1, Stage 2 oder Stage 3 gehören.
 
 Wichtig ist: Codex hat dabei vor allem Vorschläge gemacht und Codeänderungen
