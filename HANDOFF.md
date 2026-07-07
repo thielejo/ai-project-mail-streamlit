@@ -76,20 +76,14 @@ Aktueller Hinweis:
 - Es liegen lokale, unversionierte Dateien im Arbeitsordner.
 - Vor jedem Commit zuerst `git status` ausführen.
 
-Zuletzt sichtbare unversionierte Dateien:
+Zuletzt bewusst lokal gehaltene Dateien:
 
 ```text
-CHAT_HANDOFF_FUER_ANDERE_KIS.md
 PRAESI_STAGE2_STAGE3_ERKLAERUNG_UND_RUECKFRAGEN.md
-docs/hausarbeit_entwurf_v1.docx
-docs/hausarbeit_gliederung.docx
-docs/hausarbeit_literatur_intro_theorie.docx
-scripts/create_hausarbeit_entwurf_v1_docx.py
-scripts/create_hausarbeit_gliederung_docx.py
-scripts/create_literatur_intro_theorie_docx.py
 ```
 
 `PRAESI_STAGE2_STAGE3_ERKLAERUNG_UND_RUECKFRAGEN.md` sollte ursprünglich ausdrücklich nicht gepusht werden.
+Die Hausarbeitsentwürfe wurden später aus dem Repo herausgenommen und lokal separat gesichert.
 
 ---
 
@@ -365,19 +359,23 @@ MMR ist selbst ein professioneller Marktwert. Wenn man ihn nutzt, würde das Mod
 
 ## 10. Hausarbeit / Paper
 
-Für die Hausarbeit wurden lokal mehrere Word-Entwürfe erstellt:
+Für die Hausarbeit wurden lokal mehrere Word-Entwürfe erstellt und später aus dem Repo herausgenommen.
+Lokaler Sicherungsordner:
 
-- `docs/hausarbeit_gliederung.docx`
-- `docs/hausarbeit_literatur_intro_theorie.docx`
-- `docs/hausarbeit_entwurf_v1.docx`
+```text
+C:\Users\xariv\Documents\GitHub\ai-project-mail-hausarbeit-local
+```
 
-Außerdem lokale Skripte:
+Enthaltene lokale Dateien:
 
-- `scripts/create_hausarbeit_gliederung_docx.py`
-- `scripts/create_literatur_intro_theorie_docx.py`
-- `scripts/create_hausarbeit_entwurf_v1_docx.py`
+- `hausarbeit_gliederung.docx`
+- `hausarbeit_literatur_intro_theorie.docx`
+- `hausarbeit_entwurf_v1.docx`
+- `create_hausarbeit_gliederung_docx.py`
+- `create_literatur_intro_theorie_docx.py`
+- `create_hausarbeit_entwurf_v1_docx.py`
 
-Diese Dateien waren zuletzt untracked. Wenn sie ins Repo sollen, gezielt committen.
+Diese Dateien sollen nicht im Git-Repo liegen, solange nicht ausdrücklich etwas anderes entschieden wird.
 
 Geplante Hausarbeit:
 
