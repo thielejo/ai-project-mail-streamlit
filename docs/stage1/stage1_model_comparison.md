@@ -1,4 +1,4 @@
-# Stage 1: Strenger V1/V2-Vergleich auf gemeinsamem Split
+# Stage 1: Strenger Modellvergleich auf gemeinsamem Split
 
 ## Versuchsaufbau
 

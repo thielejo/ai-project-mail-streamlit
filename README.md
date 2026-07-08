@@ -109,8 +109,8 @@ evaluated on the same 105,834 previously untouched test rows. V2 reduces MAE by
 
 The V2 improvement is a Stage 1 result. It does not belong to Stage 3.
 
-Strict V1/V2 report: see [`docs/stage1/model_results_stage1_v1_v2_shared_split.md`](docs/stage1/model_results_stage1_v1_v2_shared_split.md)  
-V2 handoff: see [`docs/stage1/V2_INTEGRATION_UND_UEBERGABE.md`](docs/stage1/V2_INTEGRATION_UND_UEBERGABE.md)  
+Current Stage 1 model: see [`docs/stage1/stage1_current_model.md`](docs/stage1/stage1_current_model.md)  
+Strict model comparison: see [`docs/stage1/stage1_model_comparison.md`](docs/stage1/stage1_model_comparison.md)  
 Error by price segment: see [`model_results.md`](model_results.md)
 Full model comparison (6 models): see [`model_comparison/model_comparison.md`](model_comparison/model_comparison.md)
 
