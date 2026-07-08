@@ -11,7 +11,7 @@ Architektur und Hyperparameter sind identisch zu scripts/train_stage1_v2.py;
 einzige Aenderung: `displacement` wird als numerisches Feature ergaenzt.
 
 Datenquelle: car_prices_clean.csv + Hubraum aus dem VIN-Decode-Cache
-(experiments/vin_fin_enrichment/vin_decoded_cache_full.csv), per VIN gejoint.
+(vin_fin_enrichment/vin_decoded_cache_full.csv), per VIN gejoint.
 
 Aufruf:
     uv run python scripts/train_stage1_v2_fin.py            # 200k Schnelllauf
@@ -38,7 +38,7 @@ from xgboost import XGBRegressor
 
 REPO = Path(__file__).resolve().parent.parent
 INPUT_PATH = REPO / "car_prices_clean.csv"
-CACHE_PATH = REPO / "experiments/vin_fin_enrichment/vin_decoded_cache_full.csv"
+CACHE_PATH = REPO / "vin_fin_enrichment/vin_decoded_cache_full.csv"
 MODEL_PATH = REPO / "models/price_model_v2_fin.joblib"
 METRICS_PATH = REPO / "models/price_model_v2_fin_metrics.json"
 

@@ -226,9 +226,9 @@ ein erheblicher Teil bestehen bleibt — die exakte Zahl liefert erst der 534k-T
 
 ```bash
 # Abhängigkeit (nur requests zusätzlich zum Projekt-Stack)
-uv run python experiments/vin_fin_enrichment/01_coverage_test.py        # Abdeckung (SAMPLE_SIZE anpassbar)
-uv run python experiments/vin_fin_enrichment/02_ablation_vs_baseline.py  # Test 3
-uv run python experiments/vin_fin_enrichment/03_ablation_vs_v2.py        # Test 4
+uv run python vin_fin_enrichment/01_coverage_test.py        # Abdeckung (SAMPLE_SIZE anpassbar)
+uv run python vin_fin_enrichment/02_ablation_vs_baseline.py  # Test 3
+uv run python vin_fin_enrichment/03_ablation_vs_v2.py        # Test 4
 ```
 
 - Alle Skripte lesen `car_prices_clean.csv` **read-only** und schreiben nur in

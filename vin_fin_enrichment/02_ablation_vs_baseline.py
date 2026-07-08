@@ -16,7 +16,7 @@ Hinweis:
     XGBoost-Ensemble vergleichbar.
 
 Aufruf:
-    uv run python experiments/vin_fin_enrichment/02_ablation_vs_baseline.py
+    uv run python vin_fin_enrichment/02_ablation_vs_baseline.py
 """
 
 from __future__ import annotations

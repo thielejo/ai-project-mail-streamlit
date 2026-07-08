@@ -13,7 +13,7 @@ Vorgehen:
       lokal in diesem Ordner (vin_coverage_result.csv).
 
 Aufruf:
-    uv run python experiments/vin_fin_enrichment/01_coverage_test.py
+    uv run python vin_fin_enrichment/01_coverage_test.py
     (SAMPLE_SIZE unten anpassen; getestet mit 200 und 1000)
 """
 

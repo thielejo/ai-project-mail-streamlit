@@ -1,7 +1,7 @@
 # Stage 1 V2 + FIN — Ergebnisse (Hubraum-Erweiterung)
 
 Erweiterung des V2-Modells um den aus der VIN dekodierten **Hubraum** (`displacement`).
-Vollständige Voruntersuchung: `experiments/vin_fin_enrichment/` (`FIN_Test.md`, `INTEGRATION_V2_FIN.md`).
+Vollständige Voruntersuchung: `vin_fin_enrichment/` (`FIN_Test.md`, `INTEGRATION_V2_FIN.md`).
 
 ## Ergebnis (voller Datensatz, 529.169 Zeilen, identischer Split)
 
@@ -34,7 +34,7 @@ Kraftstoff/Zylinder redundant.
 
 ```bash
 # Voraussetzung: VIN-Decode-Cache (regenerierbar, ~3 h)
-uv run python experiments/vin_fin_enrichment/build_full_vin_cache.py
+uv run python vin_fin_enrichment/build_full_vin_cache.py
 # Training V2 + Hubraum
 uv run python scripts/train_stage1_v2_fin.py --max-rows 0
 ```

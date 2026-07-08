@@ -16,7 +16,7 @@ trim, color, interior, transmission, state nutzt)?
 Datenquelle: car_prices_fin.csv (clean + FIN). Voller Datensatz.
 
 Aufruf:
-    uv run python experiments/vin_fin_enrichment/07_v2_vs_v2_fin.py
+    uv run python vin_fin_enrichment/07_v2_vs_v2_fin.py
 """
 
 from __future__ import annotations

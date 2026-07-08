@@ -30,7 +30,7 @@ Wir haben **Pascals V2-Modell** (reiche Manheim-Merkmale: trim, transmission, st
 - Ergebnis: MAE $1.370 (−25 % gegenüber dem schlanken Modell).
 
 ### Strang B — FIN/Hubraum (Moritz)
-- Branch: `Mail_project_moritz`, Ordner `experiments/vin_fin_enrichment/`
+- Branch: `Mail_project_moritz`, Ordner `vin_fin_enrichment/`
 - Idee: aus der VIN (US-FIN) über die NHTSA-API technische Merkmale nachladen. Ablationen zeigten: **der Hubraum trägt den gesamten Effekt** (Kraftstoff/Zylinder redundant).
 - Datenbasis: alle 550.245 VINs dekodiert → `vin_decoded_cache_full.csv` (Hubraum-Abdeckung 99 %).
 
@@ -91,4 +91,4 @@ Der FIN/Hubraum-Effekt wurde über mehrere Stichprobengrößen und Modelle best�
 | `scripts/train_stage1_v2_fin.py` | Integrierte Trainings-Pipeline (V2 + Hubraum) |
 | `models/price_model_v2_fin.joblib` | Trainiertes integriertes Modell (13 MB) |
 | `models/price_model_v2_fin_metrics.json` | Metriken + Segmentfehler |
-| `experiments/vin_fin_enrichment/` | Komplette FIN-Voruntersuchung (Tests 1–8, Cache, Doku) |
+| `vin_fin_enrichment/` | Komplette FIN-Voruntersuchung (Tests 1–8, Cache, Doku) |

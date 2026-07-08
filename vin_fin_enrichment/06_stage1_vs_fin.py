@@ -15,7 +15,7 @@ Datenquelle: car_prices_fin.csv (clean + FIN). Abgeleitete Features
 (vehicle_age, sale_month, year_month) werden wie in build_features.py berechnet.
 
 Aufruf:
-    uv run python experiments/vin_fin_enrichment/06_stage1_vs_fin.py
+    uv run python vin_fin_enrichment/06_stage1_vs_fin.py
 """
 
 from __future__ import annotations

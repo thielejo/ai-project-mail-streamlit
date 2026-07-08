@@ -10,7 +10,7 @@ Spalten fuel_type, displacement, cylinders (Hubraum ist laut Ablation das
 entscheidende Merkmal).
 
 Aufruf:
-    uv run python experiments/vin_fin_enrichment/build_micro_fin_dataset.py
+    uv run python vin_fin_enrichment/build_micro_fin_dataset.py
 """
 
 from __future__ import annotations

@@ -11,7 +11,7 @@ Eigenschaften:
 - SLIM: speichert nur die relevanten Felder (klein genug fuer die Weiterverarbeitung).
 
 Aufruf (am besten im Hintergrund, Laufzeit ~3 Std.):
-    uv run python experiments/vin_fin_enrichment/build_full_vin_cache.py
+    uv run python vin_fin_enrichment/build_full_vin_cache.py
 """
 
 from __future__ import annotations

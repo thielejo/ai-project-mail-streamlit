@@ -2,7 +2,7 @@
 
 > **Status:** Experiment / Kandidat — noch nicht Produktionsmodell.
 > Experiment-Code liegt im Branch `Mail_project_moritz` unter
-> `experiments/vin_fin_enrichment/08_catboost_vs_best.py`.
+> `vin_fin_enrichment/08_catboost_vs_best.py`.
 
 ## Motivation
 
@@ -54,5 +54,5 @@ niedrigste MAPE (12,6 %).
 
 ```bash
 # Branch Mail_project_moritz, Voraussetzung: car_prices_fin.csv (clean + Hubraum)
-uv run python experiments/vin_fin_enrichment/08_catboost_vs_best.py
+uv run python vin_fin_enrichment/08_catboost_vs_best.py
 ```
