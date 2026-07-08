@@ -29,7 +29,7 @@ from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardSc
 FEATURES_PATH = Path("car_prices_features.csv")
 OUTPUT_DIR = Path("model_comparison")
 RESULTS_JSON = OUTPUT_DIR / "model_comparison.json"
-RESULTS_MD = OUTPUT_DIR / "model_comparison.md"
+RESULTS_MD = Path("docs/stage1/stage1_benchmark_models.md")
 
 RANDOM_STATE = 42
 TEST_SIZE = 0.2

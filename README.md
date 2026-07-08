@@ -31,12 +31,12 @@ Stage ownership notes are archived in
 
 ```
 app/                        Streamlit demo app (Stage 1 + Stage 2 + Stage 3)
-docs/                       Project proposal, session notes, data documentation
-  stage1/                   Stage 1 model reports and V2 handoff
+docs/                       Project proposal, data documentation, stage reports
+  stage1/                   Stage 1 model reports and comparisons
   stage2/                   Stage 2 CPI evaluation
   stage3/                   Stage 3 seasonality evaluation
 archive/                    Historical handoffs / deprecated notes
-model_comparison/           Model benchmarking results (6 models compared)
+model_comparison/           Machine-readable model benchmark results
 models/                     Trained model files and evaluation results
 exploration/                Exploratory analysis notebooks
 scripts/
@@ -113,7 +113,7 @@ The V2 improvement is a Stage 1 result. It does not belong to Stage 3.
 Current Stage 1 model: see [`docs/stage1/stage1_current_model.md`](docs/stage1/stage1_current_model.md)  
 Strict model comparison: see [`docs/stage1/stage1_model_comparison.md`](docs/stage1/stage1_model_comparison.md)  
 Error by price segment: see [`model_results.md`](model_results.md)
-Full model comparison (6 models): see [`model_comparison/model_comparison.md`](model_comparison/model_comparison.md)
+Full model comparison (6 models): see [`docs/stage1/stage1_benchmark_models.md`](docs/stage1/stage1_benchmark_models.md)
 
 ### Stage 2 — CPI Macro Adjustment
 
