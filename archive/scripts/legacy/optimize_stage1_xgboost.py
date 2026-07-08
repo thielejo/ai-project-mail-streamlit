@@ -23,7 +23,7 @@ from train_stage1_production import (
 )
 
 
-OUTPUT = Path("archive/model_artifacts_2026-07-08/stage1_xgboost_optimization.json")
+OUTPUT = Path("archive/models/artifacts/stage1_xgboost_optimization.json")
 TUNING_ROWS = 200_000
 
 CATEGORICAL = [

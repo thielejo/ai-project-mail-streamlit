@@ -59,6 +59,7 @@ with the app and re-evaluation for Stage 2 and Stage 3.
 
 Details:
 
+- Model results overview: [`docs/model_results.md`](docs/model_results.md)
 - Current Stage-1 model note: [`docs/stage1/stage1_current_model.md`](docs/stage1/stage1_current_model.md)
 - V1/V2 comparison: [`docs/stage1/stage1_model_comparison.md`](docs/stage1/stage1_model_comparison.md)
 - CatBoost tuning: [`docs/stage1/stage1_tuning_results.md`](docs/stage1/stage1_tuning_results.md)
@@ -96,7 +97,7 @@ at 1.0. See [`docs/stage3/model_results_stage3.md`](docs/stage3/model_results_st
 ```
 app/                  Streamlit demo app
 archive/              Historical handoffs, deprecated notes, archived notebooks
-docs/                 Project documentation and model reports
+docs/                 Project documentation, model reports, and presentation slides
 exploration/          Exploratory analysis notebooks
 model_comparison/     Machine-readable model benchmark results
 models/               Trained model files and evaluation outputs

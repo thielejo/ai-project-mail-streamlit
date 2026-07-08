@@ -159,14 +159,16 @@ docs/
   stage1/                   ← V2-Übergabe und Stage-1-V1/V2-Ergebnisse.
   stage2/                   ← CPI-Report.
   stage3/                   ← Saison-Report.
+  presentations/            ← Präsentationsfolien.
 
 archive/
-  model_artifacts_2026-07-08/
+  models/artifacts/
                             ← alte Modellartefakte, Fallbacks und Vergleichsoutputs
 
 model_comparison/
   model_comparison.json     ← Rohdaten des Benchmarks
 
+docs/model_results.md       ← zentrale aktuelle Ergebnisübersicht
 docs/stage1/stage1_current_model.md
                             ← aktuelles Stage-1-Ergebnis
 docs/stage1/stage1_model_comparison.md
@@ -179,13 +181,15 @@ docs/stage2/model_results_stage2.md
                             ← Stage-2-Evaluierung
 docs/stage3/model_results_stage3.md
                             ← Stage-3-Saisonalität inkl. Datenabdeckung
+docs/presentations/slides_zwischenpraesentation.pptx
+                            ← Zwischenpräsentation
 
 docs/
   project_proposal_v2.md   ← Offizieller Projektvorschlag
   data_cleaning.md          ← Datenbereinigungs-Entscheidungen
   feature_engineering.md    ← Feature-Engineering-Entscheidungen
-  session_2026-06-04.md     ← Session-Notizen: Macro-Pipeline-Setup
-  session_2026-06-09.md     ← Session-Notizen: macro_index-Korrekturen
+  macro_pipeline_session.md     ← Session-Notizen: Macro-Pipeline-Setup
+  macro_index_corrections_session.md     ← Session-Notizen: macro_index-Korrekturen
 
 data/macro_index.csv             ← FRED-Makrodaten 1996–2026-06 (9 Spalten)
 data/car_prices_clean.csv        ← Bereinigte Auktionsdaten (558.743 Zeilen)

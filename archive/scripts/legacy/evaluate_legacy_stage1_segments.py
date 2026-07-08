@@ -23,9 +23,9 @@ from train_stage1_legacy_histgb import (
 )
 
 FEATURES_PATH = Path("data/car_prices_features.csv")
-MODEL_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_model.joblib")
-METRICS_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_metrics.json")
-RESULTS_PATH = Path("model_results.md")
+MODEL_PATH = Path("archive/models/artifacts/stage1_legacy_histgb_model.joblib")
+METRICS_PATH = Path("archive/models/artifacts/stage1_legacy_histgb_metrics.json")
+RESULTS_PATH = Path("archive/docs/stage1/model_results_legacy_histgb.md")
 
 
 def print_segment_table(segment_metrics: list[dict]) -> None:

@@ -143,8 +143,8 @@ docs/
   project_proposal_v2.md   ← Offizieller Projektvorschlag
   data_cleaning.md          ← Datenbereinigungs-Entscheidungen
   feature_engineering.md    ← Feature-Engineering-Entscheidungen
-  session_2026-06-04.md     ← Session-Notizen: Macro-Pipeline-Setup
-  session_2026-06-09.md     ← Session-Notizen: macro_index-Korrekturen
+  macro_pipeline_session.md     ← Session-Notizen: Macro-Pipeline-Setup
+  macro_index_corrections_session.md     ← Session-Notizen: macro_index-Korrekturen
 
 macro_index.csv             ← FRED-Makrodaten 1996–2026-06 (9 Spalten)
 car_prices_clean.csv        ← Bereinigte Auktionsdaten (558.743 Zeilen)

@@ -19,9 +19,9 @@ from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
 
 
 INPUT_PATH = Path("data/car_prices_features.csv")
-MODEL_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_model.joblib")
-METRICS_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_metrics.json")
-RESULTS_PATH = Path("model_results.md")
+MODEL_PATH = Path("archive/models/artifacts/stage1_legacy_histgb_model.joblib")
+METRICS_PATH = Path("archive/models/artifacts/stage1_legacy_histgb_metrics.json")
+RESULTS_PATH = Path("archive/docs/stage1/model_results_legacy_histgb.md")
 RANDOM_STATE = 42
 
 TARGET_COLUMN = "sellingprice"
@@ -382,13 +382,13 @@ Target variable:
 Run this command from the project root:
 
 ```bash
-uv run python archive/script_legacy_2026-07-08/train_stage1_legacy_histgb.py
+uv run python archive/scripts/legacy/train_stage1_legacy_histgb.py
 ```
 
 For full-dataset training, run:
 
 ```bash
-uv run python archive/script_legacy_2026-07-08/train_stage1_legacy_histgb.py --max-rows 0
+uv run python archive/scripts/legacy/train_stage1_legacy_histgb.py --max-rows 0
 ```
 """
     path.write_text(content, encoding="utf-8")

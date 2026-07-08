@@ -32,11 +32,11 @@ from stage1_runtime import (  # noqa: E402
 FEATURES_PATH = PROJECT_ROOT / "data" / "car_prices_features.csv"
 STAGE2_EVAL_PATH = PROJECT_ROOT / "models" / "stage2_evaluation.json"
 SHARED_SPLIT_BENCHMARK_PATH = (
-    PROJECT_ROOT / "archive" / "model_artifacts_2026-07-08" / "stage1_shared_split_model_comparison.json"
+    PROJECT_ROOT / "archive" / "models" / "artifacts" / "stage1_shared_split_model_comparison.json"
 )
 MACRO_PATH = PROJECT_ROOT / "data" / "macro_index.csv"
 SEASONALITY_V1_PATH = (
-    PROJECT_ROOT / "archive" / "model_artifacts_2026-07-08" / "stage3_legacy_seasonality_factors.csv"
+    PROJECT_ROOT / "archive" / "models" / "artifacts" / "stage3_legacy_seasonality_factors.csv"
 )
 SEASONALITY_V2_PATH = PROJECT_ROOT / "models" / "stage3_seasonality_factors.csv"
 

@@ -34,7 +34,7 @@ from train_stage1_production import (
 )
 
 INPUT_PATH = Path("data/car_prices_clean.csv")
-OUTPUT_JSON = Path("archive/model_artifacts_2026-07-08/stage1_shared_split_model_comparison.json")
+OUTPUT_JSON = Path("archive/models/artifacts/stage1_shared_split_model_comparison.json")
 OUTPUT_MD = Path("docs/stage1/stage1_model_comparison.md")
 RANDOM_STATE = 42
 BOOTSTRAP_SAMPLES = 1_000
@@ -124,7 +124,7 @@ def write_markdown(payload: dict, path: Path) -> None:
         "## Reproduktion",
         "",
         "```powershell",
-        "uv run python archive/script_legacy_2026-07-08/compare_stage1_legacy_vs_production_shared_split.py --max-rows 0",
+        "uv run python archive/scripts/legacy/compare_stage1_legacy_vs_production_shared_split.py --max-rows 0",
         "```",
     ]
     path.write_text("\n".join(rows) + "\n", encoding="utf-8")

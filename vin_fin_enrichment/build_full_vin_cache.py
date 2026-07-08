@@ -25,7 +25,7 @@ import requests
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 SRC = REPO / "data" / "car_prices_clean.csv"
-SEED = REPO / "archive/fin_enrichment_legacy_2026-07-08/vin_decoded_cache_sample.csv"
+SEED = REPO / "archive/fin_enrichment/legacy/vin_decoded_cache_sample.csv"
 FULL = HERE / "vin_decoded_cache_full.csv"     # wachsender Voll-Cache (resume-Ziel)
 
 BATCH_SIZE = 50

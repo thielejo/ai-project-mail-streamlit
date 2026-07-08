@@ -7,7 +7,7 @@ import joblib
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-ARCHIVE_MODEL_DIR = PROJECT_ROOT / "archive" / "model_artifacts_2026-07-08"
+ARCHIVE_MODEL_DIR = PROJECT_ROOT / "archive" / "models" / "artifacts"
 V1_MODEL_PATH = ARCHIVE_MODEL_DIR / "stage1_legacy_histgb_model.joblib"
 V2_MODEL_PATH = PROJECT_ROOT / "models" / "stage1_production_model.joblib"
 V1_METRICS_PATH = ARCHIVE_MODEL_DIR / "stage1_legacy_histgb_metrics.json"
