@@ -222,11 +222,21 @@ st.markdown(
         }
 
         /* --- Weiße Auswahl-/Zahlenfelder mit blauer Umrandung --- */
-        div[data-baseweb="select"] > div,
-        .stNumberInput div[data-baseweb="input"] {
+        div[data-baseweb="select"] > div {
             background-color: #ffffff !important;
             border: 1.5px solid #0b7cff !important;
             border-radius: 8px !important;
+        }
+        .stNumberInput > div:has(input) {
+            background-color: #ffffff !important;
+            border: 1.5px solid #0b7cff !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+        }
+        .stNumberInput div[data-baseweb="input"] {
+            background-color: #ffffff !important;
+            border: 0 !important;
+            border-radius: 0 !important;
         }
         .stNumberInput input,
         .stNumberInput div[data-baseweb="input"] input,
@@ -235,14 +245,16 @@ st.markdown(
         }
         .stNumberInput button {
             background-color: #ffffff !important;
-            border-color: #d7e7ff !important;
+            border: 0 !important;
+            border-left: 1px solid #d7e7ff !important;
+            border-radius: 0 !important;
             color: #071d49 !important;
         }
         .stNumberInput button:hover {
-            border-color: #0b7cff !important;
+            background-color: #eaf3ff !important;
             color: #0b7cff !important;
         }
-        .stNumberInput div[data-baseweb="input"]:focus-within,
+        .stNumberInput > div:has(input):focus-within,
         div[data-baseweb="select"] > div:focus-within {
             box-shadow: 0 0 0 2px rgba(11, 124, 255, 0.25) !important;
         }
