@@ -15,7 +15,7 @@ Vollständige Voruntersuchung: `vin_fin_enrichment/` (`FIN_Test.md`, `INTEGRATIO
 
 ## Methode
 
-- Pipeline identisch zu `scripts/train_stage1_v2.py` (XGBoost VotingRegressor 50/50,
+- Pipeline identisch zu `scripts/train_stage1_alt_production.py` (XGBoost VotingRegressor 50/50,
   `reg:squarederror` roh + `reg:absoluteerror` log, OneHot `min_frequency=20`, 700 Bäume).
 - Einzige Änderung: `displacement` als numerisches Feature (per VIN aus dem NHTSA-Decode gejoint).
 - Hubraum-Abdeckung 99 %; fehlende Werte mit Median gefüllt.

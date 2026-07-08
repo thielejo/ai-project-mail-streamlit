@@ -30,7 +30,7 @@ from train_stage1_v2 import (
 
 INPUT_PATH = Path("car_prices_clean.csv")
 OUTPUT_JSON = Path("models/stage1_v1_v2_shared_split.json")
-OUTPUT_MD = Path("model_results_stage1_v1_v2_shared_split.md")
+OUTPUT_MD = Path("model_results_stage1_alt_shared_split.md")
 RANDOM_STATE = 42
 BOOTSTRAP_SAMPLES = 1_000
 
@@ -119,7 +119,7 @@ def write_markdown(payload: dict, path: Path) -> None:
         "## Reproduktion",
         "",
         "```powershell",
-        "uv run python scripts/compare_stage1_v1_v2_shared_split.py --max-rows 0",
+        "uv run python scripts/compare_stage1_alt_shared_split.py --max-rows 0",
         "```",
     ]
     path.write_text("\n".join(rows) + "\n", encoding="utf-8")

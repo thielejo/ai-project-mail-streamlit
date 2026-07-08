@@ -176,14 +176,14 @@ tree_method="hist"
 Reproduktion:
 
 ```powershell
-uv run python scripts/train_stage1_v2.py --max-rows 0
+uv run python scripts/train_stage1_alt_production.py --max-rows 0
 ```
 
 Der Lauf überschreibt das V2-Modell und seine Ergebnisdateien. Vorher Arbeitsstand sichern.
 
 ## 7. Wissenschaftlich strenger gemeinsamer Vergleich
 
-V1 und V2 wurden mit `scripts/compare_stage1_v1_v2_shared_split.py` von Grund auf
+V1 und V2 wurden mit `scripts/compare_stage1_alt_shared_split.py` von Grund auf
 neu trainiert. Beide erhielten exakt dieselben 423.335 Trainingszeilen und wurden
 auf denselben 105.834 zuvor unangetasteten Testzeilen geprüft. Gespeicherte Modelle
 wurden für diesen Vergleich weder geladen noch überschrieben.
@@ -196,7 +196,7 @@ deutlich und nicht nur eine zufällige Schwankung.
 Ergebnisdateien:
 
 - `models/stage1_v1_v2_shared_split.json`
-- `model_results_stage1_v1_v2_shared_split.md`
+- `model_results_stage1_alt_shared_split.md`
 
 Verbleibende Einschränkung: Der Split ist zufällig und kein zeitlicher Zukunftstest.
 
@@ -292,12 +292,12 @@ Verbesserung: 13,31 $ beziehungsweise 0,98 %. Stage 3 ist bewusst nur eine Feink
 |---|---|
 | `app/streamlit_app.py` | deutsche Oberfläche und Gesamtpipeline |
 | `scripts/stage1_runtime.py` | V2 laden, V1-Fallback, Eingaben bauen |
-| `scripts/train_stage1_v2.py` | vollständiges V2-Training |
+| `scripts/train_stage1_alt_production.py` | vollständiges V2-Training |
 | `scripts/optimize_stage1_v2.py` | Architektur- und Parametersuche |
 | `models/price_model_v2.joblib` | V2-Produktionsmodell |
 | `models/price_model.joblib` | V1-Fallback |
 | `models/price_model_v2_metrics.json` | V2-Metriken und V1-Vergleich |
-| `model_results_stage1_v2.md` | lesbare V2-Ergebnisse |
+| `model_results_stage1_alt_production.md` | lesbare V2-Ergebnisse |
 | `scripts/stage2_macro.py` | CPI-Anpassung |
 | `scripts/evaluate_stage2.py` | Stage-2-Evaluation mit V2 |
 | `models/stage2_evaluation.json` | Stage-2-Rohresultate |

@@ -21,9 +21,9 @@ Hierhin gehören:
 Wichtige Dateien:
 
 - `scripts/train_price_model.py` — ursprüngliches Stage-1-Modell
-- `scripts/train_stage1_v2.py` — Stage-1-V2-Modell
+- `scripts/train_stage1_alt_production.py` — Stage-1-V2-Modell
 - `scripts/optimize_stage1_v2.py` — Stage-1-V2-Optimierung
-- `scripts/compare_stage1_v1_v2_shared_split.py` — strenger V1/V2-Vergleich
+- `scripts/compare_stage1_alt_shared_split.py` — strenger V1/V2-Vergleich
 - `scripts/stage1_runtime.py` — Stage-1-Laden und Input-Building für die App
 - `models/price_model.joblib` — V1-Fallback
 - `models/price_model_v2.joblib` — Stage-1-V2-Produktionsmodell

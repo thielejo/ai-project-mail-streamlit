@@ -18,7 +18,7 @@ Unlike the existing model, V2 deliberately excludes sale month and `year_month`.
 
 ## Evaluation
 
-> Preferred scientific comparison: `model_results_stage1_v1_v2_shared_split.md`.
+> Preferred scientific comparison: `model_results_stage1_alt_shared_split.md`.
 > In that benchmark both models are retrained from scratch on the same split;
 > V2 reduces MAE from $1,830.95 to $1,370.15 (25.17%).
 
@@ -46,7 +46,7 @@ The ensemble is optimized for MAE in dollars. Compared with the single log model
 ## Reproduce
 
 ```bash
-uv run python scripts/train_stage1_v2.py --max-rows 0
+uv run python scripts/train_stage1_alt_production.py --max-rows 0
 ```
 
 Omit `--max-rows 0` for a faster 200,000-row development run.

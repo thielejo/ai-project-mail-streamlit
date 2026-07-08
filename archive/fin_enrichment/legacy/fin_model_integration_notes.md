@@ -24,7 +24,7 @@ Wir haben **Pascals V2-Modell** (reiche Manheim-Merkmale: trim, transmission, st
 
 ### Strang A — V2 (Pascal)
 - Branch-Ursprung: `main` / `mail_project_pascal`
-- Skript: `scripts/train_stage1_v2.py`
+- Skript: `scripts/train_stage1_alt_production.py`
 - Idee: das schlanke Stage-1-Modell um die bislang weggelassenen Manheim-Merkmale erweitern (Ausstattung, Getriebe, Bundesstaat, Außen-/Innenfarbe, Marke-Modell-Interaktion).
 - Modell: XGBoost VotingRegressor 50/50 (`reg:squarederror` roh + `reg:absoluteerror` log).
 - Ergebnis: MAE $1.370 (−25 % gegenüber dem schlanken Modell).
@@ -40,7 +40,7 @@ Wir haben **Pascals V2-Modell** (reiche Manheim-Merkmale: trim, transmission, st
 
 Neues Skript: **`scripts/train_stage1_v2_fin.py`**
 
-- Identisch zu `train_stage1_v2.py` (gleiche Features, Hyperparameter, Filter, Split, Ensemble).
+- Identisch zu `train_stage1_alt_production.py` (gleiche Features, Hyperparameter, Filter, Split, Ensemble).
 - **Einzige Änderung:** `displacement` (Hubraum) wird als numerisches Feature ergänzt, per VIN aus `vin_decoded_cache_full.csv` gejoint.
 - Fehlende Hubraum-Werte (~1 %) werden mit dem Median gefüllt.
 - Ausgabe: `models/price_model_v2_fin.joblib` + `models/price_model_v2_fin_metrics.json`.

@@ -20,7 +20,7 @@ from xgboost import XGBRegressor
 INPUT_PATH = Path("car_prices_clean.csv")
 MODEL_PATH = Path("models/price_model_v2.joblib")
 METRICS_PATH = Path("models/price_model_v2_metrics.json")
-RESULTS_PATH = Path("model_results_stage1_v2.md")
+RESULTS_PATH = Path("model_results_stage1_alt_production.md")
 CURRENT_MODEL_PATH = Path("models/price_model.joblib")
 
 RANDOM_STATE = 42
@@ -291,7 +291,7 @@ def write_results(payload: dict, path: Path) -> None:
         "## Reproduce",
         "",
         "```bash",
-        "uv run python scripts/train_stage1_v2.py --max-rows 0",
+        "uv run python scripts/train_stage1_alt_production.py --max-rows 0",
         "```",
         "",
         "Omit `--max-rows 0` for a faster 200,000-row development run.",

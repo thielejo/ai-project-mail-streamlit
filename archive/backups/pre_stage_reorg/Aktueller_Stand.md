@@ -102,7 +102,7 @@ scripts/
   build_features.py         ← Feature Engineering → car_prices_features.csv
   train_price_model.py      ← Stage-1-Training (HistGB + Segment-Analyse).
                               Speichert models/price_model.joblib.
-  train_stage1_v2.py        ← Separates Stage-1-V2-Ensemble; vollständiges
+  train_stage1_alt_production.py        ← Separates Stage-1-V2-Ensemble; vollständiges
                               Training ohne Überschreiben des alten Modells.
   optimize_stage1_v2.py     ← Validierungsbasierte Suche nach Architektur,
                               Zielfunktion, Hyperparametern und Gewichtung.

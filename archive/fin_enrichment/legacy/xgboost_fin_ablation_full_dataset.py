@@ -1,7 +1,7 @@
 """
 Test 8 (FINAL) — Pascals echtes V2 vs. V2 + Hubraum, voller Datensatz.
 
-Repliziert EXAKT das V2-Ensemble aus scripts/train_stage1_v2.py (main):
+Repliziert EXAKT das V2-Ensemble aus scripts/train_stage1_alt_production.py (main):
 XGBoost VotingRegressor 50/50 (reg:squarederror roh + reg:absoluteerror log),
 OneHotEncoder(min_frequency=20), 700 Baeume, gleiche Features/Filter/Split.
 
