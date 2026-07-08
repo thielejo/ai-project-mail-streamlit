@@ -406,9 +406,9 @@ Literatur, die im Chat genutzt/erwähnt wurde:
 
 ## 11. KI-Nutzung im Projekt
 
-Eine Datei zur KI-Nutzung wurde erstellt und gepusht:
+Die KI-Nutzung ist jetzt direkt in der README dokumentiert:
 
-- `KI_NUTZUNG_IM_PROJEKT.md`
+- `README.md`, Abschnitt "AI Usage"
 
 Kernaussage:
 
