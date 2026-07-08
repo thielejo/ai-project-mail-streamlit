@@ -11,11 +11,11 @@ wheels/
 .uv-cache/
 
 # Generated large datasets (regenerate via scripts/enrich_macro.py)
-car_prices_macro.csv
+data/car_prices_macro.csv
 
-# VIN/FIN enrichment — large generated files (regenerate via experiments/vin_fin_enrichment/)
-experiments/vin_fin_enrichment/vin_decoded_cache_full.csv
-car_prices_fin.csv
+# VIN/FIN enrichment — large generated files (regenerate via vin_fin_enrichment/)
+vin_fin_enrichment/vin_decoded_cache_full.csv
+data/car_prices_fin.csv
 
 # CatBoost (grosse Modelle + Trainingslogs, regenerierbar)
 *.cbm

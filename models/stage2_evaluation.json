@@ -1,7 +1,7 @@
 {
   "created_at": "2026-06-24T17:50:10.605930+00:00",
   "evaluation_method": "time_neutral_stage1_v2_then_historical_cpi",
-  "stage1_model": "models\\price_model_v2.joblib",
+  "stage1_model": "models\\stage1_production_model.joblib",
   "reference_year_month": "time-neutral-v2",
   "stage1_metrics_historical": {
     "mae": 1370.16,

@@ -9,10 +9,11 @@ import numpy as np
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-V1_MODEL_PATH = PROJECT_ROOT / "models" / "price_model.joblib"
-V2_MODEL_PATH = PROJECT_ROOT / "models" / "price_model_v2.joblib"
-V1_METRICS_PATH = PROJECT_ROOT / "models" / "price_model_metrics.json"
-V2_METRICS_PATH = PROJECT_ROOT / "models" / "price_model_v2_metrics.json"
+ARCHIVE_MODEL_DIR = PROJECT_ROOT / "archive" / "models" / "artifacts"
+V1_MODEL_PATH = ARCHIVE_MODEL_DIR / "stage1_legacy_histgb_model.joblib"
+V2_MODEL_PATH = PROJECT_ROOT / "models" / "stage1_production_model.joblib"
+V1_METRICS_PATH = ARCHIVE_MODEL_DIR / "stage1_legacy_histgb_metrics.json"
+V2_METRICS_PATH = PROJECT_ROOT / "models" / "stage1_production_metrics.json"
 
 # --- CatBoost (getunt + FIN/Hubraum) — neues bevorzugtes Modell ---
 CATBOOST_MODEL_PATH = PROJECT_ROOT / "models" / "price_model_catboost.cbm"
@@ -41,7 +42,12 @@ def load_production_model() -> tuple[object, str]:
         model.load_model(str(CATBOOST_MODEL_PATH))
         return model, "catboost"
     if V2_MODEL_PATH.exists():
-        return joblib.load(V2_MODEL_PATH), "v2"
+        try:
+            return joblib.load(V2_MODEL_PATH), "v2"
+        except Exception as error:
+            if not V1_MODEL_PATH.exists():
+                raise
+            print(f"Could not load Stage 1 V2 model, falling back to V1: {error}")
     if V1_MODEL_PATH.exists():
         return joblib.load(V1_MODEL_PATH), "v1"
     raise FileNotFoundError("Kein Stage-1-Modell verfuegbar (CatBoost/V2/V1).")

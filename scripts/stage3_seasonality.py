@@ -13,11 +13,13 @@ import numpy as np
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-FEATURES_PATH = PROJECT_ROOT / "car_prices_clean.csv"
-MODEL_PATH = PROJECT_ROOT / "models" / "price_model_v2.joblib"
-LEGACY_MODEL_PATH = PROJECT_ROOT / "models" / "price_model.joblib"
-MACRO_PATH = PROJECT_ROOT / "macro_index.csv"
-SEASONALITY_PATH = PROJECT_ROOT / "models" / "seasonality_factors_v2.csv"
+FEATURES_PATH = PROJECT_ROOT / "data" / "car_prices_clean.csv"
+MODEL_PATH = PROJECT_ROOT / "models" / "stage1_production_model.joblib"
+LEGACY_MODEL_PATH = (
+    PROJECT_ROOT / "archive" / "models" / "artifacts" / "stage1_legacy_histgb_model.joblib"
+)
+MACRO_PATH = PROJECT_ROOT / "data" / "macro_index.csv"
+SEASONALITY_PATH = PROJECT_ROOT / "models" / "stage3_seasonality_factors.csv"
 
 FEATURE_COLUMNS = [
     "vehicle_age",
@@ -60,8 +62,8 @@ def prepare_seasonality_data(
     macro_path: Path = MACRO_PATH,
 ) -> pd.DataFrame:
     """Create vehicle-mix and CPI-adjusted rows used to estimate seasonality."""
-    if model_path.name == "price_model_v2.joblib":
-        from train_stage1_v2 import FEATURES as V2_FEATURES, load_data
+    if model_path.name == "stage1_production_model.joblib":
+        from train_stage1_production import FEATURES as V2_FEATURES, load_data
 
         df = load_data(features_path, max_rows=0)
         prediction_input = df[V2_FEATURES]

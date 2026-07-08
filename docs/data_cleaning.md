@@ -1,17 +1,17 @@
 # Data Cleaning: Manheim Car Prices
 
-This document summarizes the cleaning steps applied to the raw Manheim vehicle auction dataset (`car_prices.csv`) and the resulting output file (`car_prices_clean.csv`).
+This document summarizes the cleaning steps applied to the raw Manheim vehicle auction dataset (`data/car_prices.csv`) and the resulting output file (`data/car_prices_clean.csv`).
 
 ## Input
 
-- Source file: `car_prices.csv`
+- Source file: `data/car_prices.csv`
 - Original rows: 558,837
 - Original columns: 16
 - Data period: vehicle transactions from 2014-2015
 
 ## Output
 
-- Cleaned file: `car_prices_clean.csv`
+- Cleaned file: `data/car_prices_clean.csv`
 - Cleaned rows: 558,743
 - Removed rows: 94
 - Reproducible script: `scripts/clean_car_prices.py`
@@ -136,4 +136,4 @@ Run the cleaning script from the project root:
 python3 scripts/clean_car_prices.py
 ```
 
-This will regenerate `car_prices_clean.csv`.
+This will regenerate `data/car_prices_clean.csv`.

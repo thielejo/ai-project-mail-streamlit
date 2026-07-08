@@ -4,13 +4,13 @@ This document summarizes the feature engineering step after cleaning the Manheim
 
 ## Input
 
-- Source file: `car_prices_clean.csv`
+- Source file: `data/car_prices_clean.csv`
 - Input rows: 558,743
 - Script: `scripts/build_features.py`
 
 ## Output
 
-- Feature file: `car_prices_features.csv`
+- Feature file: `data/car_prices_features.csv`
 - Output rows: 534,318
 - Removed rows: 24,425
 
@@ -38,4 +38,4 @@ Run this command from the project root:
 uv run python scripts/build_features.py
 ```
 
-This regenerates `car_prices_features.csv`.
+This regenerates `data/car_prices_features.csv`.

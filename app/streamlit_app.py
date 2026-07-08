@@ -35,12 +35,20 @@ from stage1_runtime import (  # noqa: E402
     load_production_model,
 )
 
-FEATURES_PATH = PROJECT_ROOT / "car_prices_features.csv"
+FEATURES_PATH = PROJECT_ROOT / "data" / "car_prices_features.csv"
 STAGE2_EVAL_PATH = PROJECT_ROOT / "models" / "stage2_evaluation.json"
-SHARED_SPLIT_BENCHMARK_PATH = PROJECT_ROOT / "models" / "stage1_v1_v2_shared_split.json"
-MACRO_PATH = PROJECT_ROOT / "macro_index.csv"
-SEASONALITY_V1_PATH = PROJECT_ROOT / "models" / "seasonality_factors.csv"
-SEASONALITY_V2_PATH = PROJECT_ROOT / "models" / "seasonality_factors_v2.csv"
+SHARED_SPLIT_BENCHMARK_PATH = (
+    PROJECT_ROOT / "archive" / "models" / "artifacts" / "stage1_shared_split_model_comparison.json"
+)
+MACRO_PATH = PROJECT_ROOT / "data" / "macro_index.csv"
+SEASONALITY_V1_PATH = (
+    PROJECT_ROOT / "archive" / "models" / "artifacts" / "stage3_legacy_seasonality_factors.csv"
+)
+SEASONALITY_V2_PATH = PROJECT_ROOT / "models" / "stage3_seasonality_factors.csv"
+
+MIN_SIMILAR_VEHICLES = 30
+MIN_MODEL_BODY_VEHICLES = 100
+LUXURY_PRICE_THRESHOLD = 40_000
 
 MACRO_AVAILABLE_YEARS = list(range(1996, 2027))
 MACRO_AVAILABLE_MONTHS = list(range(1, 13))
@@ -120,7 +128,16 @@ def load_model():
 @st.cache_data
 def load_feature_data() -> pd.DataFrame:
     return pd.read_csv(
-        FEATURES_PATH, usecols=["make", "model", "body", "sellingprice", "odometer", "condition"]
+        FEATURES_PATH,
+        usecols=[
+            "make",
+            "model",
+            "body",
+            "vehicle_age",
+            "sellingprice",
+            "odometer",
+            "condition",
+        ],
     )
 
 
@@ -198,6 +215,71 @@ def format_state(value: str) -> str:
 
 def format_color(value: str) -> str:
     return COLOR_LABELS.get(str(value), title_case(value))
+
+
+def get_price_segment(price: float) -> str:
+    if price < 5_000:
+        return "Budget"
+    if price < 10_000:
+        return "Economy"
+    if price < 20_000:
+        return "Mid-Range"
+    if price < LUXURY_PRICE_THRESHOLD:
+        return "Premium"
+    return "Luxury"
+
+
+def get_segment_error(metrics_payload: dict, segment: str) -> dict:
+    segment_metrics = metrics_payload.get("segment_metrics", [])
+    for row in segment_metrics:
+        if row.get("segment") == segment:
+            return row
+    model_metrics = metrics_payload.get("v2_metrics", metrics_payload.get("metrics", {}))
+    return {
+        "segment": segment,
+        "mae": model_metrics.get("mae", 0),
+        "mape_percent": model_metrics.get("mape_percent", 0),
+    }
+
+
+def calculate_price_range(price: float, segment_error: dict) -> tuple[float, float, float]:
+    mae = float(segment_error.get("mae") or 0)
+    mape = float(segment_error.get("mape_percent") or 0) / 100
+    uncertainty = max(mae, price * mape)
+    lower_bound = max(price - uncertainty, 500)
+    upper_bound = price + uncertainty
+    return lower_bound, upper_bound, uncertainty
+
+
+def summarize_data_basis(
+    feature_data: pd.DataFrame,
+    *,
+    make: str,
+    model: str,
+    body: str,
+    vehicle_age: int,
+    odometer_miles: float,
+    condition: float,
+) -> dict:
+    model_body = feature_data[
+        (feature_data["make"] == make)
+        & (feature_data["model"] == model)
+        & (feature_data["body"] == body)
+    ].copy()
+
+    odometer_band = max(15_000, odometer_miles * 0.25)
+    similar = model_body[
+        (model_body["vehicle_age"].between(vehicle_age - 2, vehicle_age + 2))
+        & (model_body["odometer"].between(odometer_miles - odometer_band, odometer_miles + odometer_band))
+        & (model_body["condition"].between(condition - 1, condition + 1))
+    ]
+
+    return {
+        "model_body_count": int(len(model_body)),
+        "similar_count": int(len(similar)),
+        "is_sparse": len(similar) < MIN_SIMILAR_VEHICLES or len(model_body) < MIN_MODEL_BODY_VEHICLES,
+        "odometer_band": int(round(odometer_band)),
+    }
 
 
 data = load_feature_data()
@@ -439,6 +521,39 @@ with right_column:
         help="Veränderung des Gebrauchtwagenpreisniveaus gegenüber dem 2015-Referenzniveau.",
     )
 
+    price_segment = get_price_segment(final_price)
+    segment_error = get_segment_error(metrics, price_segment)
+    data_basis = summarize_data_basis(
+        data,
+        make=selected_make,
+        model=selected_model,
+        body=selected_body,
+        vehicle_age=vehicle_age,
+        odometer_miles=odometer_miles,
+        condition=float(condition),
+    )
+    show_uncertainty_range = data_basis["is_sparse"] or final_price >= LUXURY_PRICE_THRESHOLD
+    if show_uncertainty_range:
+        lower_bound, upper_bound, _uncertainty = calculate_price_range(final_price, segment_error)
+        range_text = f"{format_currency(lower_bound)} bis {format_currency(upper_bound)}"
+
+        if data_basis["is_sparse"]:
+            st.warning(
+                "Für diese Fahrzeugkombination liegen nur wenige vergleichbare historische Verkäufe vor. "
+                f"Gefunden wurden {data_basis['similar_count']} sehr ähnliche Fahrzeuge und "
+                f"{data_basis['model_body_count']} Verkäufe mit gleicher Marke, gleichem Modell und gleicher "
+                f"Karosserieform. Die Schätzung ist deshalb unsicherer; eine grobe Preisrange liegt bei "
+                f"**{range_text}**."
+            )
+
+        if final_price >= LUXURY_PRICE_THRESHOLD:
+            st.info(
+                "Hinweis zum Luxussegment: Bei sehr teuren Fahrzeugen hängt der Preis stärker von "
+                "Ausstattung, Sondermodell, Unfallhistorie, Servicehistorie und individuellen Merkmalen ab. "
+                f"Diese Informationen sind im Datensatz nur begrenzt enthalten; deshalb sollte die Schätzung "
+                f"als Orientierung mit einer groben Spanne von **{range_text}** verstanden werden."
+            )
+
     show_price_breakdown = st.toggle(
         "Preisaufbau anzeigen",
         value=False,
@@ -473,24 +588,6 @@ with right_column:
             delta=f"{delta_pct:+.1f}% gegenüber 2015",
             help="Verhältnis des Gebrauchtwagen-CPI zum Jahresdurchschnitt 2015 (FRED: CUSR0000SETA01).",
         )
-
-    show_market_explanation = st.toggle(
-        "Marktpreis-Erklärung anzeigen",
-        value=False,
-        help="Zeigt kurz, warum der CPI-Multiplikator den Preis nach oben oder unten anpasst.",
-    )
-    if show_market_explanation:
-        if delta_pct > 10:
-            st.warning(
-                f"Gebrauchtwagenpreise liegen **{delta_pct:.1f}% über** dem 2015-Niveau — "
-                f"hauptsächlich durch den COVID-bedingten Angebotsengpass (2021–2022)."
-            )
-        elif delta_pct < -5:
-            st.info(
-                f"Gebrauchtwagenpreise liegen **{abs(delta_pct):.1f}% unter** dem 2015-Niveau."
-            )
-        else:
-            st.info(f"Gebrauchtwagenpreise nahe am 2015-Referenzniveau ({delta_pct:+.1f}%).")
 
     seasonal_observations = int(seasonal_row.get("observations", 0))
     if seasonal_observations == 0:

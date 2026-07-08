@@ -4,7 +4,7 @@ Core formula:
     stage2_price = stage1_price × cpi_multiplier(target_month)
 
 The cpi_multiplier is normalised to the 2015 annual average (= 1.0 in the
-macro_index.csv produced by enrich_macro.py). Stage 1 was trained on 2014–2015
+data/macro_index.csv produced by enrich_macro.py). Stage 1 was trained on 2014–2015
 auction data, so its output represents a 2015-equivalent price level. Multiplying
 by the current CPI ratio adjusts that baseline to today's used-car market.
 """
@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-MACRO_PATH = PROJECT_ROOT / "macro_index.csv"
+MACRO_PATH = PROJECT_ROOT / "data" / "macro_index.csv"
 
 MACRO_SIGNAL_LABELS: dict[str, str] = {
     "cpi_used_cars": "CPI Gebrauchtwagen (FRED)",
@@ -30,7 +30,7 @@ MACRO_SIGNAL_LABELS: dict[str, str] = {
 
 
 def load_macro_index(path: Path = MACRO_PATH) -> pd.DataFrame:
-    """Load macro_index.csv and return it indexed by year_month strings."""
+    """Load data/macro_index.csv and return it indexed by year_month strings."""
     df = pd.read_csv(path)
     df["year_month"] = df["year_month"].astype(str)
     return df.set_index("year_month")
