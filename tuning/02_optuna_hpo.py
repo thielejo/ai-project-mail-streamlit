@@ -8,7 +8,7 @@ Schritt 1. Nutzt einen 80/20-Validierungssplit der Teilstichprobe je Trial
 RESUME-SICHER: Optuna-Study in SQLite. Bei Abbruch erneut starten — die Study
 wird fortgesetzt, bis N_TRIALS erreicht ist.
 
-Aufruf: uv run python tuning_experiment/02_optuna_hpo.py
+Aufruf: uv run python tuning/02_optuna_hpo.py
 """
 from __future__ import annotations
 import json

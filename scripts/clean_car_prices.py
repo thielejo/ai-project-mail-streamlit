@@ -6,8 +6,8 @@ from pathlib import Path
 import pandas as pd
 
 
-INPUT_PATH = Path("car_prices.csv")
-OUTPUT_PATH = Path("car_prices_clean.csv")
+INPUT_PATH = Path("data/car_prices.csv")
+OUTPUT_PATH = Path("data/car_prices_clean.csv")
 
 CATEGORICAL_COLUMNS = [
     "make",

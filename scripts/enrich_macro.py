@@ -5,9 +5,9 @@ from pathlib import Path
 import pandas as pd
 
 
-MICRO_PATH = Path("car_prices_clean.csv")
-MACRO_PATH = Path("macro_index.csv")
-OUTPUT_PATH = Path("car_prices_macro.csv")
+MICRO_PATH = Path("data/car_prices_clean.csv")
+MACRO_PATH = Path("data/macro_index.csv")
+OUTPUT_PATH = Path("data/car_prices_macro.csv")
 
 # FRED series downloaded directly — no API key required
 FRED_BASE = "https://fred.stlouisfed.org/graph/fredgraph.csv?id="

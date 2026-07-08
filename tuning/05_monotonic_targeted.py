@@ -11,7 +11,7 @@ Vergleich gegen das getunte Baseline-Finale (Schritt 4, MAE $1.042, identischer
 Split/Config). Ziel ist NICHT primär MAE-Verbesserung, sondern garantierte
 Plausibilität bei gleichbleibender Genauigkeit.
 
-Aufruf: uv run python tuning_experiment/05_monotonic_targeted.py
+Aufruf: uv run python tuning/05_monotonic_targeted.py
 """
 from __future__ import annotations
 import json

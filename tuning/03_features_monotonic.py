@@ -7,7 +7,7 @@ zwei Erweiterungen:
   (c) + Monotonie-Constraints: Preis fällt monoton mit odometer/Alter,
        steigt mit condition/Baujahr/Hubraum (Domänenwissen, Plausibilität).
 
-Aufruf: uv run python tuning_experiment/03_features_monotonic.py
+Aufruf: uv run python tuning/03_features_monotonic.py
 """
 from __future__ import annotations
 import json

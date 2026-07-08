@@ -10,7 +10,7 @@ Vereint die zwei Entwicklungsstraenge des Teams:
 Architektur und Hyperparameter sind identisch zu scripts/train_stage1_production.py;
 einzige Aenderung: `displacement` wird als numerisches Feature ergaenzt.
 
-Datenquelle: car_prices_clean.csv + Hubraum aus dem VIN-Decode-Cache
+Datenquelle: data/car_prices_clean.csv + Hubraum aus dem VIN-Decode-Cache
 (vin_fin_enrichment/vin_decoded_cache_full.csv), per VIN gejoint.
 
 Aufruf:
@@ -37,7 +37,7 @@ from sklearn.preprocessing import OneHotEncoder
 from xgboost import XGBRegressor
 
 REPO = Path(__file__).resolve().parent.parent
-INPUT_PATH = REPO / "car_prices_clean.csv"
+INPUT_PATH = REPO / "data" / "car_prices_clean.csv"
 CACHE_PATH = REPO / "vin_fin_enrichment/vin_decoded_cache_full.csv"
 MODEL_PATH = REPO / "models/stage1_fin_model.joblib"
 METRICS_PATH = REPO / "models/stage1_fin_metrics.json"

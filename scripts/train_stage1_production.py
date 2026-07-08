@@ -17,7 +17,7 @@ from sklearn.preprocessing import OneHotEncoder
 from xgboost import XGBRegressor
 
 
-INPUT_PATH = Path("car_prices_clean.csv")
+INPUT_PATH = Path("data/car_prices_clean.csv")
 MODEL_PATH = Path("models/stage1_production_model.joblib")
 METRICS_PATH = Path("models/stage1_production_metrics.json")
 RESULTS_PATH = Path("docs/stage1/model_results_stage1_v2.md")

@@ -1,8 +1,8 @@
-# Stage 1 — Tuning-Experiment (CatBoost + Hubraum)
+# Stage 1 — Tuning (CatBoost + Hubraum)
 
-> Vollständiges Experiment mit Skripten: `tuning_experiment/` (README + 5 Schritte).
+> Vollständiges Tuning mit Skripten: `tuning/` (README + 5 Schritte).
 > Bestes Modell (`price_model_catboost_tuned.cbm`, 107 MB) ist gitignored,
-> reproduzierbar via `tuning_experiment/04_final_full_dataset.py`.
+> reproduzierbar via `tuning/04_final_full_dataset.py`.
 
 ## Ausgangspunkt
 
@@ -42,7 +42,7 @@ Ausstattung, Scheckheft), die der Manheim-Datensatz nicht enthält.
 
 ## Status
 
-Experiment abgeschlossen und dokumentiert. Das getunte Modell ist **noch nicht**
+Tuning abgeschlossen und dokumentiert. Das getunte Modell ist **noch nicht**
 in die Streamlit-App / Stage 2–3 integriert (die App nutzt weiterhin V2). Bei
 einer späteren Integration müssen Stage 2 (CPI-Backtest) und Stage 3
 (Saisonfaktoren) gegen das neue Stage-1 neu evaluiert werden — Logik unverändert,

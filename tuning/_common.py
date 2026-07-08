@@ -1,4 +1,4 @@
-"""Gemeinsame Daten-/Hilfsfunktionen für die Tuning-Experimente (CatBoost)."""
+"""Gemeinsame Daten-/Hilfsfunktionen für die Tuninge (CatBoost)."""
 from __future__ import annotations
 from pathlib import Path
 
@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 REPO = Path(__file__).resolve().parents[1]
-SRC = REPO / "car_prices_fin.csv"
+SRC = REPO / "data" / "car_prices_fin.csv"
 RANDOM_STATE = 42
 TARGET = "sellingprice"
 

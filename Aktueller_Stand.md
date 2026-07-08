@@ -122,7 +122,7 @@ app/
                               Bewertungsdatum-Selector 1996–2026.
 
 scripts/
-  build_features.py         ← Feature Engineering → car_prices_features.csv
+  build_features.py         ← Feature Engineering → data/car_prices_features.csv
   train_stage1_production.py
                             ← aktuelles Stage-1-Produktionsmodell.
                               Schreibt models/stage1_production_model.joblib.
@@ -141,7 +141,7 @@ scripts/
                               models/stage3_evaluation.json und
                               docs/stage3/model_results_stage3.md
   compare_models.py         ← 6-Modell-Benchmark (Ergebnisse in model_comparison/)
-  enrich_macro.py           ← FRED-Download → macro_index.csv (Internet nötig)
+  enrich_macro.py           ← FRED-Download → data/macro_index.csv (Internet nötig)
 
 models/
   stage1_production_model.joblib
@@ -187,13 +187,13 @@ docs/
   session_2026-06-04.md     ← Session-Notizen: Macro-Pipeline-Setup
   session_2026-06-09.md     ← Session-Notizen: macro_index-Korrekturen
 
-macro_index.csv             ← FRED-Makrodaten 1996–2026-06 (9 Spalten)
-car_prices_clean.csv        ← Bereinigte Auktionsdaten (558.743 Zeilen)
-car_prices_features.csv     ← Feature-Engineering-Ergebnis (534.318 Zeilen)
+data/macro_index.csv             ← FRED-Makrodaten 1996–2026-06 (9 Spalten)
+data/car_prices_clean.csv        ← Bereinigte Auktionsdaten (558.743 Zeilen)
+data/car_prices_features.csv     ← Feature-Engineering-Ergebnis (534.318 Zeilen)
 ```
 
 > **Nicht im Git (gitignored):**
-> `car_prices_macro.csv` (98 MB) — neu erstellen mit `uv run python scripts/enrich_macro.py`
+> `data/car_prices_macro.csv` (98 MB) — neu erstellen mit `uv run python scripts/enrich_macro.py`
 
 ---
 
@@ -291,8 +291,8 @@ Das alte UI trennte `sale_year` und `model_year` nicht klar. Ein einziges „Bew
 
 ## Wichtige Hinweise für KI-Assistenten
 
-- `car_prices_macro.csv` ist **gitignored** (98 MB). Bei Bedarf: `uv run python scripts/enrich_macro.py`
-- `macro_index.csv` enthält 1996-01 bis 2026-06. Die letzten 3 Monate sind forward-gefüllt (FRED-Verzögerung).
+- `data/car_prices_macro.csv` ist **gitignored** (98 MB). Bei Bedarf: `uv run python scripts/enrich_macro.py`
+- `data/macro_index.csv` enthält 1996-01 bis 2026-06. Die letzten 3 Monate sind forward-gefüllt (FRED-Verzögerung).
 - `models/stage1_production_model.joblib` ist das produktiv eingebundene Stage-1-Modell. Es erwartet zusätzlich `trim`, `transmission`, `state`, `color`, `interior` und `make_model`. Fehlt die Datei, lädt die App den archivierten Legacy-Fallback.
 - `stage2_macro.py` nutzt absolute Pfade (`PROJECT_ROOT = Path(__file__).resolve().parent.parent`). Importierbar aus `scripts/` und `app/` (die App macht `sys.path.insert(0, str(PROJECT_ROOT / "scripts"))`).
 - **PR #1 (GitHub Classroom) nicht anfassen** — wird automatisch vom Professor-System gepflegt.
@@ -304,9 +304,9 @@ Das alte UI trennte `sale_year` und `model_year` nicht klar. Ein einziges „Bew
 
 | Datensatz | Quelle | Zeilen | Zeitraum |
 |---|---|---|---|
-| `car_prices_clean.csv` | Manheim via Kaggle | 558.743 | 2014–2015 |
-| `car_prices_features.csv` | Feature Engineering | 534.318 | 2014–2015 |
-| `macro_index.csv` | FRED (7 Serien) | 366 Monate | 1996–2026 |
+| `data/car_prices_clean.csv` | Manheim via Kaggle | 558.743 | 2014–2015 |
+| `data/car_prices_features.csv` | Feature Engineering | 534.318 | 2014–2015 |
+| `data/macro_index.csv` | FRED (7 Serien) | 366 Monate | 1996–2026 |
 
 **Genutzte FRED-Serien:**
 - `CUSR0000SETA01` — CPI Gebrauchtwagen (primär für Stage 2)

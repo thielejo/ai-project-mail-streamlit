@@ -1,6 +1,6 @@
-# Tuning-Experiment — Stage 1 (CatBoost)
+# Tuning — Stage 1 (CatBoost)
 
-> **Autor:** Moritz Binder · **Status:** laufendes Experiment im Branch `Mail_project_moritz`
+> **Autor:** Moritz Binder · **Status:** Tuning-Arbeit aus dem Branch `Mail_project_moritz`
 > Ziel: das CatBoost-Stage-1-Modell (Ausgangswert MAE $1.120) durch systematisches
 > Tuning weiter verbessern — methodisch sauber, mit Kreuzvalidierung.
 

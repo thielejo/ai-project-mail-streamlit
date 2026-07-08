@@ -33,7 +33,7 @@ from train_stage1_production import (
     segment_metrics,
 )
 
-INPUT_PATH = Path("car_prices_clean.csv")
+INPUT_PATH = Path("data/car_prices_clean.csv")
 OUTPUT_JSON = Path("archive/model_artifacts_2026-07-08/stage1_shared_split_model_comparison.json")
 OUTPUT_MD = Path("docs/stage1/stage1_model_comparison.md")
 RANDOM_STATE = 42

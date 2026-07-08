@@ -1,6 +1,6 @@
 """
 Vollstaendiger VIN-Decode: dekodiert ALLE eindeutigen VINs aus
-car_prices_clean.csv ueber die NHTSA vPIC Batch-API.
+data/car_prices_clean.csv ueber die NHTSA vPIC Batch-API.
 
 Eigenschaften:
 - RESUME-SICHER: schreibt den Cache alle FLUSH_EVERY VINs per Append auf Platte.
@@ -24,7 +24,7 @@ import requests
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
-SRC = REPO / "car_prices_clean.csv"
+SRC = REPO / "data" / "car_prices_clean.csv"
 SEED = REPO / "archive/fin_enrichment_legacy_2026-07-08/vin_decoded_cache_sample.csv"
 FULL = HERE / "vin_decoded_cache_full.csv"     # wachsender Voll-Cache (resume-Ziel)
 

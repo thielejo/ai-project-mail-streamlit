@@ -54,7 +54,7 @@ def add_interactions(data):
 
 
 def main() -> None:
-    data = add_interactions(load_data(Path("car_prices_clean.csv"), TUNING_ROWS))
+    data = add_interactions(load_data(Path("data/car_prices_clean.csv"), TUNING_ROWS))
     development, untouched_test = train_test_split(
         data, test_size=0.2, random_state=RANDOM_STATE
     )

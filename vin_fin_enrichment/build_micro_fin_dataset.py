@@ -1,11 +1,11 @@
 """
-Merge: haengt die dekodierten Motordaten (per VIN) an car_prices_clean.csv an
+Merge: haengt die dekodierten Motordaten (per VIN) an data/car_prices_clean.csv an
 und erzeugt eine Stage-1-faehige Datei mit FIN-Features.
 
 Voraussetzung: vin_decoded_cache_full.csv ist (weitgehend) vollstaendig
 (siehe build_full_vin_cache.py).
 
-Ergebnis: car_prices_fin.csv im Projekt-Root — car_prices_clean.csv plus die
+Ergebnis: data/car_prices_fin.csv — data/car_prices_clean.csv plus die
 Spalten fuel_type, displacement, cylinders (Hubraum ist laut Ablation das
 entscheidende Merkmal).
 
@@ -21,9 +21,9 @@ import pandas as pd
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
-SRC = REPO / "car_prices_clean.csv"
+SRC = REPO / "data" / "car_prices_clean.csv"
 CACHE = HERE / "vin_decoded_cache_full.csv"
-OUT = REPO / "car_prices_fin.csv"
+OUT = REPO / "data" / "car_prices_fin.csv"
 
 
 def main() -> None:

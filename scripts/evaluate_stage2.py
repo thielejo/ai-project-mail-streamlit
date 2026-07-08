@@ -42,9 +42,9 @@ FEATURE_COLUMNS = PRODUCTION_FEATURES
 MAX_ROWS = 0
 REFERENCE_YEAR_MONTH = "time-neutral-v2"
 
-FEATURES_PATH = Path("car_prices_clean.csv")
+FEATURES_PATH = Path("data/car_prices_clean.csv")
 MODEL_PATH = Path("models/stage1_production_model.joblib")
-MACRO_PATH = Path("macro_index.csv")
+MACRO_PATH = Path("data/macro_index.csv")
 OUTPUT_JSON = Path("models/stage2_evaluation.json")
 OUTPUT_MD = Path("docs/stage2/model_results_stage2.md")
 

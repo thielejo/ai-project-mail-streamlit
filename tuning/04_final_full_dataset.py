@@ -9,7 +9,7 @@ Schritt 4 — Finale: bestes getuntes Setup auf dem VOLLEN Datensatz.
 Trainiert auf dem vollen Datensatz (80/20-Split rs=42) und vergleicht gegen
 das bisherige CatBoost-Bestmodell (MAE $1.120).
 
-Aufruf: uv run python tuning_experiment/04_final_full_dataset.py
+Aufruf: uv run python tuning/04_final_full_dataset.py
 """
 from __future__ import annotations
 import json

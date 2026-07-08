@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OrdinalEncoder
 
 
-INPUT_PATH = Path("car_prices_macro.csv")
+INPUT_PATH = Path("data/car_prices_macro.csv")
 MODEL_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_xgboost_micro_model.json")
 ENCODER_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_xgboost_micro_encoder.pkl")
 

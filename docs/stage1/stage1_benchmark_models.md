@@ -4,7 +4,7 @@
 
 All models are evaluated under identical conditions:
 
-- **Dataset:** `car_prices_features.csv` — 200,000 rows sampled (random_state=42)
+- **Dataset:** `data/car_prices_features.csv` — 200,000 rows sampled (random_state=42)
 - **Split:** 80/20 train/test, random_state=42
 - **Features:** `vehicle_age`, `sale_month`, `odometer`, `condition`, `year_month`, `make`, `model`, `body`
 - **Target:** `sellingprice` — log1p-transformed before training, expm1 after prediction

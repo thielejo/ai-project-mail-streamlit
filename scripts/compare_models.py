@@ -26,7 +26,7 @@ from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardSc
 #   7. A naive median baseline anchors the comparison at the bottom.
 # ---------------------------------------------------------------------------
 
-FEATURES_PATH = Path("car_prices_features.csv")
+FEATURES_PATH = Path("data/car_prices_features.csv")
 OUTPUT_DIR = Path("model_comparison")
 RESULTS_JSON = OUTPUT_DIR / "model_comparison.json"
 RESULTS_MD = Path("docs/stage1/stage1_benchmark_models.md")
@@ -197,7 +197,7 @@ def write_markdown(results: list[dict]) -> None:
         "",
         "All models are evaluated under identical conditions:",
         "",
-        f"- **Dataset:** `car_prices_features.csv` — {MAX_ROWS:,} rows sampled (random_state={RANDOM_STATE})",
+        f"- **Dataset:** `data/car_prices_features.csv` — {MAX_ROWS:,} rows sampled (random_state={RANDOM_STATE})",
         f"- **Split:** {int((1-TEST_SIZE)*100)}/{int(TEST_SIZE*100)} train/test, random_state={RANDOM_STATE}",
         "- **Features:** `vehicle_age`, `sale_month`, `odometer`, `condition`, `year_month`, `make`, `model`, `body`",
         "- **Target:** `sellingprice` — log1p-transformed before training, expm1 after prediction",

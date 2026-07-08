@@ -18,7 +18,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
 
 
-INPUT_PATH = Path("car_prices_features.csv")
+INPUT_PATH = Path("data/car_prices_features.csv")
 MODEL_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_model.joblib")
 METRICS_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_metrics.json")
 RESULTS_PATH = Path("model_results.md")
@@ -346,7 +346,7 @@ Target variable:
 
 ## Training Setup
 
-- Input file: `car_prices_features.csv`
+- Input file: `data/car_prices_features.csv`
 - Rows used for training/evaluation: {rows_used:,}
 - Test split: 20%
 - Test rows: {test_rows:,}

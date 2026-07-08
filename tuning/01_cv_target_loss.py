@@ -9,7 +9,7 @@ Methode: 4-fache Kreuzvalidierung auf einer Teilstichprobe (Geschwindigkeit),
 Early Stopping je Fold. Alle Metriken werden in DOLLAR berechnet (Log-Vorhersagen
 werden zurücktransformiert), damit die Orientierungen fair vergleichbar sind.
 
-Aufruf: uv run python tuning_experiment/01_cv_target_loss.py
+Aufruf: uv run python tuning/01_cv_target_loss.py
 """
 from __future__ import annotations
 import json

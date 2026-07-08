@@ -22,7 +22,7 @@ from train_stage1_legacy_histgb import (
     load_modeling_data,
 )
 
-FEATURES_PATH = Path("car_prices_features.csv")
+FEATURES_PATH = Path("data/car_prices_features.csv")
 MODEL_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_model.joblib")
 METRICS_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_metrics.json")
 RESULTS_PATH = Path("model_results.md")

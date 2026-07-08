@@ -13,12 +13,12 @@ import numpy as np
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-FEATURES_PATH = PROJECT_ROOT / "car_prices_clean.csv"
+FEATURES_PATH = PROJECT_ROOT / "data" / "car_prices_clean.csv"
 MODEL_PATH = PROJECT_ROOT / "models" / "stage1_production_model.joblib"
 LEGACY_MODEL_PATH = (
     PROJECT_ROOT / "archive" / "model_artifacts_2026-07-08" / "stage1_legacy_histgb_model.joblib"
 )
-MACRO_PATH = PROJECT_ROOT / "macro_index.csv"
+MACRO_PATH = PROJECT_ROOT / "data" / "macro_index.csv"
 SEASONALITY_PATH = PROJECT_ROOT / "models" / "stage3_seasonality_factors.csv"
 
 FEATURE_COLUMNS = [

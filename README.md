@@ -101,17 +101,17 @@ exploration/          Exploratory analysis notebooks
 model_comparison/     Machine-readable model benchmark results
 models/               Trained model files and evaluation outputs
 scripts/              Data preparation, training, evaluation, Stage 2/3 modules
-tuning_experiment/    CatBoost tuning experiments
+tuning/    CatBoost tuning
 vin_fin_enrichment/   VIN/FIN displacement enrichment experiments
 
 Aktueller_Stand.md    Internal project-status context
-car_prices_clean.csv  Cleaned Manheim auction data
-car_prices_features.csv
+data/car_prices_clean.csv  Cleaned Manheim auction data
+data/car_prices_features.csv
                       Feature-engineered training data
-macro_index.csv       FRED macro indicators
+data/macro_index.csv       FRED macro indicators
 ```
 
-`car_prices_macro.csv` is intentionally gitignored because of its file size. It
+`data/car_prices_macro.csv` is intentionally gitignored because of its file size. It
 can be regenerated with:
 
 ```bash
