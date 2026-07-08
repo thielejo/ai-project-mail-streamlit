@@ -130,8 +130,8 @@ uv sync
 # Build feature dataset
 uv run python scripts/build_features.py
 
-# Train the Stage-1 V2 model used by the app
-uv run python scripts/train_stage1_v2.py --max-rows 0
+# Train the Stage-1 production model used by the app
+uv run python scripts/train_stage1_production.py --max-rows 0
 
 # Evaluate Stage 2 and Stage 3
 uv run python scripts/evaluate_stage2.py

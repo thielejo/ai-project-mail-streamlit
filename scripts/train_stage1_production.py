@@ -291,7 +291,7 @@ def write_results(payload: dict, path: Path) -> None:
         "## Reproduce",
         "",
         "```bash",
-        "uv run python scripts/train_stage1_v2.py --max-rows 0",
+        "uv run python scripts/train_stage1_production.py --max-rows 0",
         "```",
         "",
         "Omit `--max-rows 0` for a faster 200,000-row development run.",

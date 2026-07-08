@@ -46,7 +46,7 @@ Alte, missverständlich benannte Übergaben wurden nach `archive/` verschoben.
 - Aus der VIN (US-Pendant zur FIN) lässt sich über die kostenlose NHTSA-API der **Hubraum** nachladen (Abdeckung 99 %). Die aktuelle FIN-/VIN-Vorbereitung liegt unter `vin_fin_enrichment/`; ältere Voruntersuchungen liegen im Archiv.
 - Ergänzt man V2 um den Hubraum, sinkt der MAE auf dem vollen Datensatz (529.169 Zeilen) von **1.365 $ (V2) auf 1.201 $** — **−12 %**, R² 0,937 → **0,954**. Damit ist es der **beste Stage-1-Wert** des Projekts.
 - Der Hubraum trägt den gesamten FIN-Effekt; Kraftstoff/Zylinder sind redundant (Per-Feature-Ablation, Test 6). Der Effekt hält auch zusätzlich zu trim/Farbe/Ausstattung — also kein Overlap.
-- Integriertes Modell: `models/stage1_fin_model.joblib`, Skript `scripts/train_stage1_v2_fin.py` (= XGBoost-Pipeline + `displacement`).
+- Integriertes Modell: `models/stage1_fin_model.joblib`, Skript `scripts/train_stage1_production_fin.py` (= XGBoost-Pipeline + `displacement`).
 - Status: trainiert und dokumentiert; **noch nicht** in die Streamlit-App eingebunden (das Produktionsmodell bleibt vorerst `stage1_production_model.joblib`). Der 47-MB-Voll-Decode-Cache ist nicht im Repo (regenerierbar via `vin_fin_enrichment/build_full_vin_cache.py`).
 
 ### Stage 2 — CPI-Marktpreisanpassung
@@ -123,12 +123,10 @@ app/
 
 scripts/
   build_features.py         ← Feature Engineering → car_prices_features.csv
-  train_price_model.py      ← ältere Stage-1-Training-Pipeline (HistGB).
-                              Schreibt in archive/model_artifacts_2026-07-08/.
-  train_stage1_v2.py        ← Separates Stage-1-V2-Ensemble; vollständiges
-                              Training ohne Überschreiben des alten Modells.
-  optimize_stage1_v2.py     ← Validierungsbasierte Suche nach Architektur,
-                              Zielfunktion, Hyperparametern und Gewichtung.
+  train_stage1_production.py
+                            ← aktuelles Stage-1-Produktionsmodell.
+                              Schreibt models/stage1_production_model.joblib.
+  train_stage1_fin.py       ← FIN-/Hubraum-Erweiterung für Stage 1.
   stage2_macro.py           ← Stage-2-Modul. Von App und Scripts importieren.
                               Funktionen: load_macro_index(), apply_stage2(),
                               get_cpi_multiplier(), get_macro_context()
@@ -142,13 +140,8 @@ scripts/
                               Schreibt models/stage3_seasonality_factors.csv,
                               models/stage3_evaluation.json und
                               docs/stage3/model_results_stage3.md
-  compare_stage1_v1_v2_shared_split.py
-                            ← Strenger Stage-1-V1/V2-Vergleich auf identischem Split.
-                              Schreibt docs/stage1/model_results_stage1_v1_v2_shared_split.md
-  evaluate_segments.py      ← Segmentanalyse auf gespeichertem Modell.
   compare_models.py         ← 6-Modell-Benchmark (Ergebnisse in model_comparison/)
   enrich_macro.py           ← FRED-Download → macro_index.csv (Internet nötig)
-  train_stage1.py           ← Ältere XGBoost-Pipeline (nicht primär, Vergleich)
 
 models/
   stage1_production_model.joblib
@@ -174,11 +167,14 @@ archive/
 model_comparison/
   model_comparison.json     ← Rohdaten des Benchmarks
 
-model_results.md            ← ursprüngliche Stage-1-V1-Ergebnisse
-docs/stage1/model_results_stage1_v2.md
-                            ← Stage-1-V2-Ergebnisse
-docs/stage1/model_results_stage1_v1_v2_shared_split.md
-                            ← strenger Stage-1-V1/V2-Vergleich
+docs/stage1/stage1_current_model.md
+                            ← aktuelles Stage-1-Ergebnis
+docs/stage1/stage1_model_comparison.md
+                            ← Stage-1-Modellvergleich
+docs/stage1/stage1_tuning_results.md
+                            ← aktuelles Tuning-Ergebnis
+docs/stage1/stage1_benchmark_models.md
+                            ← Benchmark der getesteten Modellfamilien
 docs/stage2/model_results_stage2.md
                             ← Stage-2-Evaluierung
 docs/stage3/model_results_stage3.md
@@ -210,8 +206,8 @@ uv sync
 # 1. Feature-Datensatz erstellen
 uv run python scripts/build_features.py
 
-# 2. Stage-1-Modell trainieren (schnell: 200k Zeilen; --max-rows 0 für alle 534k)
-uv run python scripts/train_price_model.py
+# 2. Stage-1-Produktionsmodell trainieren (schnell: 200k Zeilen; --max-rows 0 für alle 534k)
+uv run python scripts/train_stage1_production.py
 
 # 3. Stage-2-Evaluation
 uv run python scripts/evaluate_stage2.py

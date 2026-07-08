@@ -63,7 +63,7 @@ def prepare_seasonality_data(
 ) -> pd.DataFrame:
     """Create vehicle-mix and CPI-adjusted rows used to estimate seasonality."""
     if model_path.name == "stage1_production_model.joblib":
-        from train_stage1_v2 import FEATURES as V2_FEATURES, load_data
+        from train_stage1_production import FEATURES as V2_FEATURES, load_data
 
         df = load_data(features_path, max_rows=0)
         prediction_input = df[V2_FEATURES]

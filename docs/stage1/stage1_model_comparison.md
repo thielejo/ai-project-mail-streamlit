@@ -41,5 +41,5 @@ Verbesserung ist deshalb der methodisch bevorzugte V1/V2-Wert.
 ## Reproduktion
 
 ```powershell
-uv run python scripts/compare_stage1_v1_v2_shared_split.py --max-rows 0
+uv run python archive/script_legacy_2026-07-08/compare_stage1_legacy_vs_production_shared_split.py --max-rows 0
 ```

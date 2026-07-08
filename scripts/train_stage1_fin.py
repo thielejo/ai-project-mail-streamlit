@@ -1,21 +1,21 @@
 """
-Stage 1 V2 + FIN — integrierte Trainings-Pipeline.
+Stage 1 production + FIN — integrierte Trainings-Pipeline.
 
 Vereint die zwei Entwicklungsstraenge des Teams:
-  1. Pascals V2-Ensemble (reiche Manheim-Merkmale: trim, transmission, state,
+  1. Pascals Stage-1-Ensemble (reiche Manheim-Merkmale: trim, transmission, state,
      color, interior, make_model) — XGBoost VotingRegressor 50/50.
   2. Moritz' FIN-Anreicherung: der aus der VIN dekodierte Hubraum (displacement),
      der laut Ablation den gesamten FIN-Effekt traegt.
 
-Architektur und Hyperparameter sind identisch zu scripts/train_stage1_v2.py;
+Architektur und Hyperparameter sind identisch zu scripts/train_stage1_production.py;
 einzige Aenderung: `displacement` wird als numerisches Feature ergaenzt.
 
 Datenquelle: car_prices_clean.csv + Hubraum aus dem VIN-Decode-Cache
 (vin_fin_enrichment/vin_decoded_cache_full.csv), per VIN gejoint.
 
 Aufruf:
-    uv run python scripts/train_stage1_v2_fin.py            # 200k Schnelllauf
-    uv run python scripts/train_stage1_v2_fin.py --max-rows 0   # voller Datensatz
+    uv run python scripts/train_stage1_fin.py            # 200k Schnelllauf
+    uv run python scripts/train_stage1_fin.py --max-rows 0   # voller Datensatz
 """
 
 from __future__ import annotations

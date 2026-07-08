@@ -1,4 +1,4 @@
-"""Train V1 and V2 from scratch on one shared, untouched train/test split.
+"""Train legacy and production Stage-1 models on one shared train/test split.
 
 This is the strict Stage-1 comparison. Both models receive exactly the same
 rows for training and exactly the same rows for testing. Existing saved model
@@ -9,17 +9,22 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-from train_price_model import (
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from train_stage1_legacy_histgb import (
     FEATURE_COLUMNS as V1_FEATURES,
     build_sklearn_pipeline as build_v1_model,
 )
-from train_stage1_v2 import (
+from train_stage1_production import (
     FEATURES as V2_FEATURES,
     TARGET,
     build_model as build_v2_model,
@@ -30,7 +35,7 @@ from train_stage1_v2 import (
 
 INPUT_PATH = Path("car_prices_clean.csv")
 OUTPUT_JSON = Path("archive/model_artifacts_2026-07-08/stage1_shared_split_model_comparison.json")
-OUTPUT_MD = Path("docs/stage1/model_results_stage1_v1_v2_shared_split.md")
+OUTPUT_MD = Path("docs/stage1/stage1_model_comparison.md")
 RANDOM_STATE = 42
 BOOTSTRAP_SAMPLES = 1_000
 
@@ -119,7 +124,7 @@ def write_markdown(payload: dict, path: Path) -> None:
         "## Reproduktion",
         "",
         "```powershell",
-        "uv run python scripts/compare_stage1_v1_v2_shared_split.py --max-rows 0",
+        "uv run python archive/script_legacy_2026-07-08/compare_stage1_legacy_vs_production_shared_split.py --max-rows 0",
         "```",
     ]
     path.write_text("\n".join(rows) + "\n", encoding="utf-8")

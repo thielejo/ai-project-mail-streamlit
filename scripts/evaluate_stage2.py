@@ -33,12 +33,12 @@ from stage2_macro import (
     load_macro_index,
     MACRO_SIGNAL_LABELS,
 )
-from train_stage1_v2 import FEATURES as V2_FEATURES, load_data as load_v2_data
+from train_stage1_production import FEATURES as PRODUCTION_FEATURES, load_data as load_production_data
 
-# Must exactly match train_price_model.py to reproduce the same test split
+# Must exactly match the Stage-1 production split.
 RANDOM_STATE = 42
 TARGET_COLUMN = "sellingprice"
-FEATURE_COLUMNS = V2_FEATURES
+FEATURE_COLUMNS = PRODUCTION_FEATURES
 MAX_ROWS = 0
 REFERENCE_YEAR_MONTH = "time-neutral-v2"
 
@@ -62,7 +62,7 @@ FORWARD_PROJECTION_MONTHS = [
 
 def _load_test_set() -> tuple[pd.DataFrame, pd.Series, pd.Series]:
     """Reproduce the exact Stage 1 test split (same rows, same seed)."""
-    df = load_v2_data(FEATURES_PATH, MAX_ROWS)
+    df = load_production_data(FEATURES_PATH, MAX_ROWS)
     _, test = train_test_split(df, test_size=0.2, random_state=RANDOM_STATE)
     return test[FEATURE_COLUMNS], test[TARGET_COLUMN], test["year_month"]
 

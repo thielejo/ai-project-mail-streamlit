@@ -382,13 +382,13 @@ Target variable:
 Run this command from the project root:
 
 ```bash
-uv run python scripts/train_price_model.py
+uv run python archive/script_legacy_2026-07-08/train_stage1_legacy_histgb.py
 ```
 
 For full-dataset training, run:
 
 ```bash
-uv run python scripts/train_price_model.py --max-rows 0
+uv run python archive/script_legacy_2026-07-08/train_stage1_legacy_histgb.py --max-rows 0
 ```
 """
     path.write_text(content, encoding="utf-8")

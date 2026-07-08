@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import joblib
@@ -9,7 +10,9 @@ import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.model_selection import train_test_split
 
-from train_price_model import (
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from train_stage1_legacy_histgb import (
     FEATURE_COLUMNS,
     PRICE_SEGMENTS,
     RANDOM_STATE,

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 import time
 from pathlib import Path
 
@@ -11,7 +12,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from xgboost import XGBRegressor
 
-from train_stage1_v2 import (
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+
+from train_stage1_production import (
     NUMERIC_FEATURES,
     RANDOM_STATE,
     TARGET,
