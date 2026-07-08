@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    :root {
+      --pp-blue: #0b7cff;
+      --pp-blue-dark: #071d49;
+      --pp-blue-soft: #eaf3ff;
+      --pp-border: #d7e7ff;
+      --pp-text: #48617e;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: transparent;
+    }
+    .pp-month-picker {
+      border: 1px solid var(--pp-border);
+      border-left: 5px solid var(--pp-blue);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 0.85rem;
+      box-sizing: border-box;
+    }
+    .pp-year-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+    }
+    .pp-year-button {
+      border: 1px solid var(--pp-border);
+      background: #ffffff;
+      color: var(--pp-blue);
+      border-radius: 8px;
+      width: 2rem;
+      height: 2rem;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .pp-year-button:disabled {
+      color: #aebcd0;
+      cursor: not-allowed;
+    }
+    .pp-year {
+      color: var(--pp-blue-dark);
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+    .pp-month-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+    .pp-month {
+      border: 1px solid var(--pp-border);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--pp-text);
+      padding: 0.55rem 0.35rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pp-month:hover {
+      border-color: var(--pp-blue);
+      color: var(--pp-blue);
+    }
+    .pp-month.active {
+      background: var(--pp-blue);
+      border-color: var(--pp-blue);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="pp-month-picker">
+    <div class="pp-year-row">
+      <button class="pp-year-button" id="prev-year" aria-label="Vorheriges Jahr">‹</button>
+      <div class="pp-year" id="year-label"></div>
+      <button class="pp-year-button" id="next-year" aria-label="Naechstes Jahr">›</button>
+    </div>
+    <div class="pp-month-grid" id="month-grid"></div>
+  </div>
+
+  <script>
+    const DEFAULT_MONTHS = {
+      1: "Jan", 2: "Feb", 3: "Mär", 4: "Apr", 5: "Mai", 6: "Jun",
+      7: "Jul", 8: "Aug", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez"
+    };
+
+    let selectedYear = 2026;
+    let selectedMonth = 6;
+    let minYear = 1996;
+    let maxYear = 2026;
+    let monthNames = DEFAULT_MONTHS;
+    let ready = false;
+
+    function post(type, extra) {
+      window.parent.postMessage(Object.assign({ isStreamlitMessage: true, type }, extra || {}), "*");
+    }
+
+    function setValue() {
+      post("streamlit:setComponentValue", {
+        value: { year: selectedYear, month: selectedMonth },
+        dataType: "json"
+      });
+    }
+
+    function setFrameHeight() {
+      post("streamlit:setFrameHeight", { height: document.body.scrollHeight });
+    }
+
+    function render() {
+      document.getElementById("year-label").textContent = selectedYear;
+      document.getElementById("prev-year").disabled = selectedYear <= minYear;
+      document.getElementById("next-year").disabled = selectedYear >= maxYear;
+
+      const grid = document.getElementById("month-grid");
+      grid.innerHTML = "";
+      for (let month = 1; month <= 12; month++) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "pp-month" + (month === selectedMonth ? " active" : "");
+        button.textContent = monthNames[String(month)] || monthNames[month] || String(month);
+        button.addEventListener("click", () => {
+          selectedMonth = month;
+          render();
+          setValue();
+        });
+        grid.appendChild(button);
+      }
+      setFrameHeight();
+    }
+
+    document.getElementById("prev-year").addEventListener("click", () => {
+      if (selectedYear <= minYear) return;
+      selectedYear -= 1;
+      render();
+      setValue();
+    });
+
+    document.getElementById("next-year").addEventListener("click", () => {
+      if (selectedYear >= maxYear) return;
+      selectedYear += 1;
+      render();
+      setValue();
+    });
+
+    window.addEventListener("message", (event) => {
+      const data = event.data;
+      if (!data || data.type !== "streamlit:render") return;
+      if (!ready) {
+        const args = data.args || {};
+        selectedYear = Number(args.default_year || selectedYear);
+        selectedMonth = Number(args.default_month || selectedMonth);
+        minYear = Number(args.min_year || minYear);
+        maxYear = Number(args.max_year || maxYear);
+        monthNames = args.month_names || DEFAULT_MONTHS;
+        ready = true;
+        render();
+      }
+    });
+
+    post("streamlit:componentReady", { apiVersion: 1 });
+  </script>
+</body>
+</html>

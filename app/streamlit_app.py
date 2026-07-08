@@ -41,6 +41,7 @@ from stage1_runtime import (  # noqa: E402
 LOGO_PATH = PROJECT_ROOT / "app" / "assets" / "pricepilot-logo.png"
 LOGO_DISPLAY_PATH = PROJECT_ROOT / "app" / "assets" / "pricepilot-logo-display.png"
 STAR_COMPONENT_DIR = PROJECT_ROOT / "app" / "components" / "star_rating"
+MONTH_PICKER_COMPONENT_DIR = PROJECT_ROOT / "app" / "components" / "month_picker"
 FEATURES_PATH = PROJECT_ROOT / "data" / "car_prices_features.csv"
 STAGE2_EVAL_PATH = PROJECT_ROOT / "models" / "stage2_evaluation.json"
 SHARED_SPLIT_BENCHMARK_PATH = (
@@ -271,6 +272,10 @@ def logo_data_uri() -> str:
 
 
 _star_component = components.declare_component("pp_star_rating", path=str(STAR_COMPONENT_DIR))
+_month_picker_component = components.declare_component(
+    "pp_month_picker",
+    path=str(MONTH_PICKER_COMPONENT_DIR),
+)
 
 
 def star_rating(default: float = 4.0, key: str | None = None) -> float:
@@ -278,6 +283,22 @@ def star_rating(default: float = 4.0, key: str | None = None) -> float:
     if value is None:
         return float(default)
     return float(value)
+
+
+def month_picker(default_year: int = 2026, default_month: int = 6, key: str | None = None) -> tuple[int, int]:
+    value = _month_picker_component(
+        default_year=int(default_year),
+        default_month=int(default_month),
+        min_year=min(MACRO_AVAILABLE_YEARS),
+        max_year=max(MACRO_AVAILABLE_YEARS),
+        month_names=MONTH_NAMES,
+        key=key,
+    )
+    if not isinstance(value, dict):
+        return int(default_year), int(default_month)
+    year = min(max(int(value.get("year", default_year)), min(MACRO_AVAILABLE_YEARS)), max(MACRO_AVAILABLE_YEARS))
+    month = min(max(int(value.get("month", default_month)), 1), 12)
+    return year, month
 
 
 @st.cache_resource
@@ -636,22 +657,11 @@ with left_column:
 
     st.divider()
     st.subheader("Bewertungsmonat")
-    date_left, date_right = st.columns(2)
-    with date_left:
-        target_month = st.selectbox(
-            "Monat",
-            MACRO_AVAILABLE_MONTHS,
-            index=5,
-            format_func=lambda month: MONTH_NAMES[int(month)],
-        )
-    with date_right:
-        target_year = st.selectbox(
-            "Jahr",
-            MACRO_AVAILABLE_YEARS,
-            index=MACRO_AVAILABLE_YEARS.index(2026),
-        )
-    target_year = int(target_year)
-    target_month = int(target_month)
+    target_year, target_month = month_picker(
+        default_year=2026,
+        default_month=6,
+        key="valuation_month",
+    )
 
     target_ym = f"{target_year}-{target_month:02d}"
     vehicle_age = max(int(target_year) - int(model_year), 0)
