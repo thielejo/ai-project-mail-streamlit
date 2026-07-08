@@ -167,6 +167,17 @@ st.markdown(
             margin: 0.2rem 0 1rem;
             box-shadow: 0 8px 24px rgba(7, 29, 73, 0.06);
         }
+        div[data-testid="stVerticalBlock"]:has(.pp-price-card-anchor):not(:has(div[data-testid="stVerticalBlock"] .pp-price-card-anchor)) {
+            background: #ffffff;
+            border-color: #d7e7ff;
+            border: 1px solid #d7e7ff;
+            border-left: 5px solid #0b7cff;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(7, 29, 73, 0.06);
+            padding: 1.25rem 1.35rem 1rem;
+            margin: 0.2rem 0 1rem;
+        }
+        .pp-price-card-anchor { display: none; }
         .pp-range-label {
             color: #48617e;
             font-size: 1rem;
@@ -741,17 +752,16 @@ with right_column:
         .copy()
     )
 
-    st.markdown(
-        f"""
-        <div class="pp-price-card">
+    with st.container(border=False):
+        st.markdown('<span class="pp-price-card-anchor"></span>', unsafe_allow_html=True)
+        st.markdown(
+            f"""
             <div class="pp-range-label">PricePilot Preisprognose</div>
             <div class="pp-range-value">{range_text}</div>
             <div class="pp-tile-month">Bester Verkaufsmonat: <strong>{best_month_value}</strong></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    with st.container(border=False):
+            """,
+            unsafe_allow_html=True,
+        )
         if not body_season.empty:
             month_order = [MONTH_NAMES[m] for m in range(1, 13)]
             body_season["Monat"] = body_season["sale_month"].map(MONTH_NAMES)
@@ -782,7 +792,7 @@ with right_column:
                 .configure_view(strokeWidth=0, fill=None)
             )
             st.caption("Saisonale Entwicklung über die Verkaufsmonate")
-            st.altair_chart(season_chart, use_container_width=True, theme=None)
+            st.altair_chart(season_chart, width="stretch", theme=None)
         else:
             st.caption("Für diese Karosserieform liegen keine monatlichen Saisondaten vor.")
 
