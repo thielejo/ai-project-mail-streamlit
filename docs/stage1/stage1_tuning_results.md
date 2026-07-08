@@ -40,10 +40,27 @@ ist mit diesen Daten nicht erreichbar: Der verbleibende Fehler ist teils
 verschiedene Preise) und teils Folge **fehlender Merkmale** (Unfallhistorie,
 Ausstattung, Scheckheft), die der Manheim-Datensatz nicht enthält.
 
+## Produktionsmodell (in der App eingesetzt)
+
+Das $1.042-Modell (Tiefe 10 × 3000 Bäume) ist mit **107 MB zu groß für Git**
+(>100-MB-Limit) und daher **nicht deploybar**. Für die App wird deshalb ein
+kompaktes, aber gleichwertiges Modell eingesetzt:
+
+- **Produktionsmodell:** Tiefe 10 × **2000 Bäume** → **MAE $1.056 / R² 0,961 /
+  MAPE 11,9 %**, **77 MB** (ganz normal committbar, ohne Git LFS).
+- Nur $14 (~1,3 %) über dem Maximal-Experiment ($1.042) — die Tiefe (der
+  eigentliche Genauigkeitstreiber) bleibt erhalten, lediglich die Baumzahl ist
+  begrenzt.
+- **App und Paper nutzen exakt dieses eine Modell ($1.056)** — kein Widerspruch
+  zwischen berichteter und eingesetzter Zahl.
+- Artefakt: `models/price_model_catboost.cbm`. Reproduzierbar mit
+  `uv run python scripts/train_stage1_catboost.py --max-rows 0`.
+
 ## Status
 
-Tuning abgeschlossen und dokumentiert. Das getunte Modell ist **noch nicht**
-in die Streamlit-App / Stage 2–3 integriert (die App nutzt weiterhin V2). Bei
-einer späteren Integration müssen Stage 2 (CPI-Backtest) und Stage 3
-(Saisonfaktoren) gegen das neue Stage-1 neu evaluiert werden — Logik unverändert,
-nur die Zahlen.
+Das Produktionsmodell (CatBoost, getunt, + Hubraum) ist in die **Streamlit-App
+integriert** (`app/streamlit_app.py`, `scripts/stage1_runtime.py`). Der Hubraum
+wird in der App per Marke-Modell-Lookup automatisch vorgeschlagen und ist
+überschreibbar. Hinweis: Stage 2 (CPI) und Stage 3 (Saison) nutzen weiterhin die
+gegen V2 kalibrierten Faktoren als Näherung; eine formale Neu-Evaluierung gegen
+das CatBoost-Stage-1 steht noch aus (Logik unverändert, nur die Zahlen).
