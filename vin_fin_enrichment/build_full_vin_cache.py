@@ -6,8 +6,8 @@ Eigenschaften:
 - RESUME-SICHER: schreibt den Cache alle FLUSH_EVERY VINs per Append auf Platte.
   Bei einem Abbruch einfach erneut starten -> es wird dort fortgesetzt, wo es
   aufgehoert hat (bereits dekodierte VINs werden uebersprungen).
-- SEED: uebernimmt beim ersten Lauf die bereits vorhandenen Decodes aus
-  vin_decoded_cache.csv (99.703 VINs), sodass nur die ~450k Rest geladen werden.
+- SEED: uebernimmt beim ersten Lauf optional bereits vorhandene Decodes aus
+  dem archivierten Sample-Cache, sodass weniger VINs neu geladen werden muessen.
 - SLIM: speichert nur die relevanten Felder (klein genug fuer die Weiterverarbeitung).
 
 Aufruf (am besten im Hintergrund, Laufzeit ~3 Std.):
@@ -25,7 +25,7 @@ import requests
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 SRC = REPO / "car_prices_clean.csv"
-SEED = HERE / "vin_decoded_cache.csv"          # bereits committete 99.703 Decodes
+SEED = REPO / "archive/fin_enrichment_legacy_2026-07-08/vin_decoded_cache_sample.csv"
 FULL = HERE / "vin_decoded_cache_full.csv"     # wachsender Voll-Cache (resume-Ziel)
 
 BATCH_SIZE = 50
