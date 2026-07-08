@@ -228,6 +228,15 @@ st.markdown(
             border: 1.5px solid #0b7cff !important;
             border-radius: 8px !important;
         }
+        .stNumberInput button {
+            background-color: #ffffff !important;
+            border-color: #d7e7ff !important;
+            color: #071d49 !important;
+        }
+        .stNumberInput button:hover {
+            border-color: #0b7cff !important;
+            color: #0b7cff !important;
+        }
         .stNumberInput div[data-baseweb="input"]:focus-within,
         div[data-baseweb="select"] > div:focus-within {
             box-shadow: 0 0 0 2px rgba(11, 124, 255, 0.25) !important;
