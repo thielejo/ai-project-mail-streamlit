@@ -10,9 +10,16 @@ final_price = stage2_price x seasonal_factor(body, month)
 ```
 
 Die Berechnung vergleicht CPI-normalisierte Verkaufspreise mit Vorhersagen des
-zeitneutralen Stage-1-V2-Modells. V2 enthält bewusst keinen Verkaufsmonat. Dadurch werden
+zeitneutralen **Stage-1-CatBoost-Modells** (getunt, inkl. Hubraum) — dem aktuellen
+Produktionsmodell. CatBoost enthält bewusst keinen Verkaufsmonat. Dadurch werden
 Unterschiede im Fahrzeugmix (Modell, Alter, Laufleistung und Zustand) weitgehend
 herausgerechnet. Der Zielmonat fließt nicht doppelt in Stage 1 und Stage 3 ein.
+
+> Hinweis: Diese Auswertung ist gegen das **CatBoost-Stage-1** neu berechnet
+> (Skript `tuning/06_reeval_stage2_stage3_catboost.py`), damit die Zahlen zur App
+> passen. Die früheren V2-basierten Werte ($1.353,15 → $1.339,84 / −0,98 %) sind in
+> der Git-Historie erhalten. Die absoluten MAE-Werte sind kleiner, weil das bessere
+> CatBoost-Stage-1 genauere Basispreise liefert (kleinere Residuen).
 
 Pro Karosserieform werden die monatlichen Medianabweichungen relativ zum
 Gesamtmedian berechnet. Alle Effekte werden mit einer Prior-Stärke von
@@ -35,7 +42,7 @@ Gesamtmedian berechnet. Alle Effekte werden mit einer Prior-Stärke von
 
 | Kennzahl | Ohne Stage 3 | Mit Stage 3 | Änderung |
 |---|---:|---:|---:|
-| MAE auf CPI-normalisierten Preisen | $1,353.15 | $1,339.84 | -0.98% |
+| MAE auf CPI-normalisierten Preisen (CatBoost-Basis) | $1,014.00 | $998.00 | -1.59% |
 
 Die Faktoren wurden dabei nur aus den 80% Regel-Trainingsdaten abgeleitet und
 auf den übrigen 105,688 Zeilen geprüft. Dies ist eine Prüfung
