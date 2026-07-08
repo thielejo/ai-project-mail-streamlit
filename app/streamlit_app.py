@@ -228,6 +228,11 @@ st.markdown(
             border: 1.5px solid #0b7cff !important;
             border-radius: 8px !important;
         }
+        .stNumberInput input,
+        .stNumberInput div[data-baseweb="input"] input,
+        .stNumberInput div[data-baseweb="input"] > div {
+            background-color: #ffffff !important;
+        }
         .stNumberInput button {
             background-color: #ffffff !important;
             border-color: #d7e7ff !important;
