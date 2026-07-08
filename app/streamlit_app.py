@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import base64
-import datetime
 import json
 import sys
 from pathlib import Path
@@ -158,26 +157,50 @@ st.markdown(
         .pp-logo { text-align: right; }
         .pp-logo img { max-width: min(100%, 380px); height: auto; object-fit: contain; }
 
-        /* --- Preisspannen-Kachel --- */
+        /* --- Ergebnis- und Hinweis-Kacheln --- */
+        .pp-price-card {
+            background: #ffffff;
+            border: 1px solid #d7e7ff;
+            border-left: 5px solid #0b7cff;
+            border-radius: 8px;
+            padding: 1.35rem 1.45rem 1.2rem;
+            margin: 0.2rem 0 1rem;
+            box-shadow: 0 8px 24px rgba(7, 29, 73, 0.06);
+        }
         .pp-range-label {
             color: #48617e;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 650;
             margin-bottom: 0.2rem;
         }
         .pp-range-value {
-            font-size: 1.9rem;
+            font-size: 2.9rem;
             font-weight: 800;
-            line-height: 1.15;
+            line-height: 1.05;
             color: #071d49;
         }
         .pp-tile-month {
             color: #48617e;
             font-size: 0.95rem;
             font-weight: 600;
-            margin: 0.55rem 0 0.35rem;
+            margin: 0.75rem 0 0.35rem;
         }
         .pp-tile-month strong { color: #0b7cff; }
+        .pp-age-card {
+            background: #ffffff;
+            border: 1px solid #d7e7ff;
+            border-left: 5px solid #0b7cff;
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            margin-top: 0.85rem;
+            color: #48617e;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .pp-age-card strong {
+            color: #071d49;
+            font-size: 1.2rem;
+        }
 
         /* --- Weiße Auswahl-/Zahlenfelder mit blauer Umrandung --- */
         div[data-baseweb="select"] > div,
@@ -534,9 +557,7 @@ with left_column:
     )
 
     if is_rich:
-        if model_version == "catboost":
-            st.caption("Das Stage-1-Modell (CatBoost) nutzt zusätzliche Fahrzeugdetails inkl. Hubraum für eine genauere Schätzung.")
-        else:
+        if model_version != "catboost":
             st.caption("Stage 1 V2 nutzt zusätzliche Fahrzeugdetails für eine genauere Schätzung.")
         trim_options = sorted(v2_options["trim"], key=format_trim)
         state_options = sorted(v2_options["state"], key=format_state)
@@ -574,6 +595,7 @@ with left_column:
     input_left, input_right = st.columns(2)
     with input_left:
         model_year = st.number_input("Baujahr", min_value=1990, max_value=2022, value=2012, step=1)
+    with input_right:
         odometer_km = st.number_input(
             "Kilometerstand (km)",
             min_value=1,
@@ -581,14 +603,7 @@ with left_column:
             value=80_000,
             step=5_000,
         )
-        odometer_miles = float(odometer_km) * MILES_PER_KILOMETER
-        st.caption("Für das US-Preismodell wird der Wert im Hintergrund automatisch in Meilen umgerechnet.")
-
-    with input_right:
-        st.markdown("**Fahrzeugzustand**")
-        condition = star_rating(default=4.0, key="condition_stars")
-        condition_label = f"{condition:g}".replace(".", ",") + " / 5 Sterne"
-        st.caption(describe_condition(condition))
+    odometer_miles = float(odometer_km) * MILES_PER_KILOMETER
 
     if model_version == "catboost":
         suggested_disp = lookup_displacement(selected_make, selected_model, displacement_lookup)
@@ -603,24 +618,42 @@ with left_column:
     else:
         displacement = 0.0
 
-    st.divider()
-    st.subheader("Bewertungsdatum")
-    st.caption("Für welchen Zeitpunkt soll der Marktpreis berechnet werden? (Tag ist ohne Bedeutung.)")
+    st.markdown("**Fahrzeugzustand**")
+    condition = star_rating(default=4.0, key="condition_stars")
+    condition_label = f"{condition:g}".replace(".", ",") + " / 5 Sterne"
+    st.caption(describe_condition(condition))
 
-    eval_date = st.date_input(
-        "Bewertungsmonat",
-        value=datetime.date(2026, 6, 1),
-        min_value=datetime.date(min(MACRO_AVAILABLE_YEARS), 1, 1),
-        max_value=datetime.date(max(MACRO_AVAILABLE_YEARS), 12, 31),
-        format="DD.MM.YYYY",
-    )
-    target_year = int(eval_date.year)
-    target_month = int(eval_date.month)
+    st.divider()
+    st.subheader("Bewertungsmonat")
+    date_left, date_right = st.columns(2)
+    with date_left:
+        target_month = st.selectbox(
+            "Monat",
+            MACRO_AVAILABLE_MONTHS,
+            index=5,
+            format_func=lambda month: MONTH_NAMES[int(month)],
+        )
+    with date_right:
+        target_year = st.selectbox(
+            "Jahr",
+            MACRO_AVAILABLE_YEARS,
+            index=MACRO_AVAILABLE_YEARS.index(2026),
+        )
+    target_year = int(target_year)
+    target_month = int(target_month)
 
     target_ym = f"{target_year}-{target_month:02d}"
     vehicle_age = max(int(target_year) - int(model_year), 0)
     vehicle_age = min(vehicle_age, 30)
-    st.info(f"Fahrzeugalter zum Bewertungsdatum: **{vehicle_age} Jahre** ({MONTH_NAMES[target_month]} {target_year})")
+    st.markdown(
+        f"""
+        <div class="pp-age-card">
+            Fahrzeugalter zum Bewertungsmonat<br>
+            <strong>{vehicle_age} Jahre</strong> · {MONTH_NAMES[target_month]} {target_year}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 with right_column:
     st.subheader("Preisprognose")
@@ -708,13 +741,17 @@ with right_column:
         .copy()
     )
 
-    with st.container(border=True):
-        st.markdown(
-            f'<div class="pp-range-label">Geschätzte Preisspanne</div>'
-            f'<div class="pp-range-value">{range_text}</div>'
-            f'<div class="pp-tile-month">Bester Verkaufsmonat: <strong>{best_month_value}</strong></div>',
-            unsafe_allow_html=True,
-        )
+    st.markdown(
+        f"""
+        <div class="pp-price-card">
+            <div class="pp-range-label">PricePilot Preisprognose</div>
+            <div class="pp-range-value">{range_text}</div>
+            <div class="pp-tile-month">Bester Verkaufsmonat: <strong>{best_month_value}</strong></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    with st.container(border=False):
         if not body_season.empty:
             month_order = [MONTH_NAMES[m] for m in range(1, 13)]
             body_season["Monat"] = body_season["sale_month"].map(MONTH_NAMES)

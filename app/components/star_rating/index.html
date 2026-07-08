@@ -17,14 +17,16 @@
     #pp-stars {
       display: flex;
       align-items: center;
-      gap: 0.15rem;
-      padding: 0.15rem 0 0.1rem;
+      justify-content: space-between;
+      gap: 0.35rem;
+      width: 100%;
+      padding: 0.25rem 0 0.15rem;
       user-select: none;
     }
     .pp-star-wrap {
       position: relative;
-      width: 40px;
-      height: 40px;
+      width: clamp(48px, 16vw, 68px);
+      height: clamp(48px, 16vw, 68px);
       cursor: pointer;
     }
     .pp-star-wrap svg {
@@ -44,9 +46,10 @@
     .pp-hit-left { left: 0; }
     .pp-hit-right { right: 0; }
     #pp-caption {
-      margin-top: 0.1rem;
-      font-size: 0.82rem;
-      color: #8a8a8a;
+      margin-top: 0.2rem;
+      font-size: 0.92rem;
+      color: #48617e;
+      font-weight: 600;
       font-family: inherit;
     }
   </style>
