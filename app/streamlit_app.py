@@ -657,11 +657,26 @@ with left_column:
 
     st.divider()
     st.subheader("Bewertungsmonat")
-    target_year, target_month = month_picker(
-        default_year=2026,
-        default_month=6,
-        key="valuation_month",
-    )
+    if "valuation_year" not in st.session_state:
+        st.session_state.valuation_year = 2026
+    if "valuation_month" not in st.session_state:
+        st.session_state.valuation_month = 6
+
+    current_year = int(st.session_state.valuation_year)
+    current_month = int(st.session_state.valuation_month)
+    with st.popover(f"{MONTH_NAMES[current_month]} {current_year}", use_container_width=True):
+        picked_year, picked_month = month_picker(
+            default_year=current_year,
+            default_month=current_month,
+            key=f"valuation_month_picker_{current_year}_{current_month}",
+        )
+        if picked_year != current_year or picked_month != current_month:
+            st.session_state.valuation_year = picked_year
+            st.session_state.valuation_month = picked_month
+            st.rerun()
+
+    target_year = int(st.session_state.valuation_year)
+    target_month = int(st.session_state.valuation_month)
 
     target_ym = f"{target_year}-{target_month:02d}"
     vehicle_age = max(int(target_year) - int(model_year), 0)
