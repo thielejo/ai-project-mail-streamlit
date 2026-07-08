@@ -22,7 +22,12 @@ V2_FEATURES = V2_NUMERIC_FEATURES + V2_CATEGORICAL_FEATURES
 def load_production_model() -> tuple[object, str]:
     """Prefer V2 and retain V1 as an automatic fallback."""
     if V2_MODEL_PATH.exists():
-        return joblib.load(V2_MODEL_PATH), "v2"
+        try:
+            return joblib.load(V2_MODEL_PATH), "v2"
+        except Exception as error:
+            if not V1_MODEL_PATH.exists():
+                raise
+            print(f"Could not load Stage 1 V2 model, falling back to V1: {error}")
     if V1_MODEL_PATH.exists():
         return joblib.load(V1_MODEL_PATH), "v1"
     raise FileNotFoundError("Neither the V2 nor V1 Stage-1 model is available.")
