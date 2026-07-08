@@ -60,7 +60,9 @@ def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Train the tuned CatBoost Stage 1 model (with FIN displacement).")
     p.add_argument("--max-rows", type=int, default=200_000, help="Max Zeilen nach Cleaning; 0 = voller Datensatz.")
     p.add_argument("--depth", type=int, default=None, help="Baumtiefe ueberschreiben (Deploy: kleineres Modell z. B. 8).")
-    p.add_argument("--iterations", type=int, default=3000, help="Anzahl Baeume (Deploy: z. B. 1500 fuer kleineres Modell).")
+    p.add_argument("--iterations", type=int, default=2000,
+                   help="Anzahl Baeume. Standard 2000 haelt die Modell-Datei unter GitHubs "
+                        "100-MB-Grenze (committbar) bei nahezu voller Genauigkeit (Tiefe 10 bleibt).")
     return p.parse_args()
 
 
