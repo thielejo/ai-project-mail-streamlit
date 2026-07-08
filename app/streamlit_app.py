@@ -213,6 +213,13 @@ st.markdown(
             color: #071d49;
             font-size: 1.2rem;
         }
+        .pp-condition-description {
+            color: #5b708c;
+            font-size: 0.9rem;
+            line-height: 1.35;
+            margin-top: -0.65rem;
+            margin-bottom: 0.25rem;
+        }
 
         /* --- Weiße Auswahl-/Zahlenfelder mit blauer Umrandung --- */
         div[data-baseweb="select"] > div,
@@ -653,7 +660,10 @@ with left_column:
     st.markdown("**Fahrzeugzustand**")
     condition = star_rating(default=4.0, key="condition_stars")
     condition_label = f"{condition:g}".replace(".", ",") + " / 5 Sterne"
-    st.caption(describe_condition(condition))
+    st.markdown(
+        f'<div class="pp-condition-description">{describe_condition(condition)}</div>',
+        unsafe_allow_html=True,
+    )
 
     st.divider()
     st.subheader("Bewertungsmonat")
