@@ -38,7 +38,7 @@ docs/                       Project proposal, session notes, data documentation
 archive/                    Historical handoffs / deprecated notes
 model_comparison/           Model benchmarking results (6 models compared)
 models/                     Trained model files and evaluation results
-notebooks/                  Exploratory notebooks
+exploration/                Exploratory analysis notebooks
 scripts/
   build_features.py         Feature engineering from cleaned CSV
   train_price_model.py      Train original Stage 1 model
