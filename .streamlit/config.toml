@@ -1,0 +1,7 @@
+[theme]
+# App immer im hellen Design darstellen – auch wenn Nutzer System-Dark-Mode aktiv haben.
+base = "light"
+primaryColor = "#0b7cff"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f4f8ff"
+textColor = "#071d49"

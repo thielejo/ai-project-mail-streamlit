@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import base64
+import datetime
 import json
 import sys
 from pathlib import Path
 
+import altair as alt
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
@@ -53,6 +55,9 @@ SEASONALITY_V2_PATH = PROJECT_ROOT / "models" / "stage3_seasonality_factors.csv"
 
 MIN_SIMILAR_VEHICLES = 30
 MIN_MODEL_BODY_VEHICLES = 100
+GOOD_SIMILAR_VEHICLES = 80
+GOOD_MODEL_BODY_VEHICLES = 300
+STRONG_MODEL_BODY_VEHICLES = 1_000
 LUXURY_PRICE_THRESHOLD = 40_000
 
 MACRO_AVAILABLE_YEARS = list(range(1996, 2027))
@@ -136,7 +141,7 @@ st.set_page_config(page_title="PricePilot", page_icon=str(LOGO_PATH), layout="wi
 st.markdown(
     """
     <style>
-        /* --- PricePilot Branding (beide Themes) --- */
+        /* App ist fest im hellen Design (Dark Mode deaktiviert via config.toml). */
         .pp-brand {
             border-bottom: 1px solid rgba(11, 124, 255, 0.25);
             margin-bottom: 1.1rem;
@@ -153,15 +158,7 @@ st.markdown(
         .pp-logo { text-align: right; }
         .pp-logo img { max-width: min(100%, 380px); height: auto; object-fit: contain; }
 
-        /* --- Preisspannen-Karte --- */
-        .pp-range-card {
-            border: 1px solid #cfe4ff;
-            border-left: 4px solid #0b7cff;
-            border-radius: 10px;
-            padding: 0.9rem 1.1rem 1rem;
-            background: rgba(11, 124, 255, 0.05);
-            margin-bottom: 0.7rem;
-        }
+        /* --- Preisspannen-Kachel --- */
         .pp-range-label {
             color: #48617e;
             font-size: 0.9rem;
@@ -174,24 +171,58 @@ st.markdown(
             line-height: 1.15;
             color: #071d49;
         }
-
-        /* --- Weiße Kästen mit blauer Umrandung: nur Light Mode --- */
-        @media (prefers-color-scheme: light) {
-            div[data-baseweb="select"] > div,
-            .stNumberInput div[data-baseweb="input"] {
-                background-color: #ffffff !important;
-                border: 1.5px solid #0b7cff !important;
-                border-radius: 8px !important;
-            }
-            .stNumberInput div[data-baseweb="input"]:focus-within,
-            div[data-baseweb="select"] > div:focus-within {
-                box-shadow: 0 0 0 2px rgba(11, 124, 255, 0.25) !important;
-            }
-            h1, h2, h3 { color: #071d49; }
+        .pp-tile-month {
+            color: #48617e;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0.55rem 0 0.35rem;
         }
-        @media (prefers-color-scheme: dark) {
-            .pp-range-card { background: rgba(11, 124, 255, 0.12); }
-            .pp-range-value { color: #ffffff; }
+        .pp-tile-month strong { color: #0b7cff; }
+
+        /* --- Weiße Auswahl-/Zahlenfelder mit blauer Umrandung --- */
+        div[data-baseweb="select"] > div,
+        .stNumberInput div[data-baseweb="input"] {
+            background-color: #ffffff !important;
+            border: 1.5px solid #0b7cff !important;
+            border-radius: 8px !important;
+        }
+        .stNumberInput div[data-baseweb="input"]:focus-within,
+        div[data-baseweb="select"] > div:focus-within {
+            box-shadow: 0 0 0 2px rgba(11, 124, 255, 0.25) !important;
+        }
+        h1, h2, h3 { color: #071d49; }
+
+        /* --- Sicherheits-Ampel: dezent, weißer Hintergrund --- */
+        .pp-confidence {
+            background: #ffffff;
+            border: 1px solid #e6ecf5;
+            border-left: 4px solid var(--pp-conf-color, #0b7cff);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin: 0.55rem 0 0.5rem;
+        }
+        .pp-confidence-head {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .pp-confidence-dot {
+            display: inline-block;
+            width: 0.7rem;
+            height: 0.7rem;
+            border-radius: 999px;
+            background: var(--pp-conf-color, #0b7cff);
+        }
+        .pp-confidence-label {
+            color: var(--pp-conf-color, #0b7cff);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .pp-confidence-text {
+            color: #5b708c;
+            font-size: 0.9rem;
+            line-height: 1.45;
+            margin-top: 0.35rem;
         }
     </style>
     """,
@@ -397,6 +428,51 @@ def summarize_data_basis(
     }
 
 
+def get_confidence_assessment(data_basis: dict, final_price: float) -> dict:
+    """Ampel-Bewertung der Datenbasis: grün / gelb / rot."""
+    similar_count = int(data_basis["similar_count"])
+    model_body_count = int(data_basis["model_body_count"])
+
+    if final_price >= LUXURY_PRICE_THRESHOLD:
+        return {
+            "level": "red", "label": "Geringe Sicherheit",
+            "color": "#b91c1c", "background": "#fef2f2", "border": "#fca5a5",
+            "text": (
+                "Die Schätzung sollte vorsichtig interpretiert werden, weil das Fahrzeug im teuren "
+                "Segment liegt und individuelle Ausstattungsmerkmale stärker ins Gewicht fallen."
+            ),
+        }
+    if model_body_count < MIN_MODEL_BODY_VEHICLES or (
+        similar_count < 10 and model_body_count < GOOD_MODEL_BODY_VEHICLES
+    ):
+        return {
+            "level": "red", "label": "Geringe Sicherheit",
+            "color": "#b91c1c", "background": "#fef2f2", "border": "#fca5a5",
+            "text": (
+                "Die Schätzung sollte vorsichtig interpretiert werden, weil für diese Fahrzeuggruppe "
+                "nur wenige historische Verkäufe vorliegen."
+            ),
+        }
+    if (
+        similar_count < MIN_SIMILAR_VEHICLES
+        or model_body_count < STRONG_MODEL_BODY_VEHICLES
+        or (similar_count < GOOD_SIMILAR_VEHICLES and model_body_count < 3_000)
+    ):
+        return {
+            "level": "yellow", "label": "Mittlere Sicherheit",
+            "color": "#a16207", "background": "#fefce8", "border": "#fde047",
+            "text": (
+                "Die Fahrzeuggruppe ist grundsätzlich im Datensatz vertreten, aber die genaue Kombination "
+                "aus Alter, Kilometerstand und Zustand ist weniger breit abgesichert."
+            ),
+        }
+    return {
+        "level": "green", "label": "Hohe Sicherheit",
+        "color": "#15803d", "background": "#f0fdf4", "border": "#86efac",
+        "text": "Es gibt eine breite Vergleichsbasis. Der finale Preis ist trotzdem als Schätzung zu lesen.",
+    }
+
+
 data = load_feature_data()
 model, model_version = load_model()
 metrics = load_metrics(model_version)
@@ -529,18 +605,17 @@ with left_column:
 
     st.divider()
     st.subheader("Bewertungsdatum")
-    st.caption("Für welchen Zeitpunkt soll der Marktpreis berechnet werden?")
+    st.caption("Für welchen Zeitpunkt soll der Marktpreis berechnet werden? (Tag ist ohne Bedeutung.)")
 
-    date_left, date_right = st.columns(2)
-    with date_left:
-        target_year = st.selectbox("Jahr", MACRO_AVAILABLE_YEARS, index=MACRO_AVAILABLE_YEARS.index(2026))
-    with date_right:
-        target_month = st.select_slider(
-            "Monat",
-            options=MACRO_AVAILABLE_MONTHS,
-            value=6,
-            format_func=lambda m: MONTH_NAMES[m],
-        )
+    eval_date = st.date_input(
+        "Bewertungsmonat",
+        value=datetime.date(2026, 6, 1),
+        min_value=datetime.date(min(MACRO_AVAILABLE_YEARS), 1, 1),
+        max_value=datetime.date(max(MACRO_AVAILABLE_YEARS), 12, 31),
+        format="DD.MM.YYYY",
+    )
+    target_year = int(eval_date.year)
+    target_month = int(eval_date.month)
 
     target_ym = f"{target_year}-{target_month:02d}"
     vehicle_age = max(int(target_year) - int(model_year), 0)
@@ -618,169 +693,75 @@ with right_column:
     lower_bound, upper_bound, _uncertainty = calculate_price_range(final_price, segment_error)
     range_text = f"{format_currency(lower_bound)} – {format_currency(upper_bound)}"
 
-    st.markdown(
-        f"""
-        <div class="pp-range-card">
-            <div class="pp-range-label">Geschätzte Preisspanne</div>
-            <div class="pp-range-value">{range_text}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
     has_recommendation = bool(seasonal_row.get("has_recommendation", False))
     best_month_number = int(seasonal_row.get("best_month", target_month))
     best_month_value = (
         MONTH_NAMES.get(best_month_number, str(best_month_number))
         if has_recommendation
-        else "Keine belastbare Empfehlung"
-    )
-    best_month_delta = (
-        f"{(float(seasonal_row.get('best_factor', 1.0)) - seasonal_factor) * 100:+.1f} Prozentpunkte"
-        if has_recommendation
-        else None
-    )
-    quick_cols = st.columns(2)
-    quick_cols[0].metric(
-        "Bester Verkaufsmonat",
-        best_month_value,
-        delta=best_month_delta,
-        help=(
-            "Stärkster historisch beobachteter Monat. Eine Empfehlung wird nur "
-            "bei mindestens zwei Monaten mit jeweils 100 Verkäufen angezeigt."
-        ),
-    )
-    quick_cols[1].metric(
-        "Marktanpassung",
-        f"{delta_pct:+.1f}%",
-        help="Veränderung des Gebrauchtwagenpreisniveaus gegenüber dem 2015-Referenzniveau.",
+        else "Noch keine belastbare Empfehlung"
     )
 
-    if data_basis["is_sparse"]:
-        st.warning(
-            "Für diese Fahrzeugkombination liegen nur wenige vergleichbare historische Verkäufe vor "
-            f"({data_basis['similar_count']} sehr ähnliche Fahrzeuge, {data_basis['model_body_count']} mit gleicher "
-            "Marke, gleichem Modell und gleicher Karosserieform). Die Preisspanne ist deshalb breiter zu verstehen."
-        )
-
-    if final_price >= LUXURY_PRICE_THRESHOLD:
-        st.info(
-            "Hinweis zum Luxussegment: Bei sehr teuren Fahrzeugen hängt der Preis stärker von Ausstattung, "
-            "Sondermodell, Unfall- und Servicehistorie sowie individuellen Merkmalen ab, die im Datensatz nur "
-            "begrenzt enthalten sind. Die Preisspanne ist entsprechend vorsichtig einzuordnen."
-        )
-
-    show_price_breakdown = st.toggle(
-        "Preisaufbau anzeigen",
-        value=False,
-        help="Zeigt die drei Rechenschritte: Fahrzeugwert, Marktpreis und Saisonfaktor.",
+    body_season = (
+        seasonality[seasonality["body"] == selected_body][["sale_month", "seasonal_factor"]]
+        .dropna()
+        .sort_values("sale_month")
+        .copy()
     )
-    if show_price_breakdown:
-        col1, col2, col3 = st.columns(3)
-        col1.metric(
-            "Stage 1: Fahrzeugwert",
-            format_currency(stage1_price),
-            help=(
-                "Zeitneutrale V2-Vorhersage nur aus Fahrzeugmerkmalen."
-                if model_version == "v2"
-                else "V1-Vorhersage mit der festen Marktreferenz 2015-02."
-            ),
-        )
-        col2.metric(
-            "Stage 2: Marktpreis",
-            format_currency(stage2_price),
-            delta=f"{price_delta:+,.0f}",
-            help="Stage-1-Basispreis × CPI-Multiplikator für das gewählte Bewertungsdatum.",
-        )
-        col3.metric(
-            f"Stage 3: Saison ({MONTH_NAMES[target_month]})",
-            f"{seasonal_factor:.4f}",
-            delta=f"{seasonal_delta_pct:+.1f}%",
-            help="Faktor aus CPI- und fahrzeugmixbereinigten historischen Preisabweichungen.",
-        )
-        st.metric(
-            f"CPI-Multiplikator ({target_ym})",
-            f"{cpi_multiplier:.4f}",
-            delta=f"{delta_pct:+.1f}% gegenüber 2015",
-            help="Verhältnis des Gebrauchtwagen-CPI zum Jahresdurchschnitt 2015 (FRED: CUSR0000SETA01).",
-        )
 
-    seasonal_observations = int(seasonal_row.get("observations", 0))
-    if seasonal_observations == 0:
-        st.info(
-            f"Für {MONTH_NAMES[target_month]} enthält der historische Datensatz keine Verkäufe. "
-            "Die Saisonanpassung bleibt deshalb neutral."
+    with st.container(border=True):
+        st.markdown(
+            f'<div class="pp-range-label">Geschätzte Preisspanne</div>'
+            f'<div class="pp-range-value">{range_text}</div>'
+            f'<div class="pp-tile-month">Bester Verkaufsmonat: <strong>{best_month_value}</strong></div>',
+            unsafe_allow_html=True,
         )
-    elif seasonal_delta_pct > 2:
-        st.success(
-            f"Saisonal ist {MONTH_NAMES[target_month]} für **{format_body(selected_body)}** eher stark "
-            f"({seasonal_delta_pct:+.1f}%)."
-        )
-    elif seasonal_delta_pct < -2:
-        better_month_hint = (
-            f" Historisch besser: **{best_month_value}**."
-            if has_recommendation
-            else " Für einen Monatsvergleich ist die Datenbasis zu klein."
-        )
-        st.warning(
-            f"Saisonal ist {MONTH_NAMES[target_month]} für **{format_body(selected_body)}** eher schwach "
-            f"({seasonal_delta_pct:+.1f}%).{better_month_hint}"
-        )
-    else:
-        st.info(
-            f"Saisonal liegt {MONTH_NAMES[target_month]} für **{format_body(selected_body)}** nahe am Durchschnitt "
-            f"({seasonal_delta_pct:+.1f}%)."
-        )
-
-    show_model_quality = st.toggle(
-        "Modellgenauigkeit anzeigen",
-        value=False,
-        help="Zeigt die internen Testkennzahlen des Preismodells.",
-    )
-    if show_model_quality:
-        metric_values = metrics.get("shared_split_benchmark", {}).get(
-            "v2_metrics", metrics.get("v2_metrics", metrics.get("metrics", {}))
-        )
-        mae = metric_values.get("mae")
-        r2 = metric_values.get("r2")
-        if mae is not None and r2 is not None:
-            mq_left, mq_right = st.columns(2)
-            benchmark = metrics.get("shared_split_benchmark", {})
-            previous_mae = benchmark.get("v1_metrics", {}).get(
-                "mae", metrics.get("current_model_metrics_same_test", {}).get("mae")
-            )
-            mae = benchmark.get("v2_metrics", {}).get("mae", mae)
-            if model_version == "v2" and previous_mae is not None:
-                improvement_pct = (float(previous_mae) - float(mae)) / float(previous_mae) * 100
-                mq_left.metric(
-                    "Durchschnittlicher Fehler Stage 1 V2 (MAE)",
-                    format_currency(float(mae)),
-                    delta=f"-{improvement_pct:.2f}% gegenüber V1 ({format_currency(float(previous_mae))})",
-                    delta_color="inverse",
-                    help="V1 und V2 wurden auf denselben 105.834 Testfahrzeugen verglichen.",
+        if not body_season.empty:
+            month_order = [MONTH_NAMES[m] for m in range(1, 13)]
+            body_season["Monat"] = body_season["sale_month"].map(MONTH_NAMES)
+            season_chart = (
+                alt.Chart(body_season)
+                .mark_line(color="#9aa4b2", point=alt.OverlayMarkDef(filled=True, color="#9aa4b2"))
+                .encode(
+                    x=alt.X(
+                        "Monat:N",
+                        sort=month_order,
+                        title=None,
+                        axis=alt.Axis(labelColor="#8a8a8a", labelAngle=0, grid=False,
+                                      domainColor="#d7dde5", tickColor="#d7dde5"),
+                    ),
+                    y=alt.Y(
+                        "seasonal_factor:Q",
+                        title=None,
+                        scale=alt.Scale(zero=False),
+                        axis=alt.Axis(labelColor="#8a8a8a", grid=False, format=".2f",
+                                      domainColor="#d7dde5", tickColor="#d7dde5"),
+                    ),
+                    tooltip=[
+                        alt.Tooltip("Monat:N", title="Monat"),
+                        alt.Tooltip("seasonal_factor:Q", title="Saisonfaktor", format=".3f"),
+                    ],
                 )
-            else:
-                mq_left.metric("Durchschnittlicher Fehler Stage 1 (MAE)", format_currency(float(mae)))
-            mq_right.metric("Bestimmtheitsmaß R²", f"{float(r2):.3f}")
+                .properties(height=150, background="transparent")
+                .configure_view(strokeWidth=0, fill=None)
+            )
+            st.caption("Saisonale Entwicklung über die Verkaufsmonate")
+            st.altair_chart(season_chart, use_container_width=True, theme=None)
+        else:
+            st.caption("Für diese Karosserieform liegen keine monatlichen Saisondaten vor.")
 
-    display_input = {
-        "Marke": format_make(selected_make),
-        "Modell": format_model(selected_model),
-        "Karosserieform": format_body(selected_body),
-        "Baujahr": int(model_year),
-        "Fahrzeugalter": vehicle_age,
-        "Kilometerstand": f"{int(odometer_km):,} km".replace(",", "."),
-        "Zustand": condition_label,
-    }
-    if model_version == "v2":
-        display_input.update({
-            "Ausstattungsvariante": format_trim(trim),
-            "Getriebe": TRANSMISSION_LABELS.get(transmission, title_case(transmission)),
-            "Bundesstaat / Region": format_state(state),
-            "Außenfarbe": format_color(color),
-            "Innenfarbe": format_color(interior),
-        })
-    st.dataframe(pd.DataFrame([display_input]), width="stretch", hide_index=True)
+    confidence = get_confidence_assessment(data_basis, final_price)
+    st.markdown(
+        f"""
+        <div class="pp-confidence" style="--pp-conf-color: {confidence['color']};">
+            <div class="pp-confidence-head">
+                <span class="pp-confidence-dot"></span>
+                <span class="pp-confidence-label">{confidence['label']}</span>
+            </div>
+            <div class="pp-confidence-text">{confidence['text']}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 st.divider()
 
