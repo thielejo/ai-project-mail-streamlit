@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    :root {
+      --pp-blue: #0b7cff;
+      --pp-blue-dark: #0a63c9;
+      --pp-empty: #ffffff;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: transparent;
+    }
+    #pp-stars {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      padding: 0.15rem 0 0.1rem;
+      user-select: none;
+    }
+    .pp-star-wrap {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+    .pp-star-wrap svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transition: transform 0.08s ease;
+    }
+    .pp-star-wrap:hover svg { transform: scale(1.08); }
+    .pp-hit {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 50%;
+      z-index: 2;
+    }
+    .pp-hit-left { left: 0; }
+    .pp-hit-right { right: 0; }
+    #pp-caption {
+      margin-top: 0.1rem;
+      font-size: 0.82rem;
+      color: #8a8a8a;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <div id="pp-stars"></div>
+  <div id="pp-caption"></div>
+
+  <script>
+    const STAR_PATH = "M12 .587l3.668 7.431 8.2 1.192-5.934 5.786 1.401 8.169L12 18.897l-7.335 3.868 1.401-8.169L.132 9.21l8.2-1.192z";
+    const BLUE = "#0b7cff";
+    const EMPTY = "#ffffff";
+    const COUNT = 5;
+
+    let currentValue = 4.0;   // committed value
+    let uid = 0;
+
+    function svgStar(fraction, id) {
+      // fraction in {0, 0.5, 1}
+      const width = fraction * 24;
+      return `
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <defs><clipPath id="clip${id}"><rect x="0" y="0" width="${width}" height="24"/></clipPath></defs>
+          <path d="${STAR_PATH}" fill="${EMPTY}" stroke="${BLUE}" stroke-width="1.6" stroke-linejoin="round"/>
+          ${fraction > 0 ? `<path d="${STAR_PATH}" fill="${BLUE}" clip-path="url(#clip${id})"/>` : ""}
+        </svg>`;
+    }
+
+    function fractionFor(index, value) {
+      // index is 1-based star position
+      if (value >= index) return 1;
+      if (value >= index - 0.5) return 0.5;
+      return 0;
+    }
+
+    function render(previewValue) {
+      const value = previewValue != null ? previewValue : currentValue;
+      const container = document.getElementById("pp-stars");
+      let html = "";
+      for (let i = 1; i <= COUNT; i++) {
+        const frac = fractionFor(i, value);
+        html += `<div class="pp-star-wrap" data-index="${i}">
+                   ${svgStar(frac, uid++)}
+                   <div class="pp-hit pp-hit-left"  data-val="${i - 0.5}"></div>
+                   <div class="pp-hit pp-hit-right" data-val="${i}"></div>
+                 </div>`;
+      }
+      container.innerHTML = html;
+
+      const caption = document.getElementById("pp-caption");
+      caption.textContent = value.toFixed(1).replace(".", ",") + " von 5 Sternen";
+
+      container.querySelectorAll(".pp-hit").forEach((hit) => {
+        const val = parseFloat(hit.dataset.val);
+        hit.addEventListener("mouseenter", () => render(val));
+        hit.addEventListener("click", () => {
+          currentValue = val;
+          render();
+          setValue(currentValue);
+        });
+      });
+      container.addEventListener("mouseleave", () => render(), { once: true });
+
+      setFrameHeight();
+    }
+
+    // ---- Bare Streamlit component protocol ----
+    function post(type, extra) {
+      window.parent.postMessage(Object.assign({ isStreamlitMessage: true, type }, extra || {}), "*");
+    }
+    function setValue(value) {
+      post("streamlit:setComponentValue", { value: value, dataType: "json" });
+    }
+    function setFrameHeight() {
+      post("streamlit:setFrameHeight", { height: document.body.scrollHeight });
+    }
+
+    let ready = false;
+    window.addEventListener("message", (event) => {
+      const data = event.data;
+      if (!data || data.type !== "streamlit:render") return;
+      if (!ready) {
+        const args = (data.args) || {};
+        if (typeof args.default === "number") currentValue = args.default;
+        ready = true;
+        render();
+      }
+    });
+
+    // announce readiness
+    post("streamlit:componentReady", { apiVersion: 1 });
+    render();
+    setFrameHeight();
+  </script>
+</body>
+</html>

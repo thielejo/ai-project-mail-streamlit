@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import base64
 import json
 import sys
 from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
@@ -35,6 +37,9 @@ from stage1_runtime import (  # noqa: E402
     load_production_model,
 )
 
+LOGO_PATH = PROJECT_ROOT / "app" / "assets" / "pricepilot-logo.png"
+LOGO_DISPLAY_PATH = PROJECT_ROOT / "app" / "assets" / "pricepilot-logo-display.png"
+STAR_COMPONENT_DIR = PROJECT_ROOT / "app" / "components" / "star_rating"
 FEATURES_PATH = PROJECT_ROOT / "data" / "car_prices_features.csv"
 STAGE2_EVAL_PATH = PROJECT_ROOT / "models" / "stage2_evaluation.json"
 SHARED_SPLIT_BENCHMARK_PATH = (
@@ -57,11 +62,11 @@ MONTH_NAMES = {
     7: "Jul", 8: "Aug", 9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez",
 }
 CONDITION_OPTIONS = {
-    "★": (1.0, "1 Stern: erhebliche Schäden und umfassender Reparaturbedarf."),
-    "★★": (2.0, "2 Sterne: deutliche optische oder technische Mängel."),
-    "★★★": (3.0, "3 Sterne: normale altersbedingte Abnutzung und Gebrauchsspuren."),
-    "★★★★": (4.0, "4 Sterne: gepflegter Zustand mit kleineren Gebrauchsspuren."),
-    "★★★★★": (5.0, "5 Sterne: kaum sichtbare Gebrauchsspuren und keine bekannten größeren Mängel."),
+    1: (1.0, "1 Stern: erhebliche Schäden und umfassender Reparaturbedarf."),
+    2: (2.0, "2 Sterne: deutliche optische oder technische Mängel."),
+    3: (3.0, "3 Sterne: normale altersbedingte Abnutzung und Gebrauchsspuren."),
+    4: (4.0, "4 Sterne: gepflegter Zustand mit kleineren Gebrauchsspuren."),
+    5: (5.0, "5 Sterne: kaum sichtbare Gebrauchsspuren und keine bekannten größeren Mängel."),
 }
 MILES_PER_KILOMETER = 0.621371
 
@@ -115,9 +120,99 @@ MAKE_LABELS = {
     "mercedes-benz": "Mercedes-Benz", "rolls-royce": "Rolls-Royce",
     "volkswagen": "Volkswagen",
 }
+# Automarken-Kürzel, die groß geschrieben bleiben müssen (z. B. CTS, AMG, RAV4).
+MODEL_ACRONYMS = {
+    "amg", "clk", "cls", "cr-v", "cr-z", "crx", "cts", "cts-v", "es", "gli", "glk",
+    "gls", "gs", "gt", "gt-r", "gti", "gto", "gtr", "is", "ls", "mdx", "qx", "rav4",
+    "rdx", "rl", "rx", "s60", "sc", "slk", "sls", "srt", "srt-8", "sti", "tl", "tsx",
+    "tt", "wrx", "xc60", "xc70", "xc90", "z3", "z4", "c30", "c70",
+}
+# Bindewörter, die im Modellnamen klein bleiben (außer am Anfang).
+MODEL_CONNECTORS = {"and", "of", "the"}
 
 
-st.set_page_config(page_title="Universal Pricing Agent", layout="wide")
+st.set_page_config(page_title="PricePilot", page_icon=str(LOGO_PATH), layout="wide")
+
+st.markdown(
+    """
+    <style>
+        /* --- PricePilot Branding (beide Themes) --- */
+        .pp-brand {
+            border-bottom: 1px solid rgba(11, 124, 255, 0.25);
+            margin-bottom: 1.1rem;
+            padding-bottom: 0.5rem;
+        }
+        .pp-kicker {
+            color: #0b7cff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.05rem;
+        }
+        .pp-logo { text-align: right; }
+        .pp-logo img { max-width: min(100%, 380px); height: auto; object-fit: contain; }
+
+        /* --- Preisspannen-Karte --- */
+        .pp-range-card {
+            border: 1px solid #cfe4ff;
+            border-left: 4px solid #0b7cff;
+            border-radius: 10px;
+            padding: 0.9rem 1.1rem 1rem;
+            background: rgba(11, 124, 255, 0.05);
+            margin-bottom: 0.7rem;
+        }
+        .pp-range-label {
+            color: #48617e;
+            font-size: 0.9rem;
+            font-weight: 650;
+            margin-bottom: 0.2rem;
+        }
+        .pp-range-value {
+            font-size: 1.9rem;
+            font-weight: 800;
+            line-height: 1.15;
+            color: #071d49;
+        }
+
+        /* --- Weiße Kästen mit blauer Umrandung: nur Light Mode --- */
+        @media (prefers-color-scheme: light) {
+            div[data-baseweb="select"] > div,
+            .stNumberInput div[data-baseweb="input"] {
+                background-color: #ffffff !important;
+                border: 1.5px solid #0b7cff !important;
+                border-radius: 8px !important;
+            }
+            .stNumberInput div[data-baseweb="input"]:focus-within,
+            div[data-baseweb="select"] > div:focus-within {
+                box-shadow: 0 0 0 2px rgba(11, 124, 255, 0.25) !important;
+            }
+            h1, h2, h3 { color: #071d49; }
+        }
+        @media (prefers-color-scheme: dark) {
+            .pp-range-card { background: rgba(11, 124, 255, 0.12); }
+            .pp-range-value { color: #ffffff; }
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+@st.cache_data
+def logo_data_uri() -> str:
+    encoded = base64.b64encode(LOGO_DISPLAY_PATH.read_bytes()).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
+
+
+_star_component = components.declare_component("pp_star_rating", path=str(STAR_COMPONENT_DIR))
+
+
+def star_rating(default: float = 4.0, key: str | None = None) -> float:
+    value = _star_component(default=float(default), key=key)
+    if value is None:
+        return float(default)
+    return float(value)
 
 
 @st.cache_resource
@@ -195,7 +290,22 @@ def format_make(value: str) -> str:
 
 
 def format_model(value: str) -> str:
-    return title_case(value)
+    words = str(value).replace("_", " ").strip().split()
+    formatted = []
+    for index, word in enumerate(words):
+        lowered = word.lower()
+        if lowered in MODEL_ACRONYMS:
+            formatted.append(word.upper())
+        elif lowered in MODEL_CONNECTORS and index > 0:
+            formatted.append(lowered)
+        else:
+            formatted.append(
+                "-".join(
+                    part.upper() if part.lower() in MODEL_ACRONYMS else part.capitalize()
+                    for part in word.split("-")
+                )
+            )
+    return " ".join(formatted)
 
 
 def format_body(value: str) -> str:
@@ -215,6 +325,11 @@ def format_state(value: str) -> str:
 
 def format_color(value: str) -> str:
     return COLOR_LABELS.get(str(value), title_case(value))
+
+
+def describe_condition(value: float) -> str:
+    star = min(5, max(1, int(round(value))))
+    return CONDITION_OPTIONS[star][1]
 
 
 def get_price_segment(price: float) -> str:
@@ -298,11 +413,17 @@ else:
     v2_options = {}
 displacement_lookup = load_displacement_lookup() if model_version == "catboost" else {}
 
-st.title("Universal Pricing Agent")
-st.caption(
-    "Dreistufige Preisschätzung: Fahrzeugwert, aktuelles Marktpreisniveau und "
-    "eine vorsichtige saisonale Anpassung."
-)
+st.markdown('<div class="pp-brand">', unsafe_allow_html=True)
+header_text, header_logo = st.columns([0.6, 0.4], gap="large", vertical_alignment="center")
+with header_text:
+    st.markdown('<div class="pp-kicker">Used Car Pricing Intelligence</div>', unsafe_allow_html=True)
+    st.title("PricePilot")
+with header_logo:
+    st.markdown(
+        f'<div class="pp-logo"><img src="{logo_data_uri()}" alt="PricePilot Logo" /></div>',
+        unsafe_allow_html=True,
+    )
+st.markdown("</div>", unsafe_allow_html=True)
 
 left_column, right_column = st.columns([0.95, 1.05], gap="large")
 
@@ -388,13 +509,10 @@ with left_column:
         st.caption("Für das US-Preismodell wird der Wert im Hintergrund automatisch in Meilen umgerechnet.")
 
     with input_right:
-        condition_label = st.select_slider(
-            "Fahrzeugzustand",
-            options=list(CONDITION_OPTIONS),
-            value="★★★★",
-        )
-        condition, condition_description = CONDITION_OPTIONS[condition_label]
-        st.caption(condition_description)
+        st.markdown("**Fahrzeugzustand**")
+        condition = star_rating(default=4.0, key="condition_stars")
+        condition_label = f"{condition:g}".replace(".", ",") + " / 5 Sterne"
+        st.caption(describe_condition(condition))
 
     if model_version == "catboost":
         suggested_disp = lookup_displacement(selected_make, selected_model, displacement_lookup)
@@ -486,11 +604,28 @@ with right_column:
     seasonal_delta = final_price - stage2_price
     seasonal_delta_pct = (seasonal_factor - 1.0) * 100
 
-    st.metric(
-        label="Geschätzter Verkaufspreis",
-        value=format_currency(final_price),
-        delta=f"{seasonal_delta:+,.0f} saisonaler Effekt",
-        help="Fahrzeugwert plus Markt- und Saisonanpassung.",
+    price_segment = get_price_segment(final_price)
+    segment_error = get_segment_error(metrics, price_segment)
+    data_basis = summarize_data_basis(
+        data,
+        make=selected_make,
+        model=selected_model,
+        body=selected_body,
+        vehicle_age=vehicle_age,
+        odometer_miles=odometer_miles,
+        condition=float(condition),
+    )
+    lower_bound, upper_bound, _uncertainty = calculate_price_range(final_price, segment_error)
+    range_text = f"{format_currency(lower_bound)} – {format_currency(upper_bound)}"
+
+    st.markdown(
+        f"""
+        <div class="pp-range-card">
+            <div class="pp-range-label">Geschätzte Preisspanne</div>
+            <div class="pp-range-value">{range_text}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     has_recommendation = bool(seasonal_row.get("has_recommendation", False))
@@ -521,38 +656,19 @@ with right_column:
         help="Veränderung des Gebrauchtwagenpreisniveaus gegenüber dem 2015-Referenzniveau.",
     )
 
-    price_segment = get_price_segment(final_price)
-    segment_error = get_segment_error(metrics, price_segment)
-    data_basis = summarize_data_basis(
-        data,
-        make=selected_make,
-        model=selected_model,
-        body=selected_body,
-        vehicle_age=vehicle_age,
-        odometer_miles=odometer_miles,
-        condition=float(condition),
-    )
-    show_uncertainty_range = data_basis["is_sparse"] or final_price >= LUXURY_PRICE_THRESHOLD
-    if show_uncertainty_range:
-        lower_bound, upper_bound, _uncertainty = calculate_price_range(final_price, segment_error)
-        range_text = f"{format_currency(lower_bound)} bis {format_currency(upper_bound)}"
+    if data_basis["is_sparse"]:
+        st.warning(
+            "Für diese Fahrzeugkombination liegen nur wenige vergleichbare historische Verkäufe vor "
+            f"({data_basis['similar_count']} sehr ähnliche Fahrzeuge, {data_basis['model_body_count']} mit gleicher "
+            "Marke, gleichem Modell und gleicher Karosserieform). Die Preisspanne ist deshalb breiter zu verstehen."
+        )
 
-        if data_basis["is_sparse"]:
-            st.warning(
-                "Für diese Fahrzeugkombination liegen nur wenige vergleichbare historische Verkäufe vor. "
-                f"Gefunden wurden {data_basis['similar_count']} sehr ähnliche Fahrzeuge und "
-                f"{data_basis['model_body_count']} Verkäufe mit gleicher Marke, gleichem Modell und gleicher "
-                f"Karosserieform. Die Schätzung ist deshalb unsicherer; eine grobe Preisrange liegt bei "
-                f"**{range_text}**."
-            )
-
-        if final_price >= LUXURY_PRICE_THRESHOLD:
-            st.info(
-                "Hinweis zum Luxussegment: Bei sehr teuren Fahrzeugen hängt der Preis stärker von "
-                "Ausstattung, Sondermodell, Unfallhistorie, Servicehistorie und individuellen Merkmalen ab. "
-                f"Diese Informationen sind im Datensatz nur begrenzt enthalten; deshalb sollte die Schätzung "
-                f"als Orientierung mit einer groben Spanne von **{range_text}** verstanden werden."
-            )
+    if final_price >= LUXURY_PRICE_THRESHOLD:
+        st.info(
+            "Hinweis zum Luxussegment: Bei sehr teuren Fahrzeugen hängt der Preis stärker von Ausstattung, "
+            "Sondermodell, Unfall- und Servicehistorie sowie individuellen Merkmalen ab, die im Datensatz nur "
+            "begrenzt enthalten sind. Die Preisspanne ist entsprechend vorsichtig einzuordnen."
+        )
 
     show_price_breakdown = st.toggle(
         "Preisaufbau anzeigen",

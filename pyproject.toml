@@ -16,8 +16,9 @@ dependencies = [
     "transformers>=4.38.0",
     "huggingface-hub>=0.20.0",
     
-    # NEU: 
+    # NEU:
     "xgboost>=2.0",
+    "catboost>=1.2",
     "streamlit>=1.30",
     "fredapi>=0.5",
     "kaggle>=1.6"

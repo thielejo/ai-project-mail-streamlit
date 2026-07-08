@@ -37,10 +37,14 @@ DEFAULT_DISPLACEMENT = 3.0  # globaler Fallback (Median), falls Modell unbekannt
 def load_production_model() -> tuple[object, str]:
     """Bevorzugt CatBoost (getunt + Hubraum), dann V2, dann V1 als Fallback."""
     if CATBOOST_MODEL_PATH.exists():
-        from catboost import CatBoostRegressor
-        model = CatBoostRegressor()
-        model.load_model(str(CATBOOST_MODEL_PATH))
-        return model, "catboost"
+        try:
+            from catboost import CatBoostRegressor
+
+            model = CatBoostRegressor()
+            model.load_model(str(CATBOOST_MODEL_PATH))
+            return model, "catboost"
+        except Exception as error:
+            print(f"Could not load Stage 1 CatBoost model, falling back to V2/V1: {error}")
     if V2_MODEL_PATH.exists():
         try:
             return joblib.load(V2_MODEL_PATH), "v2"
