@@ -22,7 +22,8 @@ Stage 3 (Seasonal)  Rule-based by body type & month     → Seasonal fine-tuning
 
 **End product:** Streamlit app + LLM orchestration layer
 
-Stage ownership is documented in [`docs/stage_ownership.md`](docs/stage_ownership.md).
+Stage ownership notes are archived in
+[`archive/docs_cleanup_2026-07-08/stage_ownership.md`](archive/docs_cleanup_2026-07-08/stage_ownership.md).
 
 ---
 
