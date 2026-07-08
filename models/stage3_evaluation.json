@@ -1,7 +1,7 @@
 {
   "created_at": "2026-06-24T17:50:45.644792+00:00",
   "method": "cpi_normalized_model_residual_by_body_month",
-  "stage1_model": "price_model_v2.joblib",
+  "stage1_model": "stage1_production_model.joblib",
   "reference_year_month": "time-neutral V2 (no sale month feature)",
   "factor_min": 0.85,
   "factor_max": 1.15,
@@ -37,7 +37,7 @@
     "mae_change": -13.31,
     "mae_change_percent": -0.98
   },
-  "seasonality_csv": "models\\seasonality_factors_v2.csv",
+  "seasonality_csv": "models\\stage3_seasonality_factors.csv",
   "body_summary": [
     {
       "body": "sedan",

@@ -27,27 +27,27 @@ Die aktuelle Implementierung ist jetzt wieder am Projektplan ausgerichtet:
 - **Stage 3:** Saisonalität. Hierhin gehört ausschließlich die saisonale Feinkorrektur nach Karosserieform und Monat.
 - **App / UX:** Streamlit-Oberfläche, deutsche Labels, Kilometer-Umrechnung, Sterne-Skala, Toggle-Bereiche und Eingabevalidierung.
 
-Die verbindliche Zuordnung steht in `docs/stage_ownership.md`.
+Die frühere Stage-Ownership-Notiz liegt inzwischen im Archiv.
 Alte, missverständlich benannte Übergaben wurden nach `archive/` verschoben.
 
 ### Stage 1 — Neues V2-Fahrzeugwertmodell
 
-- Zusätzlich zum bisherigen Produktionsmodell wurde ein separates **Stage-1-V2-Modell** entwickelt. Das bisherige Modell `models/price_model.joblib` und seine Trainingspipeline bleiben unverändert als Backup erhalten.
+- Zusätzlich zum ersten HistGradientBoosting-Modell wurde ein separates **Stage-1-XGBoost-Ensemble** entwickelt. Das ältere Modell liegt inzwischen als Legacy-Artefakt im Archiv.
 - V2 ist ein **50/50-Ensemble aus zwei XGBoost-Modellen**: Eine Komponente prognostiziert den Preis direkt in Dollar, die andere den logarithmierten Preis. Architektur, Hyperparameter und Gewichtung wurden auf einem separaten Validierungsanteil gewählt.
 - V2 verwendet 529.169 bereinigte Verkäufe sowie zusätzliche Fahrzeugmerkmale wie Ausstattungsvariante, Getriebe, Bundesstaat, Außen- und Innenfarbe. Eine explizite Marke-Modell-Interaktion verbessert die Abbildung verschiedener Modellreihen.
 - `MMR`, VIN und Verkäufer wurden bewusst ausgeschlossen. Insbesondere `MMR` wäre bereits eine externe Preisvorhersage und könnte die Modellleistung künstlich beziehungsweise zielähnlich verbessern.
 - Im strengen gemeinsamen Neutraining auf exakt demselben Split sinkt der MAE von V1 mit **1.830,95 $** auf **1.370,15 $** bei V2. Das entspricht **460,80 $ beziehungsweise 25,17 % weniger MAE**. Das gepaarte 95%-Bootstrap-Intervall liegt bei **450,74 $ bis 470,83 $**.
 - Weitere V2-Testwerte: **RMSE 2.400,34 $**, **R² 0,9366**, **MAPE 15,13 %**. Das Ensemble ist gezielt auf den MAE in Dollar optimiert; andere Fehlermaße können gegenüber einer einzelnen V2-Komponente einen Trade-off zeigen.
-- Das neue Modell liegt unter `models/price_model_v2.joblib` und ist jetzt das **Produktionsmodell der Streamlit-App**. Die App bietet die zusätzlichen V2-Eingaben an; das bisherige Modell bleibt als automatischer Fallback erhalten.
+- Das aktuelle Produktionsmodell liegt unter `models/stage1_production_model.joblib`. Die App bietet die zusätzlichen Eingaben an; das ältere Modell bleibt als archivierter Fallback erhalten.
 - Wichtig: Die **25,17-%-Verbesserung gehört zu Stage 1**, nicht zu Stage 3.
 
 ### Stage 1 — FIN-Erweiterung (Hubraum)
 
-- Aus der VIN (US-Pendant zur FIN) lässt sich über die kostenlose NHTSA-API der **Hubraum** nachladen (Abdeckung 99 %). Eine ausführliche Voruntersuchung (6 Tests) liegt unter `experiments/vin_fin_enrichment/` (`FIN_Test.md`).
+- Aus der VIN (US-Pendant zur FIN) lässt sich über die kostenlose NHTSA-API der **Hubraum** nachladen (Abdeckung 99 %). Die aktuelle FIN-/VIN-Vorbereitung liegt unter `vin_fin_enrichment/`; ältere Voruntersuchungen liegen im Archiv.
 - Ergänzt man V2 um den Hubraum, sinkt der MAE auf dem vollen Datensatz (529.169 Zeilen) von **1.365 $ (V2) auf 1.201 $** — **−12 %**, R² 0,937 → **0,954**. Damit ist es der **beste Stage-1-Wert** des Projekts.
 - Der Hubraum trägt den gesamten FIN-Effekt; Kraftstoff/Zylinder sind redundant (Per-Feature-Ablation, Test 6). Der Effekt hält auch zusätzlich zu trim/Farbe/Ausstattung — also kein Overlap.
-- Integriertes Modell: `models/price_model_v2_fin.joblib`, Skript `scripts/train_stage1_v2_fin.py` (= V2-Pipeline + `displacement`). Details: `experiments/vin_fin_enrichment/INTEGRATION_V2_FIN.md` und `docs/stage1/model_results_stage1_v2_fin.md`.
-- Status: trainiert und dokumentiert; **noch nicht** in die Streamlit-App eingebunden (V2 bleibt vorerst Produktionsmodell). Der 47-MB-Voll-Decode-Cache ist nicht im Repo (regenerierbar via `experiments/vin_fin_enrichment/build_full_vin_cache.py`).
+- Integriertes Modell: `models/stage1_fin_model.joblib`, Skript `scripts/train_stage1_v2_fin.py` (= XGBoost-Pipeline + `displacement`).
+- Status: trainiert und dokumentiert; **noch nicht** in die Streamlit-App eingebunden (das Produktionsmodell bleibt vorerst `stage1_production_model.joblib`). Der 47-MB-Voll-Decode-Cache ist nicht im Repo (regenerierbar via `vin_fin_enrichment/build_full_vin_cache.py`).
 
 ### Stage 2 — CPI-Marktpreisanpassung
 
@@ -75,7 +75,7 @@ Eingabe: Fahrzeugbeschreibung (Marke, Modell, Karosserie, Baujahr, Km, Zustand)
 │  Stage 1 — Micro (FERTIG ✅)                                           │
 │  V2 XGBoost-Raw/Log-Ensemble auf Fahrzeugattribute                    │
 │  → Basispreis in USD (2015er Preisniveau)                              │
-│  Modell: models/price_model_v2.joblib | V1 bleibt als Fallback         │
+│  Modell: models/stage1_production_model.joblib                         │
 │  MAE: $1.370 | RMSE: $2.400 | R²: 0.9366 | MAPE: 15,13%             │
 └───────────────────────┬────────────────────────────────────────────────┘
                         │  × cpi_multiplier(Zieldatum)
@@ -123,8 +123,8 @@ app/
 
 scripts/
   build_features.py         ← Feature Engineering → car_prices_features.csv
-  train_price_model.py      ← Stage-1-Training (HistGB + Segment-Analyse).
-                              Speichert models/price_model.joblib.
+  train_price_model.py      ← ältere Stage-1-Training-Pipeline (HistGB).
+                              Schreibt in archive/model_artifacts_2026-07-08/.
   train_stage1_v2.py        ← Separates Stage-1-V2-Ensemble; vollständiges
                               Training ohne Überschreiben des alten Modells.
   optimize_stage1_v2.py     ← Validierungsbasierte Suche nach Architektur,
@@ -139,7 +139,7 @@ scripts/
                               Schreibt models/stage2_evaluation.json und
                               docs/stage2/model_results_stage2.md
   evaluate_stage3.py        ← Saisonalitätsfaktoren + Summary.
-                              Schreibt models/seasonality_factors_v2.csv,
+                              Schreibt models/stage3_seasonality_factors.csv,
                               models/stage3_evaluation.json und
                               docs/stage3/model_results_stage3.md
   compare_stage1_v1_v2_shared_split.py
@@ -151,28 +151,27 @@ scripts/
   train_stage1.py           ← Ältere XGBoost-Pipeline (nicht primär, Vergleich)
 
 models/
-  price_model.joblib        ← V1-Fallback (HistGradientBoosting)
-  price_model_v2.joblib     ← Produktionsmodell für Stage 1 V2
-  price_model_metrics.json  ← V1-Metriken inkl. Segmentaufschlüsselung
-  price_model_v2_metrics.json
-                            ← Stage-1-V2-Metriken
+  stage1_production_model.joblib
+                            ← Produktionsmodell für Stage 1
+  stage1_production_metrics.json
+                            ← Metriken zum Produktionsmodell
+  stage1_fin_model.joblib   ← FIN-/Hubraum-Erweiterung als trainiertes Artefakt
+  stage1_fin_metrics.json   ← Metriken zur FIN-/Hubraum-Erweiterung
   stage2_evaluation.json    ← Stage-2-Backtest + Projektion
   stage3_evaluation.json    ← Stage-3-Regel-Holdout
-  stage1_xgboost.json       ← Älteres XGBoost-Modell (nicht primär)
+  stage3_seasonality_factors.csv
+                            ← saisonale Korrekturfaktoren
 
 docs/
-  stage_ownership.md        ← Verbindliche fachliche Zuordnung der Stages.
   stage1/                   ← V2-Übergabe und Stage-1-V1/V2-Ergebnisse.
   stage2/                   ← CPI-Report.
   stage3/                   ← Saison-Report.
 
 archive/
-  legacy_stage3_handoff_2026-06-22/
-                            ← alte Stage-3-Übergabe, nur noch Historie.
-  stage1_encoder.pkl        ← Encoder für ältere Pipeline
+  model_artifacts_2026-07-08/
+                            ← alte Modellartefakte, Fallbacks und Vergleichsoutputs
 
 model_comparison/
-  model_comparison.md       ← Vergleich 6 Modelle (lesbar)
   model_comparison.json     ← Rohdaten des Benchmarks
 
 model_results.md            ← ursprüngliche Stage-1-V1-Ergebnisse
@@ -298,8 +297,7 @@ Das alte UI trennte `sale_year` und `model_year` nicht klar. Ein einziges „Bew
 
 - `car_prices_macro.csv` ist **gitignored** (98 MB). Bei Bedarf: `uv run python scripts/enrich_macro.py`
 - `macro_index.csv` enthält 1996-01 bis 2026-06. Die letzten 3 Monate sind forward-gefüllt (FRED-Verzögerung).
-- `models/price_model.joblib` nutzt `OrdinalEncoder(unknown_value=-1)` für Kategorien. `year_month`-Werte außerhalb 2014–2015 werden als -1 kodiert — vertretbar, da `year_month` sehr geringe Feature-Importance hat.
-- `models/price_model_v2.joblib` ist das produktiv eingebundene Stage-1-Modell. Es erwartet zusätzlich `trim`, `transmission`, `state`, `color`, `interior` und `make_model`. Fehlt die Datei, lädt die App automatisch das alte V1-Modell.
+- `models/stage1_production_model.joblib` ist das produktiv eingebundene Stage-1-Modell. Es erwartet zusätzlich `trim`, `transmission`, `state`, `color`, `interior` und `make_model`. Fehlt die Datei, lädt die App den archivierten Legacy-Fallback.
 - `stage2_macro.py` nutzt absolute Pfade (`PROJECT_ROOT = Path(__file__).resolve().parent.parent`). Importierbar aus `scripts/` und `app/` (die App macht `sys.path.insert(0, str(PROJECT_ROOT / "scripts"))`).
 - **PR #1 (GitHub Classroom) nicht anfassen** — wird automatisch vom Professor-System gepflegt.
 - **PR #2** (`Mail_project_moritz` → `main`) ist der aktive Entwicklungs-PR.

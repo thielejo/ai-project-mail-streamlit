@@ -21,7 +21,7 @@ from stage3_seasonality import (
 
 OUTPUT_JSON = Path("models/stage3_evaluation.json")
 OUTPUT_MD = Path("docs/stage3/model_results_stage3.md")
-SEASONALITY_CSV = Path("models/seasonality_factors_v2.csv")
+SEASONALITY_CSV = Path("models/stage3_seasonality_factors.csv")
 RANDOM_STATE = 42
 
 
@@ -197,7 +197,7 @@ def main() -> None:
     output = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "method": "cpi_normalized_model_residual_by_body_month",
-        "stage1_model": "price_model_v2.joblib",
+        "stage1_model": "stage1_production_model.joblib",
         "reference_year_month": "time-neutral V2 (no sale month feature)",
         "factor_min": FACTOR_MIN,
         "factor_max": FACTOR_MAX,

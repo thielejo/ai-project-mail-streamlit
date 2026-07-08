@@ -1,7 +1,7 @@
 {
   "created_at": "2026-06-24T10:14:20.915230+00:00",
   "model_name": "Stage 1 V2 XGBoost raw/log ensemble",
-  "model_path": "models\\price_model_v2.joblib",
+  "model_path": "models\\stage1_production_model.joblib",
   "rows_used": 529169,
   "train_rows": 423335,
   "test_rows": 105834,

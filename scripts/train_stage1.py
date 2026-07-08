@@ -11,8 +11,8 @@ from sklearn.preprocessing import OrdinalEncoder
 
 
 INPUT_PATH = Path("car_prices_macro.csv")
-MODEL_PATH = Path("models/stage1_xgboost.json")
-ENCODER_PATH = Path("models/stage1_encoder.pkl")
+MODEL_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_xgboost_micro_model.json")
+ENCODER_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_xgboost_micro_encoder.pkl")
 
 CATEGORICAL_FEATURES = ["make", "body", "transmission"]
 NUMERIC_FEATURES = ["condition", "odometer", "vehicle_age"]

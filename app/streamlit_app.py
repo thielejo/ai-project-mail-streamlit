@@ -31,10 +31,14 @@ from stage1_runtime import (  # noqa: E402
 
 FEATURES_PATH = PROJECT_ROOT / "car_prices_features.csv"
 STAGE2_EVAL_PATH = PROJECT_ROOT / "models" / "stage2_evaluation.json"
-SHARED_SPLIT_BENCHMARK_PATH = PROJECT_ROOT / "models" / "stage1_v1_v2_shared_split.json"
+SHARED_SPLIT_BENCHMARK_PATH = (
+    PROJECT_ROOT / "archive" / "model_artifacts_2026-07-08" / "stage1_shared_split_model_comparison.json"
+)
 MACRO_PATH = PROJECT_ROOT / "macro_index.csv"
-SEASONALITY_V1_PATH = PROJECT_ROOT / "models" / "seasonality_factors.csv"
-SEASONALITY_V2_PATH = PROJECT_ROOT / "models" / "seasonality_factors_v2.csv"
+SEASONALITY_V1_PATH = (
+    PROJECT_ROOT / "archive" / "model_artifacts_2026-07-08" / "stage3_legacy_seasonality_factors.csv"
+)
+SEASONALITY_V2_PATH = PROJECT_ROOT / "models" / "stage3_seasonality_factors.csv"
 
 MACRO_AVAILABLE_YEARS = list(range(1996, 2027))
 MACRO_AVAILABLE_MONTHS = list(range(1, 13))

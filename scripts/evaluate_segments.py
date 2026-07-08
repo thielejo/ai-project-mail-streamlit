@@ -20,8 +20,8 @@ from train_price_model import (
 )
 
 FEATURES_PATH = Path("car_prices_features.csv")
-MODEL_PATH = Path("models/price_model.joblib")
-METRICS_PATH = Path("models/price_model_metrics.json")
+MODEL_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_model.joblib")
+METRICS_PATH = Path("archive/model_artifacts_2026-07-08/stage1_legacy_histgb_metrics.json")
 RESULTS_PATH = Path("model_results.md")
 
 

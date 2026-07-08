@@ -7,10 +7,11 @@ import joblib
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-V1_MODEL_PATH = PROJECT_ROOT / "models" / "price_model.joblib"
-V2_MODEL_PATH = PROJECT_ROOT / "models" / "price_model_v2.joblib"
-V1_METRICS_PATH = PROJECT_ROOT / "models" / "price_model_metrics.json"
-V2_METRICS_PATH = PROJECT_ROOT / "models" / "price_model_v2_metrics.json"
+ARCHIVE_MODEL_DIR = PROJECT_ROOT / "archive" / "model_artifacts_2026-07-08"
+V1_MODEL_PATH = ARCHIVE_MODEL_DIR / "stage1_legacy_histgb_model.joblib"
+V2_MODEL_PATH = PROJECT_ROOT / "models" / "stage1_production_model.joblib"
+V1_METRICS_PATH = ARCHIVE_MODEL_DIR / "stage1_legacy_histgb_metrics.json"
+V2_METRICS_PATH = PROJECT_ROOT / "models" / "stage1_production_metrics.json"
 
 V1_FEATURES = ["vehicle_age", "sale_month", "odometer", "condition", "year_month", "make", "model", "body"]
 V2_NUMERIC_FEATURES = ["model_year", "vehicle_age", "odometer", "condition"]

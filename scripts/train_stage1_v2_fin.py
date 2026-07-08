@@ -39,8 +39,8 @@ from xgboost import XGBRegressor
 REPO = Path(__file__).resolve().parent.parent
 INPUT_PATH = REPO / "car_prices_clean.csv"
 CACHE_PATH = REPO / "vin_fin_enrichment/vin_decoded_cache_full.csv"
-MODEL_PATH = REPO / "models/price_model_v2_fin.joblib"
-METRICS_PATH = REPO / "models/price_model_v2_fin_metrics.json"
+MODEL_PATH = REPO / "models/stage1_fin_model.joblib"
+METRICS_PATH = REPO / "models/stage1_fin_metrics.json"
 
 RANDOM_STATE = 42
 TARGET = "sellingprice"

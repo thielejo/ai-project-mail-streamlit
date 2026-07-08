@@ -29,7 +29,7 @@ from train_stage1_v2 import (
 )
 
 INPUT_PATH = Path("car_prices_clean.csv")
-OUTPUT_JSON = Path("models/stage1_v1_v2_shared_split.json")
+OUTPUT_JSON = Path("archive/model_artifacts_2026-07-08/stage1_shared_split_model_comparison.json")
 OUTPUT_MD = Path("docs/stage1/model_results_stage1_v1_v2_shared_split.md")
 RANDOM_STATE = 42
 BOOTSTRAP_SAMPLES = 1_000
