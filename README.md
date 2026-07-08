@@ -104,8 +104,6 @@ models/               Trained model files and evaluation outputs
 scripts/              Data preparation, training, evaluation, Stage 2/3 modules
 tuning/    CatBoost tuning
 vin_fin_enrichment/   VIN/FIN displacement enrichment experiments
-
-Aktueller_Stand.md    Internal project-status context
 data/car_prices_clean.csv  Cleaned Manheim auction data
 data/car_prices_features.csv
                       Feature-engineered training data
@@ -164,8 +162,6 @@ of model improvements from macro and seasonal adjustments.
 
 ## Further Documentation
 
-- [`Aktueller_Stand.md`](Aktueller_Stand.md) - detailed current project context
-- [`HANDOFF.md`](HANDOFF.md) - handoff notes and remaining work
 - [`docs/data_cleaning.md`](docs/data_cleaning.md) - data-cleaning decisions
 - [`docs/feature_engineering.md`](docs/feature_engineering.md) - feature-engineering decisions
 - [`docs/project_proposal.md`](docs/project_proposal.md) - original historical proposal
