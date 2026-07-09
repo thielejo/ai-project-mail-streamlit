@@ -193,9 +193,9 @@ st.markdown(
         }
         .pp-tile-month {
             color: #48617e;
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin: 0.75rem 0 0.35rem;
+            font-size: 1.08rem;
+            font-weight: 700;
+            margin: 0.85rem 0 0.45rem;
         }
         .pp-tile-month strong { color: #0b7cff; }
         .pp-age-card {
@@ -449,6 +449,53 @@ def format_color(value: str) -> str:
 def describe_condition(value: float) -> str:
     star = min(5, max(1, int(round(value))))
     return CONDITION_OPTIONS[star][1]
+
+
+def format_feature_label(value: str) -> str:
+    labels = {
+        "model_year": "Baujahr",
+        "vehicle_age": "Fahrzeugalter",
+        "odometer": "Kilometerstand",
+        "condition": "Fahrzeugzustand",
+        "displacement": "Hubraum",
+        "make": "Marke",
+        "model": "Modell",
+        "trim": "Ausstattungsvariante",
+        "body": "Karosserieform",
+        "transmission": "Getriebe",
+        "state": "Bundesstaat / Region",
+        "color": "Außenfarbe",
+        "interior": "Innenfarbe",
+        "make_model": "Marke-Modell-Kombination",
+    }
+    return labels.get(str(value), title_case(str(value)))
+
+
+def get_top_feature_rows(model: object, model_version: str, metrics_payload: dict) -> list[dict]:
+    saved_rows = metrics_payload.get("top_features", [])
+    if saved_rows:
+        return saved_rows
+
+    features = metrics_payload.get("features", [])
+    if model_version == "catboost" and features and hasattr(model, "get_feature_importance"):
+        try:
+            importances = model.get_feature_importance()
+        except Exception:
+            return []
+        total = float(sum(abs(float(value)) for value in importances)) or 1.0
+        rows = []
+        for feature, importance in sorted(
+            zip(features, importances),
+            key=lambda item: abs(float(item[1])),
+            reverse=True,
+        )[:10]:
+            rows.append({
+                "Merkmal": format_feature_label(feature),
+                "Einfluss": f"{abs(float(importance)) / total * 100:.1f} %",
+            })
+        return rows
+
+    return []
 
 
 def get_price_segment(price: float) -> str:
@@ -828,7 +875,7 @@ with right_column:
             body_season["Monat"] = body_season["sale_month"].map(MONTH_NAMES)
             season_chart = (
                 alt.Chart(body_season)
-                .mark_line(color="#9aa4b2", point=alt.OverlayMarkDef(filled=True, color="#9aa4b2"))
+                .mark_line(color="#0b7cff", point=alt.OverlayMarkDef(filled=True, color="#0b7cff"))
                 .encode(
                     x=alt.X(
                         "Monat:N",
@@ -1035,7 +1082,7 @@ if show_developer_details:
             st.write("Noch keine Stage-2-Evaluationsdaten. Bitte `uv run python scripts/evaluate_stage2.py` ausführen.")
 
     with st.expander("Wichtigste Einflussfaktoren (Stage 1)"):
-        top_features = metrics.get("top_features", [])
+        top_features = get_top_feature_rows(model, model_version, metrics)
         if top_features:
             st.dataframe(pd.DataFrame(top_features), width="stretch", hide_index=True)
         else:
