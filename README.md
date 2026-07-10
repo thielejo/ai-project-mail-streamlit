@@ -1,7 +1,7 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/NELeUmAZ)
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=23211453)
 
-# Universal Pricing Agent - BIS5522 AI & Machine Learning
+# PricePilot - Universal Used-Car Pricing Agent
 
 **Team MAIL:** Johanna Thiele · Moritz Binder · Pascal Müller · Tara Golle  
 **Deadline:** 31.07.2026  
@@ -33,29 +33,30 @@ Stage 3 (Seasonal)  Body type and month rules       -> seasonal fine-tuning
 ```
 
 The Streamlit demo combines these stages into an interactive pricing interface.
-The current app uses the Stage-1 V2 model with CPI and seasonal adjustments.
-Separately, the strongest documented Stage-1 candidate is a tuned CatBoost model
-with displacement data; it is documented but not yet integrated into the app.
+The current app uses the tuned CatBoost production model with displacement,
+followed by CPI and seasonal adjustments.
 
 ## Current Status & Results
 
 ### Stage 1 - Vehicle-Value Model
 
-The app currently uses the Stage-1 V2 XGBoost ensemble as its production model.
-On a strict shared train/test split, V2 improved MAE from **$1,830.95** to
-**$1,370.15** compared with the previous V1 model.
+The production model is a tuned **CatBoost model with displacement** derived
+from VIN data. It uses a log-transformed target and 14 vehicle features while
+excluding identifiers and `MMR` to avoid leakage. The committed 2,000-tree
+artifact stays below GitHub's 100 MB file limit and is loaded directly by the
+app.
 
-| Metric | V2 XGBoost Ensemble | Previous V1 |
+| Metric | CatBoost Production | Previous V2 XGBoost |
 |---|---:|---:|
-| MAE | $1,370.15 | $1,830.95 |
-| RMSE | $2,400.34 | $3,276.81 |
-| R² | 0.9366 | 0.8818 |
-| MAPE | 15.13% | 16.45% |
+| MAE | **$1,056.54** | $1,370.15 |
+| RMSE | **$1,892.82** | $2,400.34 |
+| R² | **0.9606** | 0.9366 |
+| MAPE | **11.91%** | 15.13% |
 
-The strongest Stage-1 candidate so far is a tuned **CatBoost + displacement**
-model with **MAE $1,042**, **RMSE $1,875**, **R² 0.961**, and **MAPE 11.8%**.
-This model is documented as the target candidate, but still needs integration
-with the app and re-evaluation for Stage 2 and Stage 3.
+The tuning experiments reached MAE **$1,042** with a larger 3,000-tree model.
+The deployed model trades only about $14 MAE for a substantially smaller,
+committable artifact. The app automatically suggests displacement from a
+make/model lookup and allows the value to be adjusted.
 
 Details:
 
@@ -79,8 +80,11 @@ to later market price levels.
 | 2023-09 | 1.2200 | +22.0% vs. baseline |
 | 2026-06 | 1.2177 | +21.8% vs. baseline |
 
-Backtest on the V2 setup: MAE **$1,370.16 -> $1,376.22** after CPI adjustment
-(+0.44%). See [`docs/stage2/model_results_stage2.md`](docs/stage2/model_results_stage2.md).
+The stored Stage-2 backtest was run on the earlier V2 baseline: MAE
+**$1,370.16 -> $1,376.22** after CPI adjustment (+0.44%). Because the 2014-2015
+test period is itself close to the reference level, this result mainly checks
+the adjustment architecture; it is not the production CatBoost model's error.
+See [`docs/stage2/model_results_stage2.md`](docs/stage2/model_results_stage2.md).
 
 ### Stage 3 - Seasonal Adjustment
 
@@ -88,30 +92,41 @@ Stage 3 adds a rule-based seasonal factor by body type and sale month. The
 factors are generated from CPI-normalized Stage-1 residuals and smoothed toward
 neutral when data is sparse.
 
-On the separated rule holdout, Stage 3 improves MAE from **$1,353.15** to
-**$1,339.84** (-0.98%). Months without historical observations remain neutral
-at 1.0. See [`docs/stage3/model_results_stage3.md`](docs/stage3/model_results_stage3.md).
+The seasonal factors have been recalculated against the current CatBoost
+baseline. On the separated rule holdout, Stage 3 improves MAE on CPI-normalized
+prices from **$1,014.23** to **$998.09** (-1.59%). This tests the seasonal rule,
+not a new independent Stage-1 model. Months without historical observations
+remain neutral at 1.0. See
+[`docs/stage3/model_results_stage3.md`](docs/stage3/model_results_stage3.md).
 
 ## Repository Structure
 
 ```
 app/                  Streamlit demo app
 archive/              Historical handoffs, deprecated notes, archived notebooks
+data/                 Raw, cleaned, feature-engineered, and macro datasets
 docs/                 Project documentation, model reports, and presentation slides
 exploration/          Exploratory analysis notebooks
 model_comparison/     Machine-readable model benchmark results
 models/               Trained model files and evaluation outputs
 scripts/              Data preparation, training, evaluation, Stage 2/3 modules
-tuning/    CatBoost tuning
+tuning/               CatBoost tuning and Stage-2/3 re-evaluation
 vin_fin_enrichment/   VIN/FIN displacement enrichment experiments
-data/car_prices_clean.csv  Cleaned Manheim auction data
-data/car_prices_features.csv
-                      Feature-engineered training data
-data/macro_index.csv       FRED macro indicators
 ```
 
-`data/car_prices_macro.csv` is intentionally gitignored because of its file size. It
-can be regenerated with:
+Important data files:
+
+| File | Purpose | Tracked |
+|---|---|---|
+| `data/car_prices.csv` | Original Manheim auction data | yes |
+| `data/car_prices_clean.csv` | Cleaned source data | yes |
+| `data/car_prices_features.csv` | Feature and app comparison data | yes |
+| `data/macro_index.csv` | FRED indicators and CPI multiplier | yes |
+| `data/car_prices_macro.csv` | Generated micro/macro merge | no |
+| `vin_fin_enrichment/vin_decoded_cache_full.csv` | Generated NHTSA VIN cache | no |
+
+The generated files are intentionally gitignored and can be rebuilt from the
+tracked raw data and external sources.
 
 ```bash
 uv run python scripts/enrich_macro.py
@@ -126,23 +141,37 @@ git clone https://github.com/digital-business-lectures/ai-project-mail.git
 cd ai-project-mail
 uv sync
 
-# Build feature dataset
+# Clean the tracked raw dataset and build features
+uv run python scripts/clean_car_prices.py
 uv run python scripts/build_features.py
 
-# Train the Stage-1 production model used by the app
-uv run python scripts/train_stage1_production.py --max-rows 0
+# Optional: regenerate macro data
+uv run python scripts/enrich_macro.py
 
-# Evaluate Stage 2 and Stage 3
-uv run python scripts/evaluate_stage2.py
-uv run python scripts/evaluate_stage3.py
-
-# Run the demo app
+# Run the demo app with the committed production artifacts
 uv run streamlit run app/streamlit_app.py
 ```
 
+Rebuilding the current CatBoost model additionally requires the VIN decode
+cache from the free NHTSA API. The first step is resume-safe but can take several
+hours:
+
+```bash
+uv run python vin_fin_enrichment/build_full_vin_cache.py
+uv run python scripts/train_stage1_catboost.py --max-rows 0
+
+# Stored V2 architecture evaluation utilities
+uv run python scripts/evaluate_stage2.py
+uv run python scripts/evaluate_stage3.py
+```
+
+The CatBoost-based Stage-3 re-evaluation and its generated factors are stored in
+`tuning/06_reeval_results.json` and
+`models/stage3_seasonality_factors.csv`.
+
 ## Data Sources
 
-- **Micro data:** Manheim Used Car Auction Data via [Kaggle](https://www.kaggle.com/datasets/tunguz/used-car-auction-prices), 558,743 US wholesale transactions from 2014-2015.
+- **Micro data:** Manheim Used Car Auction Data via [Kaggle](https://www.kaggle.com/datasets/tunguz/used-car-auction-prices), 558,837 raw US wholesale auction rows from 2014-2015; 558,743 remain after removing rows without price or mileage.
 - **Macro data:** Federal Reserve Economic Data (FRED), especially the used-car CPI series used for Stage 2.
 - **VIN/FIN enrichment:** NHTSA vPIC API for displacement information in the Stage-1 enrichment experiments.
 
