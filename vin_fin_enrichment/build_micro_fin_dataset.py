@@ -20,7 +20,7 @@ import numpy as np
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[1]
+REPO = HERE.parent
 SRC = REPO / "data" / "car_prices_clean.csv"
 CACHE = HERE / "vin_decoded_cache_full.csv"
 OUT = REPO / "data" / "car_prices_fin.csv"

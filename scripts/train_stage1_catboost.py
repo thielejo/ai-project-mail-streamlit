@@ -1,7 +1,7 @@
 """
 Stage 1 — Produktions-Trainingsskript: CatBoost + FIN (Hubraum), getunt.
 
-Vereint die Erkenntnisse des Tuning-Experiments (tuning_experiment/) in einem
+Vereint die Erkenntnisse des Tuning-Experiments (tuning/) in einem
 produktiven Skript:
   - Modell: CatBoost (native kategoriale Merkmale)
   - Zielgröße: log1p(Preis) mit MAE-Loss  (Schritt 1)
@@ -9,10 +9,16 @@ produktiven Skript:
   - FIN-Feature: Hubraum (displacement) aus dem VIN-Decode-Cache, per VIN gejoint
   - KEINE Monotonie-Constraints (Schritt 3+5: verschlechtern das Modell)
 
-Ergebnis (voller Datensatz): MAE ~$1.042 / R² ~0,961 / MAPE ~11,8 %.
+Ergebnis des committeten Artefakts (voller Datensatz, --iterations 2000):
+MAE $1.056,54 / RMSE $1.892,82 / R² 0,9606 / MAPE 11,91 %
+(siehe models/price_model_catboost_metrics.json).
 
-Datenquelle: car_prices_clean.csv + Hubraum aus
-experiments/vin_fin_enrichment/vin_decoded_cache_full.csv (per VIN).
+Datenquelle: data/car_prices_clean.csv + Hubraum aus
+vin_fin_enrichment/vin_decoded_cache_full.csv (per VIN).
+
+Der Decode-Cache liegt NICHT im Repo (regenerierbar aus der freien NHTSA-API).
+Vor dem ersten Training einmalig erzeugen:
+    uv run python vin_fin_enrichment/build_full_vin_cache.py   # resume-sicher
 
 Aufruf:
     uv run python scripts/train_stage1_catboost.py            # 200k Schnelllauf
@@ -32,9 +38,9 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
 REPO = Path(__file__).resolve().parent.parent
-INPUT_PATH = REPO / "car_prices_clean.csv"
-CACHE_PATH = REPO / "experiments/vin_fin_enrichment/vin_decoded_cache_full.csv"
-TUNED_PARAMS_PATH = REPO / "tuning_experiment/02_best_params.json"
+INPUT_PATH = REPO / "data" / "car_prices_clean.csv"
+CACHE_PATH = REPO / "vin_fin_enrichment/vin_decoded_cache_full.csv"
+TUNED_PARAMS_PATH = REPO / "tuning/02_best_params.json"
 MODEL_PATH = REPO / "models/price_model_catboost.cbm"
 METRICS_PATH = REPO / "models/price_model_catboost_metrics.json"
 
@@ -75,6 +81,14 @@ def load_tuned_params() -> dict:
 def load_data(max_rows: int) -> pd.DataFrame:
     required = ["vin", "year", "saledate", "make", "model", "trim", "body",
                 "transmission", "state", "condition", "odometer", "color", "interior", TARGET]
+    if not CACHE_PATH.exists():
+        raise SystemExit(
+            f"VIN-Decode-Cache fehlt: {CACHE_PATH.relative_to(REPO)}\n"
+            "Er ist bewusst nicht im Repo, laesst sich aber aus der freien NHTSA-API\n"
+            "regenerieren (resume-sicher, Seed aus dem archivierten Sample-Cache):\n"
+            "    uv run python vin_fin_enrichment/build_full_vin_cache.py"
+        )
+
     df = pd.read_csv(INPUT_PATH, usecols=required)
 
     # FIN: Hubraum aus dem VIN-Decode-Cache per VIN joinen
