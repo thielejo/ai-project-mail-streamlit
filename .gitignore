@@ -11,10 +11,11 @@ wheels/
 .uv-cache/
 
 # Generated large datasets (regenerate via scripts/enrich_macro.py)
-data/car_prices_macro.csv
+# Ohne Pfadpraefix, damit die Regel auch im Repo-Root greift (Datei > 100 MB!)
+car_prices_macro.csv
 
 # VIN/FIN enrichment — large generated files (regenerate via vin_fin_enrichment/)
-vin_fin_enrichment/vin_decoded_cache_full.csv
+**/vin_decoded_cache_full.csv
 data/car_prices_fin.csv
 
 # CatBoost (grosse Modelle + Trainingslogs, regenerierbar)
