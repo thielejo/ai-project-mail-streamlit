@@ -81,7 +81,7 @@ to later market price levels.
 | 2026-06 | 1.2224 | +22.2% vs. baseline |
 
 The stored Stage-2 backtest was run on the earlier V2 baseline: MAE
-**$1,370.16 -> $1,376.22** after CPI adjustment (+0.44%). Because the 2014-2015
+**$1,370.16 -> $1,383.73** after CPI adjustment (+0.99%). Because the 2014-2015
 test period is itself close to the reference level, this result mainly checks
 the adjustment architecture; it is not the production CatBoost model's error.
 See [`docs/stage2/model_results_stage2.md`](docs/stage2/model_results_stage2.md).
@@ -94,7 +94,7 @@ neutral when data is sparse.
 
 The seasonal factors have been recalculated against the current CatBoost
 baseline. On the separated rule holdout, Stage 3 improves MAE on CPI-normalized
-prices from **$1,014.23** to **$998.09** (-1.59%). This tests the seasonal rule,
+prices from **$1,022.52** to **$993.46** (-2.84%). This tests the seasonal rule,
 not a new independent Stage-1 model. Months without historical observations
 remain neutral at 1.0. See
 [`docs/stage3/model_results_stage3.md`](docs/stage3/model_results_stage3.md).
