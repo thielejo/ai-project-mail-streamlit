@@ -134,7 +134,7 @@ stage2_price = stage1_price × cpi_multiplier(target_month)
 ```
 
 Der `cpi_multiplier` ist auf den 2015-Jahresdurchschnitt (= 1.000) normiert.
-Quelle: CPI Used Cars & Trucks (CUSR0000SETA01, FRED).
+Quelle: CPI Used Cars & Trucks (CUSR0000SETA02, FRED).
 
 ## Architekturgetreuer Backtest (2014–2015 Testset)
 

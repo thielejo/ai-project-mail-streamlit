@@ -20,7 +20,7 @@ MACRO_START = pd.Period("1996-01", "M")
 
 FRED_SERIES = {
     # --- Price indices ---
-    "cpi_used_cars": "CUSR0000SETA01",   # CPI Used Cars & Trucks (MUVVI proxy)
+    "cpi_used_cars": "CUSR0000SETA02",   # CPI Used Cars & Trucks (Achtung: SETA01 = Neuwagen)
 
     # --- Monetary policy ---
     "fedfunds": "FEDFUNDS",              # US Federal Funds Rate

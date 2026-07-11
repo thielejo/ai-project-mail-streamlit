@@ -30,7 +30,7 @@ from stage1_runtime import CATBOOST_FEATURES, CATBOOST_CATEGORICAL_FEATURES  # n
 
 RANDOM_STATE = 42  # identisch zu evaluate_stage3.py
 
-FIN_PATH = REPO / "car_prices_fin.csv"
+FIN_PATH = REPO / "data" / "car_prices_fin.csv"
 MACRO_PATH = REPO / "data" / "macro_index.csv"
 MODEL_PATH = REPO / "models" / "price_model_catboost.cbm"
 OUT_FACTORS = REPO / "tuning" / "stage3_seasonality_factors_catboost.csv"

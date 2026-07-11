@@ -76,9 +76,9 @@ to later market price levels.
 | Date | CPI Multiplier | Effect |
 |---|---:|---|
 | 2015-01 | 1.0000 | baseline |
-| 2021-12 | 1.1396 | +14.0% vs. baseline |
-| 2023-09 | 1.2200 | +22.0% vs. baseline |
-| 2026-06 | 1.2177 | +21.8% vs. baseline |
+| 2021-12 | 1.4378 | +43.8% vs. baseline |
+| 2023-09 | 1.2743 | +27.4% vs. baseline |
+| 2026-06 | 1.2224 | +22.2% vs. baseline |
 
 The stored Stage-2 backtest was run on the earlier V2 baseline: MAE
 **$1,370.16 -> $1,376.22** after CPI adjustment (+0.44%). Because the 2014-2015

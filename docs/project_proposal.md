@@ -81,5 +81,7 @@ The entire engine is compiled into an interactive **Streamlit Web Application** 
 * [US Interest Rates (FEDFUNDS)](https://fred.stlouisfed.org/series/FEDFUNDS)
 * [Used Car Price Index / MUVVI Proxy (CUSR0000SETA01)](https://fred.stlouisfed.org/series/CUSR0000SETA01)
 
+> **Hinweis (nachträglich):** Im finalen Modell wurde auf **CUSR0000SETA02 („Used Cars and Trucks")** korrigiert. Der ursprünglich hier genannte Code SETA01 ist der **Neuwagen**-Index; für die Gebrauchtwagen-Marktanpassung ist SETA02 die korrekte FRED-Serie.
+
 ---
 *Proposal submitted for review. We look forward to feedback via GitHub issues.*

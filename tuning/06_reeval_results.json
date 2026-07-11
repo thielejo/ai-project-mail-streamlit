@@ -2,10 +2,10 @@
   "stage3_holdout": {
     "train_rows": 423481,
     "test_rows": 105688,
-    "baseline_mae": 1014.23,
-    "stage3_mae": 998.09,
-    "mae_change": -16.14,
-    "mae_change_percent": -1.59
+    "baseline_mae": 1022.52,
+    "stage3_mae": 993.46,
+    "mae_change": -29.06,
+    "mae_change_percent": -2.84
   },
   "n_rows": 529169,
   "model": "price_model_catboost.cbm"
