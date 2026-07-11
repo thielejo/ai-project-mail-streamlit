@@ -14,8 +14,10 @@ wheels/
 # Ohne Pfadpraefix, damit die Regel auch im Repo-Root greift (Datei > 100 MB!)
 car_prices_macro.csv
 
-# VIN/FIN enrichment — large generated files (regenerate via vin_fin_enrichment/)
-**/vin_decoded_cache_full.csv
+# VIN/FIN enrichment
+# Der Voll-Cache (VIN->Hubraum, ~47 MB) wird BEWUSST versioniert, damit die
+# exakte per-VIN-Anreicherung dauerhaft reproduzierbar ist (unter GitHubs 100-MB-Grenze).
+# car_prices_fin.csv bleibt ignoriert (100 MB, regenerierbar aus clean + Voll-Cache).
 data/car_prices_fin.csv
 
 # CatBoost (grosse Modelle + Trainingslogs, regenerierbar)

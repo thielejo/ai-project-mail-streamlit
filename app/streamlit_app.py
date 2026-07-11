@@ -986,10 +986,10 @@ if show_developer_details:
        `Stage-2-Preis = Stage-1-Preis × {cpi_multiplier:.4f}`
 
     4. Der Multiplikator kommt aus dem FRED-Datensatz *CPI Used Cars & Trucks*
-       (CUSR0000SETA01), normiert auf den 2015-Jahresdurchschnitt (= 1.000).
+       (CUSR0000SETA02), normiert auf den 2015-Jahresdurchschnitt (= 1.000).
 
     5. Für den COVID-Angebotsengpass (2021–2022) erreichte der Multiplikator bis
-       zu **1.22** (+22%). Aktuell (2026-06) liegt er stabil bei ~1.22.
+       zu **1.46** (+46%). Aktuell (2026-06) liegt er bei ~1.22 (+22%).
 
     **Stage 3 – Saisonale Anpassung**
 
