@@ -5,7 +5,7 @@
 
 **Team MAIL:** Johanna Thiele · Moritz Binder · Pascal Müller · Tara Golle  
 **Deadline:** 31.07.2026  
-**Live Demo:** [https://ai-project-mail.streamlit.app](https://ai-project-mail.streamlit.app)
+**Live Demo:** [Open PricePilot in Streamlit](https://ai-project-mail.streamlit.app)
 
 ## Project Overview
 
@@ -68,14 +68,15 @@ Details:
 
 ### Stage 2 - CPI Macro Adjustment
 
-Stage 2 adjusts the Stage-1 baseline price with a used-car CPI multiplier from
-FRED. The historical 2014-2015 test period is close to the CPI baseline, so the
+Stage 2 adjusts the Stage-1 baseline price with the FRED Used Cars and Trucks
+CPI series (`CUSR0000SETA02`). The multiplier is normalized to the 2015 annual
+average. The historical 2014-2015 test period is close to this baseline, so the
 backtest changes accuracy only slightly. Its main purpose is forward projection
 to later market price levels.
 
 | Date | CPI Multiplier | Effect |
 |---|---:|---|
-| 2015-01 | 1.0000 | baseline |
+| 2015 average | 1.0000 | normalization baseline |
 | 2021-12 | 1.4378 | +43.8% vs. baseline |
 | 2023-09 | 1.2743 | +27.4% vs. baseline |
 | 2026-06 | 1.2224 | +22.2% vs. baseline |
@@ -111,7 +112,7 @@ model_comparison/     Machine-readable model benchmark results
 models/               Trained model files and evaluation outputs
 scripts/              Data preparation, training, evaluation, Stage 2/3 modules
 tuning/               CatBoost tuning and Stage-2/3 re-evaluation
-vin_fin_enrichment/   VIN/FIN displacement enrichment experiments
+vin_fin_enrichment/   VIN decoding pipeline and versioned displacement cache
 ```
 
 Important data files:
@@ -123,10 +124,12 @@ Important data files:
 | `data/car_prices_features.csv` | Feature and app comparison data | yes |
 | `data/macro_index.csv` | FRED indicators and CPI multiplier | yes |
 | `data/car_prices_macro.csv` | Generated micro/macro merge | no |
-| `vin_fin_enrichment/vin_decoded_cache_full.csv` | Generated NHTSA VIN cache | no |
+| `vin_fin_enrichment/vin_decoded_cache_full.csv` | Versioned NHTSA VIN cache for reproducible displacement enrichment | yes |
 
-The generated files are intentionally gitignored and can be rebuilt from the
-tracked raw data and external sources.
+The generated micro/macro merge is intentionally gitignored and can be rebuilt
+from the tracked raw data and external FRED sources. The complete VIN cache is
+versioned so that the production model can be reproduced without decoding every
+VIN again.
 
 ```bash
 uv run python scripts/enrich_macro.py
@@ -152,17 +155,22 @@ uv run python scripts/enrich_macro.py
 uv run streamlit run app/streamlit_app.py
 ```
 
-Rebuilding the current CatBoost model additionally requires the VIN decode
-cache from the free NHTSA API. The first step is resume-safe but can take several
-hours:
+The versioned VIN decode cache is already included in a normal clone, so the
+current CatBoost model can be rebuilt directly:
 
 ```bash
-uv run python vin_fin_enrichment/build_full_vin_cache.py
 uv run python scripts/train_stage1_catboost.py --max-rows 0
 
 # Stored V2 architecture evaluation utilities
 uv run python scripts/evaluate_stage2.py
 uv run python scripts/evaluate_stage3.py
+```
+
+To refresh or recreate the VIN cache from the free NHTSA API, run the following
+resume-safe command. A full rebuild can take several hours:
+
+```bash
+uv run python vin_fin_enrichment/build_full_vin_cache.py
 ```
 
 The CatBoost-based Stage-3 re-evaluation and its generated factors are stored in
@@ -173,7 +181,7 @@ The CatBoost-based Stage-3 re-evaluation and its generated factors are stored in
 
 - **Micro data:** Manheim Used Car Auction Data via [Kaggle](https://www.kaggle.com/datasets/tunguz/used-car-auction-prices), 558,837 raw US wholesale auction rows from 2014-2015; 558,743 remain after removing rows without price or mileage.
 - **Macro data:** Federal Reserve Economic Data (FRED), especially the used-car CPI series used for Stage 2.
-- **VIN/FIN enrichment:** NHTSA vPIC API for displacement information in the Stage-1 enrichment experiments.
+- **VIN/FIN enrichment:** NHTSA vPIC API for the displacement information used by the Stage-1 production model; the decoded VIN cache is versioned for reproducibility.
 
 ## AI Usage
 

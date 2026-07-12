@@ -16,8 +16,9 @@ MAE $1.056,54 / RMSE $1.892,82 / R² 0,9606 / MAPE 11,91 %
 Datenquelle: data/car_prices_clean.csv + Hubraum aus
 vin_fin_enrichment/vin_decoded_cache_full.csv (per VIN).
 
-Der Decode-Cache liegt NICHT im Repo (regenerierbar aus der freien NHTSA-API).
-Vor dem ersten Training einmalig erzeugen:
+Der vollständige Decode-Cache wird im Repo versioniert, damit das Training ohne
+erneuten Abruf aller VINs reproduzierbar bleibt. Zum Aktualisieren oder
+vollständigen Neuerzeugen über die freie NHTSA-API:
     uv run python vin_fin_enrichment/build_full_vin_cache.py   # resume-sicher
 
 Aufruf:
@@ -84,8 +85,8 @@ def load_data(max_rows: int) -> pd.DataFrame:
     if not CACHE_PATH.exists():
         raise SystemExit(
             f"VIN-Decode-Cache fehlt: {CACHE_PATH.relative_to(REPO)}\n"
-            "Er ist bewusst nicht im Repo, laesst sich aber aus der freien NHTSA-API\n"
-            "regenerieren (resume-sicher, Seed aus dem archivierten Sample-Cache):\n"
+            "Er wird normalerweise mit dem Repo ausgeliefert und laesst sich bei Bedarf\n"
+            "aus der freien NHTSA-API regenerieren (resume-sicher):\n"
             "    uv run python vin_fin_enrichment/build_full_vin_cache.py"
         )
 
