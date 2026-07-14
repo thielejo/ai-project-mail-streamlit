@@ -79,9 +79,10 @@ Der Zielmonat wird so nicht doppelt gezählt.
 - Stage 2 extrapoliert ausschließlich über CPI-Inflation; strukturelle Marktveränderungen
   (z. B. Elektrifizierung, Chip-Engpässe) sind nicht modelliert.
 - Für Monate ohne FRED-Daten wird der letzte verfügbare Monat genutzt (Forward-Fill).
-- Im gespeicherten Makrostand sind die CPI-Werte für 2026-05 und 2026-06 aus
-  2026-04 fortgeschrieben. 2026-06 ist daher ein Bewertungsdatum, kein neuer
-  unabhängiger CPI-Messpunkt.
+- Im gespeicherten Makrostand enthält 2026-05 mit 180.005 eine gegenüber
+  2026-04 veränderte CPI-Beobachtung. Die Werte für 2026-06 und 2026-07
+  entsprechen dagegen dem Maiwert und sind daher vorläufige Fortschreibungen,
+  keine neuen unabhängigen CPI-Messpunkte.
 - Das CatBoost-Produktionsmodell enthält bewusst weder `sale_month` noch
   `year_month`. Dadurch bleiben Marktbewegung und Saison vollständig in
   Stage 2 und Stage 3.

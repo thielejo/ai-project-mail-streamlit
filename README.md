@@ -162,7 +162,7 @@ current CatBoost model can be rebuilt directly:
 ```bash
 uv run python scripts/train_stage1_catboost.py --max-rows 0
 
-# Stored V2 architecture evaluation utilities
+# Recreate the current CatBoost-based Stage-2 and Stage-3 evaluations
 uv run python scripts/evaluate_stage2.py
 uv run python scripts/evaluate_stage3.py
 ```
@@ -174,9 +174,10 @@ resume-safe command. A full rebuild can take several hours:
 uv run python vin_fin_enrichment/build_full_vin_cache.py
 ```
 
-The CatBoost-based Stage-3 re-evaluation and its generated factors are stored in
-`tuning/06_reeval_results.json` and
-`models/stage3_seasonality_factors.csv`.
+The current CatBoost-based Stage-2 and Stage-3 evaluation outputs are stored in
+`models/stage2_evaluation.json`, `models/stage3_evaluation.json`, and
+`models/stage3_seasonality_factors.csv`; the corresponding readable reports are
+under `docs/stage2/` and `docs/stage3/`.
 
 ## Data Sources
 
