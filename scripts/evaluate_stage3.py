@@ -120,10 +120,12 @@ Karosserieform und Verkaufsmonat:
 final_price = stage2_price x seasonal_factor(body, month)
 ```
 
-Die Berechnung vergleicht CPI-normalisierte Verkaufspreise mit Vorhersagen des
-zeitneutralen Stage-1-V2-Modells. V2 enthält bewusst keinen Verkaufsmonat. Dadurch werden
-Unterschiede im Fahrzeugmix (Modell, Alter, Laufleistung und Zustand) weitgehend
-herausgerechnet. Der Zielmonat fließt nicht doppelt in Stage 1 und Stage 3 ein.
+Die Berechnung vergleicht CPI-normalisierte Verkaufspreise (Quelle: CPI Used Cars &
+Trucks, FRED CUSR0000SETA02) mit Vorhersagen des zeitneutralen
+**CatBoost-Produktionsmodells** (getunt, inkl. Hubraum) — demselben Modell, das die
+App ausliefert. Es enthält bewusst keinen Verkaufsmonat. Dadurch werden Unterschiede
+im Fahrzeugmix (Modell, Alter, Laufleistung und Zustand) weitgehend herausgerechnet.
+Der Zielmonat fließt nicht doppelt in Stage 1 und Stage 3 ein.
 
 Pro Karosserieform werden die monatlichen Medianabweichungen relativ zum
 Gesamtmedian berechnet. Alle Effekte werden mit einer Prior-Stärke von
@@ -197,8 +199,8 @@ def main() -> None:
     output = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "method": "cpi_normalized_model_residual_by_body_month",
-        "stage1_model": "stage1_production_model.joblib",
-        "reference_year_month": "time-neutral V2 (no sale month feature)",
+        "stage1_model": "price_model_catboost.cbm",
+        "reference_year_month": "time-neutral CatBoost+FIN (no sale month feature)",
         "factor_min": FACTOR_MIN,
         "factor_max": FACTOR_MAX,
         "shrinkage_observations": SHRINKAGE_OBSERVATIONS,

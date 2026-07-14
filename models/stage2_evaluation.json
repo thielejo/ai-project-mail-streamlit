@@ -1,158 +1,158 @@
 {
-  "created_at": "2026-07-11T11:10:29.816029+00:00",
-  "evaluation_method": "time_neutral_stage1_v2_then_historical_cpi",
-  "stage1_model": "models/stage1_production_model.joblib",
-  "reference_year_month": "time-neutral-v2",
+  "created_at": "2026-07-14T19:12:40.371519+00:00",
+  "evaluation_method": "time_neutral_stage1_catboost_fin_then_historical_cpi",
+  "stage1_model": "models/price_model_catboost.cbm",
+  "reference_year_month": "time-neutral-catboost",
   "stage1_metrics_historical": {
-    "mae": 1370.16,
-    "rmse": 2400.34,
-    "r2": 0.9366,
-    "mape_percent": 15.13
+    "mae": 1056.54,
+    "rmse": 1892.83,
+    "r2": 0.9606,
+    "mape_percent": 11.91
   },
   "stage2_metrics_historical": {
-    "mae": 1383.73,
-    "rmse": 2407.08,
-    "r2": 0.9362,
-    "mape_percent": 15.21
+    "mae": 1075.86,
+    "rmse": 1907.2,
+    "r2": 0.96,
+    "mape_percent": 12.02
   },
   "test_multiplier_stats": {
     "min": 0.9838,
     "max": 1.029,
     "mean": 0.9995
   },
-  "stage1_test_median_price": 12495.33,
+  "stage1_test_median_price": 12400.39,
   "forward_projection": [
     {
       "year_month": "2015-01",
       "cpi_multiplier": 0.9838,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 12293.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 12199.0,
       "delta_pct": -1.6
     },
     {
       "year_month": "2016-01",
       "cpi_multiplier": 0.9822,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 12273.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 12179.0,
       "delta_pct": -1.8
     },
     {
       "year_month": "2017-01",
       "cpi_multiplier": 0.9423,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 11774.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 11685.0,
       "delta_pct": -5.8
     },
     {
       "year_month": "2018-01",
       "cpi_multiplier": 0.9409,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 11757.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 11668.0,
       "delta_pct": -5.9
     },
     {
       "year_month": "2019-01",
       "cpi_multiplier": 0.9657,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 12067.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 11975.0,
       "delta_pct": -3.4
     },
     {
       "year_month": "2020-01",
       "cpi_multiplier": 0.9468,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 11830.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 11740.0,
       "delta_pct": -5.3
     },
     {
       "year_month": "2020-06",
       "cpi_multiplier": 0.911,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 11383.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 11297.0,
       "delta_pct": -8.9
     },
     {
       "year_month": "2021-01",
       "cpi_multiplier": 1.0414,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 13013.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 12914.0,
       "delta_pct": 4.1
     },
     {
       "year_month": "2021-06",
       "cpi_multiplier": 1.3231,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 16533.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 16407.0,
       "delta_pct": 32.3
     },
     {
       "year_month": "2021-12",
       "cpi_multiplier": 1.4378,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 17965.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 17829.0,
       "delta_pct": 43.8
     },
     {
       "year_month": "2022-01",
       "cpi_multiplier": 1.4633,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 18285.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 18146.0,
       "delta_pct": 46.3
     },
     {
       "year_month": "2022-06",
       "cpi_multiplier": 1.4171,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 17707.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 17573.0,
       "delta_pct": 41.7
     },
     {
       "year_month": "2022-12",
       "cpi_multiplier": 1.3106,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 16377.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 16253.0,
       "delta_pct": 31.1
     },
     {
       "year_month": "2023-01",
       "cpi_multiplier": 1.2931,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 16158.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 16035.0,
       "delta_pct": 29.3
     },
     {
       "year_month": "2023-09",
       "cpi_multiplier": 1.2743,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 15922.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 15801.0,
       "delta_pct": 27.4
     },
     {
       "year_month": "2024-01",
       "cpi_multiplier": 1.244,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 15544.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 15426.0,
       "delta_pct": 24.4
     },
     {
       "year_month": "2025-01",
       "cpi_multiplier": 1.2555,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 15688.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 15569.0,
       "delta_pct": 25.6
     },
     {
       "year_month": "2026-01",
       "cpi_multiplier": 1.2309,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 15381.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 15264.0,
       "delta_pct": 23.1
     },
     {
       "year_month": "2026-06",
       "cpi_multiplier": 1.2224,
-      "stage1_baseline": 12495.0,
-      "stage2_price": 15274.0,
+      "stage1_baseline": 12400.0,
+      "stage2_price": 15158.0,
       "delta_pct": 22.2
     }
   ],

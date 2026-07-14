@@ -1,6 +1,14 @@
 """
 Schritt 6 — Stage 2 & Stage 3 gegen das neue CatBoost-Stage-1 neu auswerten.
 
+    ⚠️  ÜBERHOLT (Experiment-Skript). Die Stage-Skripte selbst rechnen inzwischen
+    gegen das CatBoost-Produktionsmodell (siehe scripts/production_baseline.py).
+    Kanonische Zahlen liefern:
+        uv run python scripts/evaluate_stage2.py
+        uv run python scripts/evaluate_stage3.py
+    Dieses Skript bleibt nur als Beleg des damaligen Zwischenschritts erhalten;
+    seine Werte koennen leicht abweichen (andere Datenaufbereitung).
+
 Hintergrund: Stage 2 (CPI) und Stage 3 (Saison) waren gegen das alte V2-Modell
 kalibriert. Da die App jetzt das getunte CatBoost-Modell (+ Hubraum) nutzt,
 werden die Faktoren und Kennzahlen hier gegen DIESE Basis neu berechnet — die
