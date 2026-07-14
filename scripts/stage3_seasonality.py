@@ -14,7 +14,7 @@ import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 FEATURES_PATH = PROJECT_ROOT / "data" / "car_prices_clean.csv"
-MODEL_PATH = PROJECT_ROOT / "models" / "stage1_production_model.joblib"
+MODEL_PATH = PROJECT_ROOT / "models" / "price_model_catboost.cbm"
 LEGACY_MODEL_PATH = (
     PROJECT_ROOT / "archive" / "models" / "artifacts" / "stage1_legacy_histgb_model.joblib"
 )
@@ -61,29 +61,18 @@ def prepare_seasonality_data(
     model_path: Path = MODEL_PATH,
     macro_path: Path = MACRO_PATH,
 ) -> pd.DataFrame:
-    """Create vehicle-mix and CPI-adjusted rows used to estimate seasonality."""
-    if model_path.name == "stage1_production_model.joblib":
-        from train_stage1_production import FEATURES as V2_FEATURES, load_data
+    """Create vehicle-mix and CPI-adjusted rows used to estimate seasonality.
 
-        df = load_data(features_path, max_rows=0)
-        prediction_input = df[V2_FEATURES]
-    else:
-        required = FEATURE_COLUMNS + ["sellingprice"]
-        df = pd.read_csv(features_path, usecols=required).dropna(subset=required)
-        df = df[
-            df["sellingprice"].between(500, 150_000)
-            & df["odometer"].between(1, 500_000)
-            & df["vehicle_age"].between(0, 30)
-            & df["sale_month"].between(1, 12)
-        ].copy()
-        prediction_input = df[FEATURE_COLUMNS].copy()
-        prediction_input["sale_month"] = REFERENCE_MONTH
-        prediction_input["year_month"] = REFERENCE_YEAR_MONTH
+    Basis ist das CatBoost-Produktionsmodell (getunt, inkl. Hubraum) — dasselbe
+    Modell, das die App ausliefert. Damit sind die erzeugten Saisonfaktoren
+    konsistent zur Produktion und aus diesem Skript reproduzierbar.
+    """
+    from production_baseline import load_production_frame, predict_baseline
+
+    df = load_production_frame()
     df["body"] = df["body"].astype(str).str.lower().str.strip()
     df["sale_month"] = df["sale_month"].astype(int)
-
-    model = joblib.load(model_path)
-    df["reference_prediction"] = np.maximum(model.predict(prediction_input), 500.0)
+    df["reference_prediction"] = predict_baseline(df)
 
     macro = pd.read_csv(macro_path, usecols=["year_month", "cpi_multiplier"])
     cpi_lookup = macro.set_index("year_month")["cpi_multiplier"]

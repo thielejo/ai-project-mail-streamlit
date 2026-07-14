@@ -1,8 +1,8 @@
 {
-  "created_at": "2026-07-11T11:11:03.158324+00:00",
+  "created_at": "2026-07-14T19:14:22.057737+00:00",
   "method": "cpi_normalized_model_residual_by_body_month",
-  "stage1_model": "stage1_production_model.joblib",
-  "reference_year_month": "time-neutral V2 (no sale month feature)",
+  "stage1_model": "price_model_catboost.cbm",
+  "reference_year_month": "time-neutral CatBoost+FIN (no sale month feature)",
   "factor_min": 0.85,
   "factor_max": 1.15,
   "shrinkage_observations": 1000,
@@ -32,10 +32,10 @@
   "holdout_evaluation": {
     "training_rows": 423481,
     "test_rows": 105688,
-    "baseline_mae": 1355.46,
-    "stage3_mae": 1333.96,
-    "mae_change": -21.5,
-    "mae_change_percent": -1.59
+    "baseline_mae": 1020.36,
+    "stage3_mae": 991.24,
+    "mae_change": -29.12,
+    "mae_change_percent": -2.85
   },
   "seasonality_csv": "models/stage3_seasonality_factors.csv",
   "body_summary": [
@@ -44,9 +44,9 @@
       "total_observations": 233725,
       "observed_months": 8,
       "best_month": "Mar",
-      "best_factor": 1.0284,
+      "best_factor": 1.025,
       "worst_month": "Jun",
-      "worst_factor": 0.9642,
+      "worst_factor": 0.9636,
       "has_recommendation": true
     },
     {
@@ -54,9 +54,9 @@
       "total_observations": 139801,
       "observed_months": 8,
       "best_month": "Mar",
-      "best_factor": 1.0175,
+      "best_factor": 1.0184,
       "worst_month": "Apr",
-      "worst_factor": 0.954,
+      "worst_factor": 0.9573,
       "has_recommendation": true
     },
     {
@@ -64,19 +64,19 @@
       "total_observations": 25620,
       "observed_months": 8,
       "best_month": "Jan",
-      "best_factor": 1.0324,
+      "best_factor": 1.0218,
       "worst_month": "Jun",
-      "worst_factor": 0.9479,
+      "worst_factor": 0.9607,
       "has_recommendation": true
     },
     {
       "body": "minivan",
       "total_observations": 24619,
       "observed_months": 8,
-      "best_month": "Mar",
-      "best_factor": 1.0124,
-      "worst_month": "Dec",
-      "worst_factor": 0.9868,
+      "best_month": "Jan",
+      "best_factor": 1.0106,
+      "worst_month": "Jun",
+      "worst_factor": 0.9859,
       "has_recommendation": true
     },
     {
@@ -84,9 +84,9 @@
       "total_observations": 16916,
       "observed_months": 8,
       "best_month": "Mar",
-      "best_factor": 1.0157,
-      "worst_month": "Dec",
-      "worst_factor": 0.9901,
+      "best_factor": 1.0124,
+      "worst_month": "Jun",
+      "worst_factor": 0.9878,
       "has_recommendation": true
     },
     {
@@ -94,9 +94,9 @@
       "total_observations": 15996,
       "observed_months": 8,
       "best_month": "Jan",
-      "best_factor": 1.0118,
+      "best_factor": 1.0077,
       "worst_month": "May",
-      "worst_factor": 0.9892,
+      "worst_factor": 0.9937,
       "has_recommendation": true
     },
     {
@@ -104,9 +104,9 @@
       "total_observations": 15507,
       "observed_months": 8,
       "best_month": "Mar",
-      "best_factor": 1.0146,
+      "best_factor": 1.0149,
       "worst_month": "Jun",
-      "worst_factor": 0.9767,
+      "worst_factor": 0.978,
       "has_recommendation": true
     },
     {
@@ -114,19 +114,19 @@
       "total_observations": 10102,
       "observed_months": 8,
       "best_month": "Mar",
-      "best_factor": 1.0114,
-      "worst_month": "Dec",
-      "worst_factor": 0.9886,
+      "best_factor": 1.0074,
+      "worst_month": "Jun",
+      "worst_factor": 0.9937,
       "has_recommendation": true
     },
     {
       "body": "supercrew",
       "total_observations": 8871,
       "observed_months": 8,
-      "best_month": "Mar",
-      "best_factor": 1.006,
+      "best_month": "Jan",
+      "best_factor": 1.0036,
       "worst_month": "Feb",
-      "worst_factor": 0.9935,
+      "worst_factor": 0.9955,
       "has_recommendation": true
     },
     {
@@ -134,19 +134,19 @@
       "total_observations": 7412,
       "observed_months": 8,
       "best_month": "Jan",
-      "best_factor": 1.0253,
+      "best_factor": 1.026,
       "worst_month": "Jun",
-      "worst_factor": 0.9717,
+      "worst_factor": 0.9735,
       "has_recommendation": true
     },
     {
       "body": "supercab",
       "total_observations": 5144,
       "observed_months": 8,
-      "best_month": "Jun",
-      "best_factor": 1.0056,
+      "best_month": "Jan",
+      "best_factor": 1.0047,
       "worst_month": "Feb",
-      "worst_factor": 0.9952,
+      "worst_factor": 0.9946,
       "has_recommendation": true
     },
     {
@@ -154,9 +154,9 @@
       "total_observations": 4658,
       "observed_months": 8,
       "best_month": "Jan",
-      "best_factor": 1.0087,
+      "best_factor": 1.007,
       "worst_month": "Dec",
-      "worst_factor": 0.9837,
+      "worst_factor": 0.9896,
       "has_recommendation": true
     }
   ]

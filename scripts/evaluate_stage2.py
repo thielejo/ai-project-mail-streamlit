@@ -33,17 +33,20 @@ from stage2_macro import (
     load_macro_index,
     MACRO_SIGNAL_LABELS,
 )
-from train_stage1_production import FEATURES as PRODUCTION_FEATURES, load_data as load_production_data
+from production_baseline import (
+    MODEL_LABEL,
+    load_production_frame,
+    predict_baseline,
+)
 
 # Must exactly match the Stage-1 production split.
 RANDOM_STATE = 42
 TARGET_COLUMN = "sellingprice"
-FEATURE_COLUMNS = PRODUCTION_FEATURES
 MAX_ROWS = 0
-REFERENCE_YEAR_MONTH = "time-neutral-v2"
+REFERENCE_YEAR_MONTH = "time-neutral-catboost"
 
 FEATURES_PATH = Path("data/car_prices_clean.csv")
-MODEL_PATH = Path("models/stage1_production_model.joblib")
+MODEL_PATH = Path("models/price_model_catboost.cbm")
 MACRO_PATH = Path("data/macro_index.csv")
 OUTPUT_JSON = Path("models/stage2_evaluation.json")
 OUTPUT_MD = Path("docs/stage2/model_results_stage2.md")
@@ -62,9 +65,9 @@ FORWARD_PROJECTION_MONTHS = [
 
 def _load_test_set() -> tuple[pd.DataFrame, pd.Series, pd.Series]:
     """Reproduce the exact Stage 1 test split (same rows, same seed)."""
-    df = load_production_data(FEATURES_PATH, MAX_ROWS)
+    df = load_production_frame()
     _, test = train_test_split(df, test_size=0.2, random_state=RANDOM_STATE)
-    return test[FEATURE_COLUMNS], test[TARGET_COLUMN], test["year_month"]
+    return test, test[TARGET_COLUMN], test["year_month"]
 
 
 def _metrics(y_true: pd.Series, y_pred: np.ndarray) -> dict[str, float]:
@@ -138,10 +141,11 @@ Quelle: CPI Used Cars & Trucks (CUSR0000SETA02, FRED).
 
 ## Architekturgetreuer Backtest (2014–2015 Testset)
 
-Stage 1 V2 enthält bewusst weder Verkaufsmonat noch Makrovariable und liefert
-damit einen zeitneutralen Fahrzeug-Basiswert. Stage 2 wendet anschließend den
-CPI des tatsächlichen historischen Verkaufsmonats an. Der Zielmonat wird so
-nicht doppelt gezählt.
+Als Basis dient das **CatBoost-Produktionsmodell (getunt, inkl. Hubraum)** — dasselbe
+Modell, das die App ausliefert. Es enthält bewusst weder Verkaufsmonat noch
+Makrovariable und liefert damit einen zeitneutralen Fahrzeug-Basiswert. Stage 2
+wendet anschließend den CPI des tatsächlichen historischen Verkaufsmonats an.
+Der Zielmonat wird so nicht doppelt gezählt.
 
 | Metrik | Referenz-Baseline | Mit Stage 2 | Δ |
 |---|---:|---:|---:|
@@ -154,7 +158,7 @@ nicht doppelt gezählt.
 - Min: {multiplier_stats['min']:.4f} / Max: {multiplier_stats['max']:.4f} / Ø {multiplier_stats['mean']:.4f}
 
 > Der kleine Unterschied ({mae_delta:+.2f} USD MAE) zeigt, wie Stage 2
-> den zeitneutralen V2-Basiswert im historischen Zeitraum verändert. Die
+> den zeitneutralen CatBoost-Basiswert im historischen Zeitraum verändert. Die
 > Faktoren liegen nahe bei 1,0, weil 2014–2015 den Referenzzeitraum bilden.
 
 ## Vorwärtsprojektion (Median Stage-1-Preis: ${stage1_median:,.0f})
@@ -181,8 +185,9 @@ nicht doppelt gezählt.
 - Im gespeicherten Makrostand sind die CPI-Werte für 2026-05 und 2026-06 aus
   2026-04 fortgeschrieben. 2026-06 ist daher ein Bewertungsdatum, kein neuer
   unabhängiger CPI-Messpunkt.
-- Stage 1 V2 enthält bewusst weder `sale_month` noch `year_month`. Dadurch
-  bleiben Marktbewegung und Saison vollständig in Stage 2 und Stage 3.
+- Das CatBoost-Produktionsmodell enthält bewusst weder `sale_month` noch
+  `year_month`. Dadurch bleiben Marktbewegung und Saison vollständig in
+  Stage 2 und Stage 3.
 """
     OUTPUT_MD.write_text(content, encoding="utf-8")
 
@@ -194,13 +199,12 @@ def main() -> None:
     print("\n1. Lade Makrodaten...")
     macro = load_macro_index(MACRO_PATH)
 
-    print("2. Reproduziere das vollständige Stage-1-V2-Testset (random_state=42)...")
+    print("2. Reproduziere das vollständige Stage-1-Testset (random_state=42)...")
     X_test, y_test, test_months = _load_test_set()
     print(f"   -> Testset: {len(X_test):,} Zeilen, {len(test_months.unique())} year_month-Werte")
 
-    print("3. Lade das zeitneutrale Stage-1-V2-Modell...")
-    model = joblib.load(MODEL_PATH)
-    stage1_preds = model.predict(X_test)
+    print(f"3. Lade das zeitneutrale Produktionsmodell: {MODEL_LABEL} ...")
+    stage1_preds = predict_baseline(X_test)
     stage1_metrics = _metrics(y_test, stage1_preds)
     print(f"   Stage 1  MAE=${stage1_metrics['mae']:,.2f}  RMSE=${stage1_metrics['rmse']:,.2f}  R²={stage1_metrics['r2']:.4f}")
 
@@ -245,7 +249,7 @@ def main() -> None:
 
     output = {
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "evaluation_method": "time_neutral_stage1_v2_then_historical_cpi",
+        "evaluation_method": "time_neutral_stage1_catboost_fin_then_historical_cpi",
         "stage1_model": str(MODEL_PATH),
         "reference_year_month": REFERENCE_YEAR_MONTH,
         "stage1_metrics_historical": stage1_metrics,
