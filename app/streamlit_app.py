@@ -570,7 +570,7 @@ def get_confidence_assessment(data_basis: dict, final_price: float) -> dict:
 
     if final_price >= LUXURY_PRICE_THRESHOLD:
         return {
-            "level": "red", "label": "Geringe Sicherheit",
+            "level": "red", "label": "Geringe Genauigkeit",
             "color": "#b91c1c", "background": "#fef2f2", "border": "#fca5a5",
             "text": (
                 "Die Schätzung sollte vorsichtig interpretiert werden, weil das Fahrzeug im teuren "
@@ -581,7 +581,7 @@ def get_confidence_assessment(data_basis: dict, final_price: float) -> dict:
         similar_count < 10 and model_body_count < GOOD_MODEL_BODY_VEHICLES
     ):
         return {
-            "level": "red", "label": "Geringe Sicherheit",
+            "level": "red", "label": "Geringe Genauigkeit",
             "color": "#b91c1c", "background": "#fef2f2", "border": "#fca5a5",
             "text": (
                 "Die Schätzung sollte vorsichtig interpretiert werden, weil für diese Fahrzeuggruppe "
@@ -594,7 +594,7 @@ def get_confidence_assessment(data_basis: dict, final_price: float) -> dict:
         or (similar_count < GOOD_SIMILAR_VEHICLES and model_body_count < 3_000)
     ):
         return {
-            "level": "yellow", "label": "Mittlere Sicherheit",
+            "level": "yellow", "label": "Mittlere Genauigkeit",
             "color": "#a16207", "background": "#fefce8", "border": "#fde047",
             "text": (
                 "Die Fahrzeuggruppe ist grundsätzlich im Datensatz vertreten, aber die genaue Kombination "
@@ -602,7 +602,7 @@ def get_confidence_assessment(data_basis: dict, final_price: float) -> dict:
             ),
         }
     return {
-        "level": "green", "label": "Hohe Sicherheit",
+        "level": "green", "label": "Hohe Genauigkeit",
         "color": "#15803d", "background": "#f0fdf4", "border": "#86efac",
         "text": "Es gibt eine breite Vergleichsbasis. Der finale Preis ist trotzdem als Schätzung zu lesen.",
     }
